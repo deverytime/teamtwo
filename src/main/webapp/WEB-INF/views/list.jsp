@@ -1,14 +1,27 @@
-<%@ page language="java" contentType="text/html; charset=UTF-8"
-    pageEncoding="UTF-8"%>
+<%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
+<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <!DOCTYPE html>
-<html>
+<html lang="ko">
 <head>
-<meta charset="UTF-8">
-<title>Insert title here</title>
+	<meta charset="UTF-8">
+	<title>deverytime</title>
+	<%@ include file="/WEB-INF/views/inc/asset.jsp" %>
+	<style>
+		/* 현재 페이지 전용 CSS가 필요하면 여기에 작성 */
+	</style>
 </head>
-<body>
+<body class="bg-slate-50 text-slate-800">
+	<%@ include file="/WEB-INF/views/inc/header.jsp" %>
+	
+	<main class="page-wrap">
+		
+		<div class="mb-8">
+			<h1 class="section-title">콘텐츠 제목</h1>
+			<p class="section-desc">여기에 페이지 부제목이나 설명을 적습니다.</p>
+		</div>
 
-	<section class="demo-block">
+		<div class="content-card card-pad">
+			<section class="demo-block">
       <h2 class="section-title">예제 3. 목록 테이블</h2>
       <p class="section-desc">관리자 페이지나 게시판 목록에 바로 응용 가능한 기본 형태입니다.</p>
 
@@ -82,6 +95,12 @@
         </div>
       </div>
     </section>
+		</div>
 
+	</main>
+	
+	<script>
+		// 현재 페이지 전용 JavaScript가 필요하면 여기에 작성
+	</script>
 </body>
 </html>
