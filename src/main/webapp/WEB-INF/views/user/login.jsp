@@ -55,7 +55,7 @@
 			</form>
 
 			<div class="flex justify-center gap-4 mt-8 text-sm text-slate-500">
-				<a href="/teamtwo/user/findid.do"
+				<a href="/teamtwo/user/find-id.do"
 					class="hover:text-primary hover:underline">아이디 찾기</a> <span
 					class="text-slate-300">|</span> <a href="/teamtwo/user/findpw.do"
 					class="hover:text-primary hover:underline">비밀번호 찾기</a> <span
