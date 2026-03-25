@@ -1,6 +1,7 @@
 package com.deverytime.study;
 
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.HashMap;
 
 import com.deverytime.model.StudyDao;
@@ -16,7 +17,15 @@ public class StudyService {
 		
 		for(StudyDto dto : list) {
 			
+			String createDate = dto.getCreateDate();
+			
+			createDate = createDate.substring(0, 10);
+			
+			dto.setCreateDate(createDate);
+			
 			String name = dto.getName();
+			
+			String desc = dto.getDescription();
 			
 			name = name.replace("<", "&lt;").replace(">", "&rt;");
 			
@@ -26,9 +35,24 @@ public class StudyService {
 			
 			dto.setName(name);
 			
+			if(desc.length() > 30) {
+				desc = desc.substring(0, 30) + "...";
+			}
+			
+			dto.setDescription(desc);
+			
 		}
 		
+		
 		return list;
+		
+	}
+
+	public int getTotalCount(HashMap<String, String> map) {
+		
+		StudyDao dao = new StudyDao();
+		
+		return dao.getTotalCount(map);
 		
 	}
 	

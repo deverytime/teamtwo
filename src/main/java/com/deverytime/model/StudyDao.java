@@ -15,7 +15,8 @@ public class StudyDao extends BasicDao{
 			String where = "";
 			
 			if(map.get("search").equals("y")) {
-				
+				where = String.format("where %s like '%%%s%%'"
+						, map.get("word"));
 			}
 			
 			String sql = "";
@@ -39,6 +40,10 @@ public class StudyDao extends BasicDao{
 				dto.setStatus(rs.getString("status"));
 				dto.setCreateDate(rs.getString("createDate"));
 				
+				dto.setScheduleCount(rs.getString("scheduleCount"));
+				dto.setHeadCount(rs.getString("headCount"));
+				
+				
 				list.add(dto);
 			}
 			
@@ -53,6 +58,32 @@ public class StudyDao extends BasicDao{
 		}
 		
 		return null;
+		
+	}
+
+	public int getTotalCount(HashMap<String, String> map) {
+		
+		try {
+			
+			String where = "";
+			
+			if(map.get("search").equals("y")) {
+				where = String.format("where name like '%%%s%%'", map.get("word"));
+			}
+			
+			String sql = "select count(*) as cnt from vwStudy " + where;
+			
+			rs = stat.executeQuery(sql);
+			
+			if(rs.next()) {
+				return rs.getInt("cnt");
+			}
+			
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		
+		return 0;
 		
 	}
 

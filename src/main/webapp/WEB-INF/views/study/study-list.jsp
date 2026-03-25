@@ -6,59 +6,126 @@
 <head>
 <meta charset="UTF-8">
 <title>Insert title here</title>
+<%@ include file="/WEB-INF/views/inc/asset.jsp" %>
 </head>
 <style>
-	table {
-		border-collapse: collapse;
+	#head {
+		margin: 40px 120px;
 	}
 
-	table tr td {
-		border: 1px solid black;
-		text-align: center;
-		width: 200px;
+	#main {
+		margin: 0px 120px;
+		display: grid;
+		grid-template-columns: 1fr 1fr;
+		gap: 40px;
 	}
 	
-	#div1 {
-		display: flex;
+	.btns {
+		margin: 50px;
 		justify-content: center;
-		align-items: center;
-		margin-top: 100px;
 	}
 	
-	#div2 {
+	#btn2 {
+		margin-left: 10px;
+	}
+	
+	#searchDiv {
+		margin: 40px;
+		margin-left: 120px;
+	}
+	
+	#searchBar {
+		width: 400px;
+	}
+	
+	#select {
+		width: 160px;
+	}
+	
+	#pagebar {
 		display: flex;
 		justify-content: center;
 	}
 	
 </style>
 <body>
-	<h1>스터디 목록</h1>
+	<%@ include file="/WEB-INF/views/inc/header.jsp" %>
 	
-	<hr>
+    <!-- 머리글 -->
+    <section class="demo-block">
+    <div id="head">
+      <h2 class="section-title">스터디 목록</h2>
+      <p class="section-desc">참여하고 싶은 스터디를 확인해보세요!</p>
+    </div>
+	
 	<!-- 스터디 목록 -->
-	<div id="div1">
-	<table>
-		<tr>
-			<td>스터디 명</td>&nbsp;<td>&nbsp;<td>
-		</tr>
-		<tr>
-			<td>인원수</td><td>일정개수</td><td>생성일</td>
-		</tr>
-	</table>
-	</div>
-	
-	<hr>
-	<!-- 페이징 바 -->
-	<div>1 2 3 4 5...</div>
-	
-	<!-- 스터디 검색창 -->
-	<input type="text" name="search" value="스터디 검색"> <button type="button" onclick="location.href='/teamtwo/study/liststudy.do?search=${dto.search}';">검색</button>
-	
-	<!-- 스터디 등록 버튼 / 내 스터디 목록 버튼 -->
-	<div id="div2">
-		<button type="button" id="addStudyBtn" onclick="location.href='/teamtwo/study/addstudy.do?seq=${dto.seq}';">스터디 등록</button>
-		<button type="button" id="myStudyBtn" onclick="location.href='/teamtwo/study/mystudy.do?seq=${dto.seq}';">내 스터디 목록</button>
-	</div>
+	<div id="main-layout">
+	  <div id="main">
+	  <c:forEach items="${list}" var="dto">
+        <div class="content-card card-pad">
+          <div class="flex items-start justify-between gap-4 mb-4">
+            <div>
+              <p class="text-sm text-slate-500"></p>
+              <h3 class="text-xl font-bold mt-1">${dto.name}</h3>
+            </div>
+            <span class="badge badge-outline badge-primary">${dto.status == '0' ? '모집중' : '모집완료'}</span>
+          </div>
+
+          <p class="text-slate-600 leading-7 mb-6">
+            ${dto.description}
+          </p>
+
+          <div class="grid sm:grid-cols-3 gap-4 mb-6">
+            <div class="stats-box">
+              <p class="text-sm text-slate-500">인원수</p>
+              <p class="mt-2">${dto.headCount} / ${dto.capacity}</p>
+            </div>
+            <div class="stats-box">
+              <p class="text-sm text-slate-500">일정</p>
+              <p class="mt-2 text-2xl font-bold">${dto.scheduleCount}</p>
+            </div>
+            <div class="stats-box">
+              <p class="text-sm text-slate-500">생성일</p>
+              <p class="mt-2 text-2xl font-bold">${dto.createDate}</p>
+            </div>
+          </div>
+
+          <div class="flex flex-wrap justify-between gap-2">
+            <button class="btn btn-brand" onclick="/teamtwo/study/study-view.do?seq${seq}">상세 보기</button>
+            <button class="btn btn-brand" onclick="/teamtwo/study/study-member.do?seq=${seq}">참여 하기</button>
+          </div>
+        </div>
+      </c:forEach>
+      </div>
+      
+      <!-- 검색 -->
+      <div class="flex flex-col sm:flex-row gap-2" id="searchDiv">
+            <select class="select select-bordered bg-white" id="select">
+              <option>전체 상태</option> 
+              <option>모집중</option>
+              <option>모집완료</option>
+            </select>
+            <input
+              type="text"
+              placeholder="스터디 검색"
+              class="input input-bordered bg-white"
+              name="word"
+              id="searchBar"
+            />
+            <button class="btn btn-brand">검색</button>
+          </div>
+       
+       <!-- 페이지 바 -->
+       <div id="pagebar">${pagebar}</div>
+      
+      
+       <!-- 버튼 -->
+       <div class="flex flex-wrap justify-between gap-2 btns">
+            <button class="btn btn-soft-brand" onclick="/teamtwo/study/study-add.do?seq=${seq}" id="btn1">스터디 등록</button>
+            <button class="btn btn-soft-brand" onclick="/teamtwo/study/mystudy.do?seq=${seq}" id="btn2">내 스터디 목록</button>
+       </div>
+      
+    </section>
 	
 	
 </body>
