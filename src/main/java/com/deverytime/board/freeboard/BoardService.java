@@ -9,7 +9,7 @@ import com.deverytime.model.BoardDao;
 import com.deverytime.model.BoardDto;
 
 public class BoardService {
-	
+
 	// 게시판에서 주제(카테고리)를 보여주기 위한 매핑
 	private static final Map<String, String> CATEGORY_MAP = new HashMap<>();
 	static {
@@ -26,58 +26,54 @@ public class BoardService {
 	}
 
 	// 카테고리 보내주
-	public Map<String, String> getCategoryMap(){
+	public Map<String, String> getCategoryMap() {
 		return CATEGORY_MAP;
 	}
-	
 
 	public ArrayList<BoardDto> list() {
 
 		BoardDao dao = new BoardDao();
 		ArrayList<BoardDto> list = dao.list();
-		
-		for(BoardDto dto : list) {
-			
+
+		for (BoardDto dto : list) {
+
 			// 주제 한글 처리
 			String categoryName = CATEGORY_MAP.get(dto.getCategory());
-			
+
 			dto.setCategory(categoryName);
-			
+
 			// 날짜 변환
 			String regDate = dto.getRegDate();
-			LocalDate postDate = LocalDate.parse(regDate.substring(0, 10)); //저장된 String date로
+			LocalDate postDate = LocalDate.parse(regDate.substring(0, 10)); // 저장된 String date로
 			LocalDate today = LocalDate.now();
-			
-			if(postDate.equals(today)) {
+
+			if (postDate.equals(today)) {
 				// 시간처리
 				dto.setRegDate(regDate.substring(11));
-				
+
 			} else {
 				// 날짜처리
-				dto.setRegDate(regDate.substring(0,10));
-				
+				dto.setRegDate(regDate.substring(0, 10));
+
 			}
-			
+
 		}
-		
-		
+
 		return list;
 	}
 
-
 	public int add(BoardDto dto) {
-		
+
 		BoardDao dao = new BoardDao();
-		
+
 		// DB에 인서트하기전에 id로 memberSeq를 알아오
 		String memberSeq = dao.getMemberSeqById(dto.getId());
-		
+
 		dto.setMemberSeq(memberSeq);
-		
-		
+
 		int result = dao.add(dto);
-		
+
 		return result;
 	}
-	
+
 }
