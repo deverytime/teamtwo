@@ -16,8 +16,8 @@
 		
 		<div class="flex-none">
 			<ul class="menu menu-horizontal px-1 text-slate-700 font-semibold items-center z-[50]">
-				<li><a href="/teamtwo/plan/List.do">학습계획</a></li>
-				<li><a href="/teamtwo/study/ListStudy.do">스터디</a></li>
+				<li><a href="/teamtwo/plan/list.do">학습계획</a></li>
+				<li><a href="/teamtwo/study/listStudy.do">스터디</a></li>
 				
 				<li class="dropdown dropdown-hover dropdown-end">
 					<div tabindex="0" role="button" class="m-1">게시판</div>

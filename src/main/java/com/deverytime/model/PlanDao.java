@@ -89,18 +89,22 @@ public class PlanDao extends BasicDao {
 	    return list;
 	}
 	
-	public PlanDto add() {
+	public int addPeriod(PlanDto dto) {
 		try {
-			String sql = "select id from member where seq = 1";
+			String sql = "INSERT INTO plan (seq, title, subject, description, type, startdate, enddate, regdate, updatedate, progressStatus, memberSeq) "
+					+ "VALUES (planSeq.nextval, ?, ?, ?, ?, ?, ?, sysdate, sysdate, DEFAULT, ?)";
+
+			pstat = conn.prepareStatement(sql);
+
+			pstat.setString(1, dto.getTitle());
+			pstat.setString(2, dto.getSubject());
+			pstat.setString(3, dto.getDescription());
+			pstat.setString(4, dto.getType());
+			pstat.setDate(5, dto.getStartDate());
+			pstat.setDate(6, dto.getEndDate());
+			pstat.setString(7, dto.getMemberSeq());
 			
-			rs = stat.executeQuery(sql);
-			
-			if (rs.next()) {
-				PlanDto dto = PlanDto.builder()
-					.seq(rs.getString("seq"))
-					.build();
-				return dto;
-			}
+			return pstat.executeUpdate();
 			
 		} catch (Exception e) {
 			e.printStackTrace();
@@ -108,7 +112,7 @@ public class PlanDao extends BasicDao {
 	        closeAll();
 		}
 		
-		return null;
+		return 0;
 	}
 
 	public int getTotalCount(HashMap<String, String> map) {
@@ -153,6 +157,31 @@ public class PlanDao extends BasicDao {
 		    }
 
 		    return 0;
+		}
+
+		public int addCompletion(PlanDto dto) {
+			
+			try {
+				String sql = "INSERT INTO plan (seq, title, subject, description, type, regdate, updatedate, progressStatus, memberSeq) "
+				           + "VALUES (planSeq.nextval, ?, ?, ?, ?, sysdate, sysdate, DEFAULT, ?)";
+				
+				pstat = conn.prepareStatement(sql);
+
+				pstat.setString(1, dto.getTitle());
+				pstat.setString(2, dto.getSubject());
+				pstat.setString(3, dto.getDescription());
+				pstat.setString(4, dto.getType());
+				pstat.setString(5, dto.getMemberSeq());
+				
+				return pstat.executeUpdate();
+				
+			} catch (Exception e) {
+				e.printStackTrace();
+			} finally {
+		        closeAll();
+			}
+			
+			return 0;
 		}
 	}
 
