@@ -24,7 +24,11 @@ public class BoardService {
 		CATEGORY_MAP.put("9", "토론");
 		CATEGORY_MAP.put("10", "공지");
 	}
-	
+
+	// 카테고리 보내주
+	public Map<String, String> getCategoryMap(){
+		return CATEGORY_MAP;
+	}
 	
 
 	public ArrayList<BoardDto> list() {
@@ -58,6 +62,22 @@ public class BoardService {
 		
 		
 		return list;
+	}
+
+
+	public int add(BoardDto dto) {
+		
+		BoardDao dao = new BoardDao();
+		
+		// DB에 인서트하기전에 id로 memberSeq를 알아오
+		String memberSeq = dao.getMemberSeqById(dto.getId());
+		
+		dto.setMemberSeq(memberSeq);
+		
+		
+		int result = dao.add(dto);
+		
+		return result;
 	}
 	
 }
