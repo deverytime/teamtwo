@@ -13,7 +13,6 @@ import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
 import com.deverytime.model.PlanDto;
-import com.deverytime.model.PlanService;
 
 @WebServlet("/plan/list.do")
 public class List extends HttpServlet {
