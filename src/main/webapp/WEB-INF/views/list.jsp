@@ -50,38 +50,49 @@
 		        </div>
 		
 		        <div class="overflow-x-auto">
+		        	  <table class="table">
+		        	  	<thead>
+			        	  	<tr>
+			        	  		<th>잡담</th>
+			        	  		<th>개발</th>
+			        	  		<th>에러</th>
+			        	  		<th>인사</th>
+			        	  		<th>유머</th>
+			        	  		<th>자랑</th>
+			        	  		<th>정보</th>
+			        	  		<th>나눔</th>
+			        	  		<th>토론</th>
+			        	  		<th>공지</th>
+			        	  	</tr>
+		        	  	</thead>
+		        	  </table>
+		        	  <br>
+				  <hr>
+				  <br>			        	
 		          <table class="table">
 		            <thead>
 		              <tr>
-		                <th>ID</th>
-		                <th>이름</th>
-		                <th>이메일</th>
-		                <th>상태</th>
-		                <th>가입일</th>
+		                <th>글번호</th>
+		                <th>주제</th>
+		                <th>제목</th>
+		                <th>글쓴이</th>
+		                <th>날짜</th>
+		                <th>조회수</th>
+		                <th>추천수</th>
 		              </tr>
 		            </thead>
 		            <tbody>
-		              <tr>
-		                <td>101</td>
-		                <td>김민수</td>
-		                <td>minsu@example.com</td>
-		                <td><span class="badge badge-success badge-outline">활성</span></td>
-		                <td>2026-03-10</td>
-		              </tr>
-		              <tr>
-		                <td>102</td>
-		                <td>이지은</td>
-		                <td>jieun@example.com</td>
-		                <td><span class="badge badge-warning badge-outline">휴면</span></td>
-		                <td>2026-03-11</td>
-		              </tr>
-		              <tr>
-		                <td>103</td>
-		                <td>박준호</td>
-		                <td>junho@example.com</td>
-		                <td><span class="badge badge-error badge-outline">정지</span></td>
-		                <td>2026-03-12</td>
-		              </tr>
+		            	  <c:forEach var="dto" items="${list}">	
+			              <tr>
+			                <td>${dto.seq}</td>
+			                <td>${dto.category}</td>
+			                <td>${dto.title}</td>
+			                <td>${dto.nickname}</td>
+			                <td>${dto.regDate}</td>
+			                <td>${dto.readCount}</td>
+			                <td>${dto.recommend}</td>
+			              </tr>
+		              </c:forEach>
 		            </tbody>
 		          </table>
 		        </div>
