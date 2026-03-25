@@ -4,8 +4,12 @@ import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.HashMap;
 
+import com.deverytime.model.MemberDao;
+import com.deverytime.model.MemberDto;
 import com.deverytime.model.StudyDao;
 import com.deverytime.model.StudyDto;
+import com.deverytime.model.StudyScheduleDao;
+import com.deverytime.model.StudyScheduleDto;
 
 public class StudyService {
 	
@@ -54,6 +58,37 @@ public class StudyService {
 		
 		return dao.getTotalCount(map);
 		
+	}
+
+	public StudyDto get(String seq) {
+		
+		StudyDao dao = new StudyDao();
+		
+		StudyDto dto = dao.get(seq);
+		
+		String createDate = dto.getCreateDate();
+		
+		createDate = createDate.substring(0, 10);
+		
+		dto.setCreateDate(createDate);
+		
+		return dto;
+		
+	}
+
+	public ArrayList<StudyScheduleDto> scheduleList(String seq) {
+		
+		StudyScheduleDao dao = new StudyScheduleDao();
+		
+		return dao.scheduleList(seq);
+		
+	}
+
+	public ArrayList<MemberDto> memberList(String seq, HashMap<String, String> map) {
+		
+		StudyDao dao = new StudyDao();
+		
+		return dao.memberlist(seq, map);
 	}
 	
 }

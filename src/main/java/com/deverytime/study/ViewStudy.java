@@ -11,30 +11,26 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
-import javax.websocket.Session;
 
+import com.deverytime.model.MemberDto;
 import com.deverytime.model.StudyDto;
+import com.deverytime.model.StudyScheduleDto;
 
-@WebServlet(value = "/study/study-list.do")
-public class ListStudy extends HttpServlet{
+@WebServlet(value = "/study/study-view.do")
+public class ViewStudy extends HttpServlet{
 
 	@Override
 	protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
+		
+		String seq = req.getParameter("seq");
+		
+		StudyService service = new StudyService();
 			
-		String word = req.getParameter("word");
-		String search = "n"; //목록보기(n), 검색하기(y)
+		StudyDto dto = service.get(seq);
 		
-		if(word == null || word.trim().equals("")) {
-			search = "n";
-		} else {
-			search = "y";
-		}
-		
+		ArrayList<MemberDto> mlist = new ArrayList<MemberDto>();	
 		
 		HashMap<String, String> map = new HashMap<String, String>();
-		map.put("word", word);
-		map.put("search", search);
-		
 		
 		String page = req.getParameter("page");
 		
@@ -63,12 +59,7 @@ public class ListStudy extends HttpServlet{
 		map.put("nowPage", nowPage + "");
 		
 		
-		StudyService service = new StudyService();
-		
-		ArrayList<StudyDto> list = new ArrayList<StudyDto>();
-		
-		list = service.list(map);
-		
+		mlist = service.memberList(seq, map);
 		
 		totalCount = service.getTotalCount(map);
 		
@@ -109,10 +100,14 @@ public class ListStudy extends HttpServlet{
 		}
 		
 		req.setAttribute("pagebar", pagebar);
-		req.setAttribute("list", list);
-		req.setAttribute("map", map);
-	
-		req.getRequestDispatcher("/WEB-INF/views/study/study-list.jsp").forward(req, resp);
+		
+		HttpSession session = req.getSession();
+		
+		
+		req.setAttribute("dto", dto);
+		req.setAttribute("mlist", mlist);
+		
+		req.getRequestDispatcher("/WEB-INF/views/study/study-view.jsp").forward(req, resp);
 		
 	}
 	

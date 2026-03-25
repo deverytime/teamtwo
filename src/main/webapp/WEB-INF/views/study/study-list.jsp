@@ -9,12 +9,9 @@
 <%@ include file="/WEB-INF/views/inc/asset.jsp" %>
 </head>
 <style>
-	#head {
-		margin: 40px 120px;
-	}
 
 	#main {
-		margin: 0px 120px;
+		margin: 0px 40px;
 		display: grid;
 		grid-template-columns: 1fr 1fr;
 		gap: 40px;
@@ -50,15 +47,18 @@
 </style>
 <body>
 	<%@ include file="/WEB-INF/views/inc/header.jsp" %>
-	
-    <!-- 머리글 -->
-    <section class="demo-block">
-    <div id="head">
-      <h2 class="section-title">스터디 목록</h2>
-      <p class="section-desc">참여하고 싶은 스터디를 확인해보세요!</p>
-    </div>
-	
+
+    <main class="page-wrap">
+		
+		<div class="mb-8">
+			<h1 class="section-title">스터디 목록</h1>
+			<p class="section-desc">참여하고 싶은 스터디를 확인해보세요!</p>
+		</div>
+
+		<div class="content-card card-pad">
+			
 	<!-- 스터디 목록 -->
+	<section class="demo-block">
 	<div id="main-layout">
 	  <div id="main">
 	  <c:forEach items="${list}" var="dto">
@@ -82,17 +82,17 @@
             </div>
             <div class="stats-box">
               <p class="text-sm text-slate-500">일정</p>
-              <p class="mt-2 text-2xl font-bold">${dto.scheduleCount}</p>
+              <p class="mt-2 text-2xl font-bold">${dto.scheduleCount}개</p>
             </div>
             <div class="stats-box">
               <p class="text-sm text-slate-500">생성일</p>
               <p class="mt-2 text-2xl font-bold">${dto.createDate}</p>
             </div>
           </div>
-
+	
           <div class="flex flex-wrap justify-between gap-2">
-            <button class="btn btn-brand" onclick="/teamtwo/study/study-view.do?seq${seq}">상세 보기</button>
-            <button class="btn btn-brand" onclick="/teamtwo/study/study-member.do?seq=${seq}">참여 하기</button>
+            <button class="btn btn-brand" onclick="location.href='/teamtwo/study/study-view.do?seq=${dto.seq}';">상세 보기</button>
+            <button class="btn btn-brand" onclick="location.href='/teamtwo/study/study-member.do?seq=${dto.seq}';">참여 하기</button>
           </div>
         </div>
       </c:forEach>
@@ -126,6 +126,14 @@
        </div>
       
     </section>
+
+		</div>
+
+	</main>
+	
+    
+	
+	
 	
 	
 </body>

@@ -52,9 +52,7 @@ public class StudyDao extends BasicDao{
 		} catch (Exception e) {
 			e.printStackTrace();
 		} finally {
-			
-			closeAll();
-			
+			closeAll();	
 		}
 		
 		return null;
@@ -71,7 +69,7 @@ public class StudyDao extends BasicDao{
 				where = String.format("where name like '%%%s%%'", map.get("word"));
 			}
 			
-			String sql = "select count(*) as cnt from vwStudy " + where;
+			String sql = "select count(*) as cnt from study " + where;
 			
 			rs = stat.executeQuery(sql);
 			
@@ -81,9 +79,89 @@ public class StudyDao extends BasicDao{
 			
 		} catch (Exception e) {
 			e.printStackTrace();
+		} finally {
+			closeAll();
 		}
 		
 		return 0;
+		
+	}
+
+	public StudyDto get(String seq) {
+		
+		try {
+			
+			String sql = "select * from vwStudy where seq = ?";
+			
+			pstat = conn.prepareStatement(sql);
+			
+			pstat.setString(1, seq);
+			
+			rs = pstat.executeQuery();
+			
+			StudyDto dto = new StudyDto();
+			
+			
+			if(rs.next()) {
+				
+				dto.setSeq(rs.getString("seq"));
+				dto.setName(rs.getString("name"));
+				dto.setDescription(rs.getString("description"));
+				dto.setCapacity(rs.getString("capacity"));
+				dto.setStatus(rs.getString("status"));
+				dto.setCreateDate(rs.getString("createDate"));
+				
+				dto.setScheduleCount(rs.getString("scheduleCount"));
+				dto.setHeadCount(rs.getString("headCount"));
+				
+			}
+			
+			return dto;
+			
+		} catch (Exception e) {
+			e.printStackTrace();
+		} finally {
+			closeAll();
+		}
+		
+		return null;
+		
+	}
+
+	public ArrayList<MemberDto> memberlist(String seq, HashMap<String, String> map) {
+		
+		try {
+			
+			String sql = String.format("select * from (select a.*, rownum as rnum from vwStudyMember a where studySeq = ?) where rnum between %s and %s"
+					,map.get("begin")
+					,map.get("end"));
+			
+			pstat = conn.prepareStatement(sql);
+			pstat.setString(1, seq);
+			rs = pstat.executeQuery();
+			
+			ArrayList<MemberDto> list = new ArrayList<MemberDto>();
+			
+			while(rs.next()) {
+				MemberDto dto = new MemberDto();
+				
+				dto.setSeq(rs.getString("seq"));
+				dto.setId(rs.getString("id"));
+				dto.setName(rs.getString("name"));
+				dto.setEmail(rs.getString("email"));
+				
+				list.add(dto);
+			}
+			
+			return list;
+			
+		} catch (Exception e) {
+			e.printStackTrace();
+		} finally {
+			closeAll();
+		}
+		
+		return null;
 		
 	}
 
