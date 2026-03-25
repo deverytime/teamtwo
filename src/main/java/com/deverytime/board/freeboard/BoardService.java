@@ -85,7 +85,7 @@ public class BoardService {
 		
 		dto = dao.view(dto);
 		
-		//카테고리 한글 처리
+		// 카테고리 한글 처리
 		dto.setCategory(getCategoryName(dto.getCategory()));
 		
 		return dto;
