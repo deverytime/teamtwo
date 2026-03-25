@@ -98,12 +98,20 @@
 		        </div>
 		
 		        <div class="card-pad border-t border-slate-200 flex justify-between items-center">
-		          <p class="text-sm text-slate-500">총 3명</p>
-		          <div class="join">
-		            <button class="join-item btn btn-sm">1</button>
-		            <button class="join-item btn btn-sm btn-active">2</button>
-		            <button class="join-item btn btn-sm">3</button>
-		          </div>
+					<!-- 왼쪽 빈 공간 -->
+				  	<div class="w-24"></div>
+				  
+				 	<!-- 가운데 페이지바 -->
+				 	<div class="flex gap-1">
+				   		<button class="btn">1</button>
+				    		<button class="btn">2</button>
+				    		<button class="btn">3</button>
+				  	</div>
+				  
+				  	<!-- 오른쪽 글쓰기 버튼 -->
+				  	<div class="w-24 flex justify-end">
+				    		<button class="btn btn-brand" onclick="location.href='add.do?board=${board}'">글쓰기</button>
+				  	</div>
 		        </div>
 		      </div>
    		 </section>

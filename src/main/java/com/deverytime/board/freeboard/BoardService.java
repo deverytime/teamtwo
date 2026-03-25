@@ -28,7 +28,7 @@ public class BoardService {
 	
 
 	public ArrayList<BoardDto> list() {
-		
+
 		BoardDao dao = new BoardDao();
 		ArrayList<BoardDto> list = dao.list();
 		

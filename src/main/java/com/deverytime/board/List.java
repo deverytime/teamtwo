@@ -17,7 +17,7 @@ public class List extends HttpServlet {
 		//List.java
 		
 
-		req.getRequestDispatcher("/WEB-INF/views/name.jsp").forward(req, resp);
+		req.getRequestDispatcher("/WEB-INF/views/list.jsp").forward(req, resp);
 	}
 
 }

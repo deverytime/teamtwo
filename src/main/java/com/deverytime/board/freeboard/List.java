@@ -11,7 +11,7 @@ import javax.servlet.http.HttpServletResponse;
 
 import com.deverytime.model.BoardDto;
 
-@WebServlet(value = "/freeboard/list.do")
+@WebServlet(value = "/board/freeboard/list.do")
 public class List extends HttpServlet {
 
 	@Override
