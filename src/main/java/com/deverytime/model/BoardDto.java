@@ -18,6 +18,8 @@ public class BoardDto {
 	private String regDate;
 	private String recommend;
 	private String report;
+	private String memberSeq; // id때문에 필요
+	private String id;
 	
 	private String nickname; // member와 조인 닉네임 
 	
