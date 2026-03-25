@@ -133,4 +133,10 @@ public class PlanService {
 	    return pagebar.toString();
 	}
 
+	public PlanDto get(String seq, String memberSeq) {
+		PlanDao dao = new PlanDao();
+		
+		return dao.get(seq, memberSeq);
+	}
+
 }
