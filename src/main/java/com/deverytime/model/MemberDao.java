@@ -131,4 +131,35 @@ public class MemberDao extends BasicDao {
 		}
 	}
 
+	// 7. 이메일 존재 여부 확인 (아이디 찾기 1단계)
+	public int findEmail(String email) {
+		try {
+			String sql = "select count(*) as cnt from member where email = ?";
+			pstat = conn.prepareStatement(sql);
+			pstat.setString(1, email);
+			rs = pstat.executeQuery();
+			if (rs.next())
+				return rs.getInt("cnt");
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		return 0;
+	}
+
+	// 8. 이름+이메일로 아이디 찾기 (아이디 찾기 2, 3단계)
+	public String findId(String name, String email) {
+		try {
+			String sql = "select id from member where name = ? and email = ?";
+			pstat = conn.prepareStatement(sql);
+			pstat.setString(1, name);
+			pstat.setString(2, email);
+			rs = pstat.executeQuery();
+			if (rs.next())
+				return rs.getString("id"); // 일치하면 아이디 반환
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		return null; // 정보 불일치 시 null
+	}
+
 }

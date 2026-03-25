@@ -20,7 +20,7 @@ public class Login extends HttpServlet {
 	protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
 		// 로그인 화면 띄우기
 		req.getRequestDispatcher("/WEB-INF/views/user/login.jsp").forward(req, resp);
-		System.out.println("현재 로그인한 사람: " + req.getSession().getAttribute("auth"));
+		// System.out.println("현재 로그인한 사람: " + req.getSession().getAttribute("auth"));
 	}
 
 	@Override
