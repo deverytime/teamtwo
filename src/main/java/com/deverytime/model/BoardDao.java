@@ -98,4 +98,45 @@ public class BoardDao extends BasicDao {
 		return null;
 	}
 
+	public BoardDto view(BoardDto dto) {
+		
+		try {
+			
+			String sql = "select * from vwPost ";
+			String board = "";
+			String seq = String.format("seq = %s", dto.getSeq());
+			
+			// 보드타입으로 어떤 게시판인지 판별
+			if(dto.getBoardType().equals("1")) {
+				board = "where boardType=1 and ";
+			}
+			
+			sql = sql + board + seq;
+			
+			rs = stat.executeQuery(sql);
+			
+			if(rs.next()) {
+				dto.setTitle(rs.getString("title"));
+				dto.setContent(rs.getString("content"));
+				dto.setReadCount(rs.getString("readCount"));
+				dto.setRegDate(rs.getString("regDate"));
+				dto.setRecommend(rs.getString("recommend"));
+				dto.setReport(rs.getString("report"));
+				dto.setMemberSeq(rs.getString("memberSeq"));
+				dto.setBoardType(rs.getString("boardType"));
+				dto.setCategory(rs.getString("category"));
+				dto.setNickname(rs.getString("nickname"));
+			}
+				
+			return dto;	
+			
+		} catch (Exception e) {
+			e.printStackTrace();
+		} finally {
+			closeAll();
+		}
+		
+		return null;
+	}
+
 }

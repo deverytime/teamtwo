@@ -24,8 +24,13 @@ public class BoardService {
 		CATEGORY_MAP.put("9", "토론");
 		CATEGORY_MAP.put("10", "공지");
 	}
+	
+	// 주제 한글 처리
+	private String getCategoryName(String categoryKey) {
+	    return CATEGORY_MAP.get(categoryKey);
+	}
 
-	// 카테고리 보내주
+	// 카테고리 보내주기
 	public Map<String, String> getCategoryMap() {
 		return CATEGORY_MAP;
 	}
@@ -38,9 +43,7 @@ public class BoardService {
 		for (BoardDto dto : list) {
 
 			// 주제 한글 처리
-			String categoryName = CATEGORY_MAP.get(dto.getCategory());
-
-			dto.setCategory(categoryName);
+			dto.setCategory(getCategoryName(dto.getCategory()));
 
 			// 날짜 변환
 			String regDate = dto.getRegDate();
@@ -74,6 +77,18 @@ public class BoardService {
 		int result = dao.add(dto);
 
 		return result;
+	}
+
+	public BoardDto view(BoardDto dto) {
+		
+		BoardDao dao = new BoardDao();
+		
+		dto = dao.view(dto);
+		
+		//카테고리 한글 처리
+		dto.setCategory(getCategoryName(dto.getCategory()));
+		
+		return dto;
 	}
 
 }
