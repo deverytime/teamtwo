@@ -1,4 +1,4 @@
-package com.test.deverytime.board.freeboard;
+package com.deverytime.board.freeboard;
 
 import java.io.IOException;
 import java.util.ArrayList;
@@ -20,11 +20,14 @@ public class List extends HttpServlet {
 		//List.java
 		// 1. 작성된 글 불러오기
 		// 2. 넘기기
-		//BoardService service = new BoardService();
+		BoardService service = new BoardService();
 		
-		//ArrayList<BoardDto> list = service.list();
+		ArrayList<BoardDto> list = service.list();
 		
-		//req.setAttribute("list", list);
+		String board = "1";
+		
+		req.setAttribute("list", list);
+		req.setAttribute("board", board);
 
 		req.getRequestDispatcher("/WEB-INF/views/list.jsp").forward(req, resp);
 	}

@@ -1,4 +1,4 @@
-package com.test.deverytime.board.freeboard;
+package com.deverytime.board.freeboard;
 
 import java.util.ArrayList;
 
