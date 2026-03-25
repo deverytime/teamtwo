@@ -1,4 +1,4 @@
-package com.test.deverytime.study;
+package com.deverytime.study;
 
 import java.io.IOException;
 import java.util.ArrayList;
