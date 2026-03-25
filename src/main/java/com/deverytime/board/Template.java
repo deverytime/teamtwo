@@ -1,4 +1,4 @@
-package com.test.deverytime.board;
+package com.deverytime.board;
 
 import java.io.IOException;
 
@@ -8,16 +8,17 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
-@WebServlet(value = "/list.do")
-public class List extends HttpServlet {
+@WebServlet(value = "/template.do")
+public class Template extends HttpServlet {
 
 	@Override
 	protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
 
-		//List.java
+		//Template.java
 		
 
-		req.getRequestDispatcher("/WEB-INF/views/name.jsp").forward(req, resp);
+		req.getRequestDispatcher("/WEB-INF/views/template.jsp").forward(req, resp);
 	}
 
 }
+

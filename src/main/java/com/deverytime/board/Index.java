@@ -1,4 +1,4 @@
-package com.test.deverytime.board;
+package com.deverytime.board;
 
 import java.io.IOException;
 
