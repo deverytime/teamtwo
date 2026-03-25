@@ -1,4 +1,4 @@
-package com.test.deverytime.model;
+package com.deverytime.model;
 
 public class StudyDto {
 
