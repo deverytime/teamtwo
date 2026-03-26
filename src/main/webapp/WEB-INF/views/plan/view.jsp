@@ -1,5 +1,6 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
+<%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt" %>
 <!DOCTYPE html>
 <html lang="ko">
 <head>
@@ -9,25 +10,226 @@
 </head>
 <body class="bg-slate-50 text-slate-800">
   <%@ include file="/WEB-INF/views/inc/header.jsp" %>
-  <main class="page-wrap">
-  	
-  	
-    <div class="mb-8">
-      <h1 class="section-title">학습계획 상세 화면 (임시)</h1>
-      <p class="section-desc">여기에 페이지 부제목이나 설명을 적습니다.</p>
+
+  <div class="page-wrap max-w-6xl mx-auto px-4 py-8">
+
+    <!-- 상단 제목 -->
+    <div class="flex items-center justify-between mb-6">
+      <div>
+        <h2 class="text-3xl font-bold text-slate-800">학습계획 상세</h2>
+        <p class="text-sm text-slate-500 mt-1">학습계획 관리 및 해당학습의 기록 조회가 가능합니다</p>
+      </div>
+      <button class="px-4 py-2 btn btn-soft" onclick="location.href = '/teamtwo/plan/list.do';">
+        목록으로
+      </button>
     </div>
-    
-    <div class="content-card card-pad">
-      <div class="flex justify-center gap-4 pt-2">
+
+    <!-- 계획 카드 -->
+    <div class="bg-white rounded-2xl shadow-sm border border-slate-200 p-6 mb-6">
+
+      <!-- 상단 2열 -->
+      <div class="flex items-center gap-10 w-fit">
+      
+        <!-- 좌측 -->
+        <div>
+          <p class="text-sm text-slate-400 mb-1">계획명</p>
+          <h3 class="text-2xl font-bold text-slate-800">${dto.title}</h3>
+      
+          <span class="inline-flex mt-3 rounded-full px-3 py-1 text-sm font-medium
+            ${dto.progressStatus == '진행중' ? 'bg-blue-100 text-blue-700' : ''}
+            ${dto.progressStatus == '완료' ? 'bg-emerald-100 text-emerald-700' : ''}
+            ${dto.progressStatus == '미완료' ? 'bg-red-100 text-red-700' : ''}
+          ">
+            ${dto.progressStatus}
+          </span>
+        </div>
+      
+        <!-- 우측 (진행률) -->
+        <div class="shrink-0">
+          <div
+            class="radial-progress text-emerald-500 font-bold text-xl"
+            style="--value:35; --size:96px; --thickness:10px;"
+          >
+            35%
+          </div>
+        </div>
+      
+      </div>
+
+      <!-- 설명 -->
+      <div class="mt-6 border-t border-slate-100 pt-5">
+        <p class="text-sm text-slate-400 mb-2">설명</p>
+        <p class="text-slate-700 leading-7">
+          ${dto.description}
+        </p>
+      </div>
+
+      <!-- 버튼 -->
+      <div class="flex justify-end gap-4 pt-2">
         <a href="/teamtwo/plan/edit.do?seq=${dto.seq}" class="btn btn-soft btn-accent">수정</a>
+    
+        
         <button type="button" class="btn btn-soft btn-error"
-        onclick="openModal(${dto.seq})">
+          onclick="openModal(${dto.seq})">
             삭제
         </button>
       </div>
+
+      
     </div>
-    
-    
+    <!-- 기본 정보 + 통계 -->
+<div class="grid grid-cols-1 lg:grid-cols-3 gap-6">
+
+  <!-- 기본 정보 -->
+  <div class="lg:col-span-2 bg-white rounded-2xl shadow-sm border border-slate-200 p-6">
+    <h4 class="text-lg font-semibold text-slate-800 mb-4">기본 정보</h4>
+
+    <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+
+      <div class="rounded-xl bg-slate-50 p-4">
+        <p class="text-sm text-slate-400 mb-1">주제</p>
+        <p class="text-base font-medium text-slate-800">${dto.subject}</p>
+      </div>
+
+      <div class="rounded-xl bg-slate-50 p-4">
+        <p class="text-sm text-slate-400 mb-1">계획 유형</p>
+        <p class="text-base font-medium text-slate-800">${dto.type}</p>
+      </div>
+
+      <div class="rounded-xl bg-slate-50 p-4">
+        <p class="text-sm text-slate-400 mb-1">시작일</p>
+        <p class="text-base font-medium text-slate-800">
+          <fmt:formatDate value="${dto.startDate}" pattern="M월 d일" />
+        </p>
+      </div>
+
+      <c:if test="${not empty dto.endDate}">
+        <div class="rounded-xl bg-slate-50 p-4">
+          <p class="text-sm text-slate-400 mb-1">종료일</p>
+          <p class="text-base font-medium text-slate-800">
+            <fmt:formatDate value="${dto.endDate}" pattern="M월 d일" />
+          </p>
+        </div>
+      </c:if>
+
+      <div class="rounded-xl bg-slate-50 p-4">
+        <p class="text-sm text-slate-400 mb-1">최근 수정일</p>
+        <p class="text-base font-medium text-slate-800">
+          <fmt:formatDate value="${dto.updateDate}" pattern="M월 d일" />
+        </p>
+      </div>
+
+    </div>
+  </div>
+
+  <!-- 통계 정보 -->
+  <div class="bg-white rounded-2xl shadow-sm border border-slate-200 p-6">
+    <h4 class="text-lg font-semibold text-slate-800 mb-4">진행 현황</h4>
+
+    <div class="space-y-4">
+      <div class="rounded-xl bg-blue-50 p-4">
+        <p class="text-sm text-blue-500 mb-1">시작한 지</p>
+        <p class="text-2xl font-bold text-blue-700">
+          ${dto.daysFromStart}일
+        </p>
+      </div>
+
+<!--       <div class="rounded-xl bg-blue-50 p-4"> -->
+<!--         <p class="text-sm text-blue-500 mb-1">시작한 지</p> -->
+<!--         <p class="text-2xl font-bold text-blue-700">7일</p> -->
+<!--       </div> -->
+<!--       <div class="rounded-xl bg-amber-50 p-4"> -->
+<!--         <p class="text-sm text-amber-500 mb-1">종료까지</p> -->
+<!--         <p class="text-2xl font-bold text-amber-700">D-14</p> -->
+<!--       </div> -->
+      
+      <c:if test="${not empty dto.endDate}">
+        <div class="rounded-xl bg-amber-50 p-4">
+          <p class="text-sm text-amber-500 mb-1">종료까지</p>
+          <p class="text-2xl font-bold text-amber-700">
+      
+            <c:choose>
+              <c:when test="${dto.daysToEnd > 0}">
+                D-${dto.daysToEnd}
+              </c:when>
+              <c:when test="${dto.daysToEnd == 0}">
+                D-Day
+              </c:when>
+              <c:otherwise>
+                종료됨
+              </c:otherwise>
+            </c:choose>
+          </p>
+        </div>
+      </c:if>
+
+      <div class="rounded-xl bg-violet-50 p-4">
+        <p class="text-sm text-violet-500 mb-1">학습기록 수</p>
+        <p class="text-2xl font-bold text-violet-700">5개</p>
+      </div>
+
+    </div>
+  </div>
+
+</div>
+<!-- 학습기록 목록 -->
+  <div class="bg-white rounded-2xl shadow-sm border border-slate-200 mt-6 overflow-hidden">
+
+    <!-- 헤더 -->
+    <div class="px-6 py-4 border-b border-slate-200 flex items-center justify-start">
+      <div>
+        <h4 class="text-lg font-semibold text-slate-800">학습기록 (임시임시)</h4>
+        <p class="text-sm text-slate-500">해당 계획에 등록된 학습기록입니다.</p>
+      </div>
+    </div>
+
+    <!-- 테이블 -->
+    <div class="overflow-x-auto">
+      <table class="min-w-full text-sm text-left">
+        <thead class="bg-slate-50 text-slate-500">
+          <tr>
+            <th class="px-6 py-3 font-medium">날짜</th>
+            <th class="px-6 py-3 font-medium">학습 내용</th>
+            <th class="px-6 py-3 font-medium">진행률</th>
+            <th class="px-6 py-3 font-medium">비고</th>
+          </tr>
+        </thead>
+
+        <tbody class="divide-y divide-slate-100">
+
+          <tr class="hover:bg-slate-50">
+            <td class="px-6 py-4">2026-03-21</td>
+            <td class="px-6 py-4">학습계획 등록 기능 구현</td>
+            <td class="px-6 py-4">10%</td>
+            <td class="px-6 py-4 text-slate-500">폼 구성 완료</td>
+          </tr>
+
+          <tr class="hover:bg-slate-50">
+            <td class="px-6 py-4">2026-03-23</td>
+            <td class="px-6 py-4">목록 조회 + 페이징</td>
+            <td class="px-6 py-4">25%</td>
+            <td class="px-6 py-4 text-slate-500">검색 기능 포함</td>
+          </tr>
+
+          <tr class="hover:bg-slate-50">
+            <td class="px-6 py-4">2026-03-25</td>
+            <td class="px-6 py-4">수정 기능 구현</td>
+            <td class="px-6 py-4">35%</td>
+            <td class="px-6 py-4 text-slate-500">세션 연동 완료</td>
+          </tr>
+
+        </tbody>
+      </table>
+    </div>
+    <!-- 기록 추가 버튼 (고정) -->
+    <button
+      class="fixed bottom-6 right-12 z-50 px-5 py-3 rounded-full bg-sky-500 text-white font-semibold shadow-lg hover:bg-sky-600 active:scale-95 transition cursor-pointer"
+      >
+      + 기록 추가
+    </button>
+  </div>
+
+  </div>
 <!-- 모달 -->
 <dialog id="deleteModal" class="modal">
   <div class="modal-box">
@@ -77,7 +279,7 @@
           });
         
         });
-	</script>
-</main>
+  </script>
+</body>
 </body>
 </html>
