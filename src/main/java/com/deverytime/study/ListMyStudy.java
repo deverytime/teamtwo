@@ -123,7 +123,8 @@ public class ListMyStudy extends HttpServlet{
 			pagebar += String.format("<a href='#!'>[다음 %d페이지]</a>", blockSize);
 		} else {
 			pagebar += String.format("<a href='/teamtwo/study/mystudy-list.do?page=%d'>[다음 %d페이지]</a>", n, blockSize);
-		}	
+		}
+	
 		
 		req.setAttribute("pagebar", pagebar);
 		req.setAttribute("list", list);

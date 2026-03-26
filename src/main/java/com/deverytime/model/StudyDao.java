@@ -97,12 +97,10 @@ public class StudyDao extends BasicDao{
 			
 			pstat.setString(1, seq);
 			
-			rs = pstat.executeQuery();
-			
-			StudyDto dto = new StudyDto();
-			
+			rs = pstat.executeQuery();	
 			
 			if(rs.next()) {
+				StudyDto dto = new StudyDto();
 				
 				dto.setSeq(rs.getString("seq"));
 				dto.setName(rs.getString("name"));
@@ -374,14 +372,15 @@ public class StudyDao extends BasicDao{
 		
 	}
 
-	public int unregStudy(MemberDto dto) {
+	public int unregStudy(MemberDto dto, String seq) {
 		
 		try {
 			
-			String sql = "delete from study_member where memberseq = ?";
+			String sql = "delete from study_member where memberseq = ? and studySeq = ?";
 			
 			pstat = conn.prepareStatement(sql);
 			pstat.setString(1, dto.getSeq());
+			pstat.setString(2, seq);
 			
 			return pstat.executeUpdate();
 			
