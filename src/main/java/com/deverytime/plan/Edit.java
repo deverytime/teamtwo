@@ -54,6 +54,8 @@ public class Edit extends HttpServlet {
 	@Override
 	protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
 		
+	    req.setCharacterEncoding("UTF-8");
+
 		PlanService service = new PlanService();
 		
 		// 완료기반은 endDate 없으므로 오류 안나게 처리
@@ -70,6 +72,7 @@ public class Edit extends HttpServlet {
 			.type(req.getParameter("type"))
 			.subject(req.getParameter("subject"))
 			.description(req.getParameter("description"))
+			.progressStatus(req.getParameter("progressStatus"))
 			.startDate(Date.valueOf(req.getParameter("startDate")))
 			.endDate(endDate)
 			.updateDate(new Date(System.currentTimeMillis()))
@@ -79,9 +82,7 @@ public class Edit extends HttpServlet {
 		int result = service.edit(dto);
 		
 		if (result == 1) {
-			// TODO 임시 (나중에상세페이지로 가게 바꿔야 함)
-			resp.sendRedirect("/plan/view.do?seq=" + dto.getSeq());
-//			resp.sendRedirect("/plan/list.do");
+			resp.sendRedirect(req.getContextPath() + "/plan/view.do?seq=" + dto.getSeq());
 		} else {
 			req.setAttribute("dto", dto); // 입력값 다시 넘김
 			
