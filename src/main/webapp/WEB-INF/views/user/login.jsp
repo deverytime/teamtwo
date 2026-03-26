@@ -55,9 +55,9 @@
 			</form>
 
 			<div class="flex justify-center gap-4 mt-8 text-sm text-slate-500">
-				<a href="/teamtwo/user/find-id.do"
+				<a href="/teamtwo/user/id-find.do"
 					class="hover:text-primary hover:underline">아이디 찾기</a> <span
-					class="text-slate-300">|</span> <a href="/teamtwo/user/find-pw.do"
+					class="text-slate-300">|</span> <a href="/teamtwo/user/pw-find.do"
 					class="hover:text-primary hover:underline">비밀번호 찾기</a> <span
 					class="text-slate-300">|</span> <a href="/teamtwo/user/register.do"
 					class="hover:text-primary font-bold hover:underline">가입하기</a>
