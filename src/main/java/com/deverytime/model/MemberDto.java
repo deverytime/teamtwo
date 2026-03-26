@@ -17,4 +17,7 @@ public class MemberDto {
 	private int twoFactor;		// 2차 인증 (0:비활성화, 1:활성화)
 	private int type;			// 권한 (0:회원, 1:관리자)
 	private int failCount;		// 로그인 실패 횟수(기본값: 0)
+	
+	//study-view에서 필요한 데이터
+	private String regdate; //스터디 등록일
 }
