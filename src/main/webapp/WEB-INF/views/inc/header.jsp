@@ -9,7 +9,7 @@
 			<a href="/teamtwo/index.do" class="text-2xl font-bold text-brand-600">deverytime</a>
 			<c:if test="${not empty auth}">
 				<span class="ml-3 chip ${authDto.type == 1 ? 'chip-amber' : 'chip-blue'}">
-					${authDto.type == 1 ? '관리자' : '일반'} | ${auth}
+					${authDto.type == 1 ? '관리자' : '일반 회원'} | ${auth}
 				</span>
 			</c:if>
 		</div>

@@ -11,7 +11,6 @@ import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
 import com.deverytime.model.MemberDto;
-import com.deverytime.model.MemberService;
 
 @WebServlet("/user/login.do")
 public class Login extends HttpServlet {
