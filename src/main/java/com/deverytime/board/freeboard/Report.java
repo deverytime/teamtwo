@@ -1,0 +1,57 @@
+package com.deverytime.board.freeboard;
+
+import java.io.IOException;
+
+import javax.servlet.ServletException;
+import javax.servlet.annotation.WebServlet;
+import javax.servlet.http.HttpServlet;
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
+import javax.servlet.http.HttpSession;
+
+import com.deverytime.model.BoardDto;
+
+@WebServlet(value = "/board/freeboard/report.do")
+public class Report extends HttpServlet {
+
+	@Override
+	protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
+
+		// Report.java
+		// 1. 정보받기
+		resp.setContentType("text/html; charset=UTF-8");
+		HttpSession session = req.getSession();
+
+		// 로그인 안한 사용자면 안내 메시지 출력
+		if (session.getAttribute("auth") == null) {
+			resp.sendRedirect(
+					"view.do?board=" + req.getParameter("board") + "&seq=" + req.getParameter("seq") + "&msg=login");
+			return;
+		}
+
+		String seq = req.getParameter("seq");
+		String board = req.getParameter("board");
+		String reasonSeq = req.getParameter("reasonSeq");
+
+		BoardDto dto = new BoardDto();
+		dto.setReasonSeq(reasonSeq);
+		dto.setSeq(seq);
+		dto.setId((String) session.getAttribute("auth"));
+
+		// 2. 추천 처리
+		BoardService service = new BoardService();
+
+		int result = service.report(dto);
+
+		if (result == 1) {
+			// 신고 처리
+			resp.sendRedirect("view.do?board=" + board+ "&seq=" + seq);
+
+		} else {
+			// 이미 신고한 경우
+			resp.sendRedirect("view.do?board=" + board + "&seq=" + seq + "&msg=reportalready");
+		}
+
+	}
+
+}
