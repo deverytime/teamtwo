@@ -81,7 +81,7 @@
 		const id = idInput.value;
 		if(id.trim() === '') { alert('아이디를 입력해주세요.'); return; }
 
-		fetch('/teamtwo/user/find-pw.do', {
+		fetch('/teamtwo/user/pw-find.do', {
 			method: 'POST',
 			headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
 			body: 'action=checkId&id=' + id
@@ -112,7 +112,7 @@
 		this.innerText = "발송중...";
 		this.disabled = true;
 
-		fetch('/teamtwo/user/find-pw.do', {
+		fetch('/teamtwo/user/pw-find.do', {
 			method: 'POST',
 			headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
 			body: 'action=sendAuth&id=' + id + '&email=' + email
@@ -139,7 +139,7 @@
 		const authCode = document.getElementById('authCode').value;
 		if(authCode.trim() === '') { alert('인증번호를 입력해주세요.'); return; }
 
-		fetch('/teamtwo/user/find-pw.do', {
+		fetch('/teamtwo/user/pw-find.do', {
 			method: 'POST',
 			headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
 			body: 'action=verify&id=' + id + '&email=' + email + '&authCode=' + authCode

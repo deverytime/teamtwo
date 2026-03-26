@@ -7,7 +7,7 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
-@WebServlet("/user/check-pw.do")
+@WebServlet("/user/pw-check.do")
 public class CheckPw extends HttpServlet {
 
 	@Override
@@ -23,7 +23,7 @@ public class CheckPw extends HttpServlet {
 		String target = req.getParameter("target");
 		req.setAttribute("target", target);
 		
-		req.getRequestDispatcher("/WEB-INF/views/user/check-pw.jsp").forward(req, resp);
+		req.getRequestDispatcher("/WEB-INF/views/user/pw-check.jsp").forward(req, resp);
 	}
 
 	@Override

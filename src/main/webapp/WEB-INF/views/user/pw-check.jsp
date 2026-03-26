@@ -45,7 +45,7 @@
 			
 			if(pw.trim() === '') { alert('비밀번호를 입력해주세요.'); return; }
 
-			fetch('/teamtwo/user/check-pw.do', {
+			fetch('/teamtwo/user/pw-check.do', {
 				method: 'POST',
 				headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
 				body: 'pw=' + encodeURIComponent(pw)

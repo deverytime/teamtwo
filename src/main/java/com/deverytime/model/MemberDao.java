@@ -94,6 +94,8 @@ public class MemberDao extends BasicDao {
 				dto.setPw(rs.getString("pw"));
 				dto.setName(rs.getString("name"));
 				dto.setNickname(rs.getString("nickname"));
+				dto.setEmail(rs.getString("email")); 
+				dto.setPic(rs.getString("pic"));
 				dto.setStatus(rs.getInt("status"));
 				dto.setFailCount(rs.getInt("failCount"));
 				dto.setTwoFactor(rs.getInt("twoFactor"));
