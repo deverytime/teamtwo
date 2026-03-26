@@ -30,13 +30,13 @@
           <div class="flex justify-between items-center">
             <label class="form-label inline! text-center">학습 계획명</label>
             <input type="text" class="input input-bordered w-2/3 placeholder:text-gray-500 placeholder:italic"
-              id="title" name="title" value="${dto.title}">
+              id="title" name="title" value="${dto.title}" required maxlength="160">
           </div>
 
           <div class="flex justify-between items-center">
             <label class="form-label inline! text-center">주제</label>
             <input type="text" class="input input-bordered w-2/3 placeholder:text-gray-500 placeholder:italic"
-              id="subject" name="subject" value="${dto.subject}">
+              id="subject" name="subject" value="${dto.subject}" required maxlength="160">
           </div>
           
           <div class="flex justify-between items-center">
@@ -53,7 +53,7 @@
             <label class="form-label">학습계획 설명</label>
             <textarea
               class="textarea textarea-bordered w-full h-64"
-              id="description" name="description">${dto.description}</textarea>
+              id="description" name="description" required maxlength="1000">${dto.description}</textarea>
           </div>
         </div>
 

@@ -4,7 +4,6 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.HashMap;
 
-
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
@@ -12,6 +11,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
+import com.deverytime.model.MemberDto;
 import com.deverytime.model.PlanDto;
 
 @WebServlet("/plan/list.do")
@@ -22,10 +22,17 @@ public class List extends HttpServlet {
 		
 		HttpSession session = req.getSession();
 		PlanService service = new PlanService();
+
+		// 세션에서 memberDto 가져오기
+		MemberDto auth = (MemberDto) session.getAttribute("authDto");
 		
-		// TODO 로그인 기능 구현 후 제거해야 함
-		session.setAttribute("auth", 4);
-		int memberSeq = (Integer) session.getAttribute("auth");
+		// 로그인안했으면 로그인 페이지로
+		if (auth == null) {
+		    resp.sendRedirect("/teamtwo/user/login.do");
+		    return;
+		}
+		// dto 에 저장된 memberSeq 가져오기
+		int memberSeq = Integer.parseInt(auth.getSeq());
 		
 		// page
 		String page = req.getParameter("page");
