@@ -189,6 +189,82 @@ public class StudyDao extends BasicDao{
 		return 0;
 	}
 
+	public int add(StudyDto dto, MemberDto mdto) {
+		
+		int result = 0;
+		
+		try {
+			
+			conn.setAutoCommit(false);
+			
+			String sql = "insert into study (seq, name, description, capacity, status, createDate) values (studySeq.nextVal, ?, ?, ?, default, default)";
+			
+			pstat = conn.prepareStatement(sql);
+			pstat.setString(1, dto.getName());
+			pstat.setString(2, dto.getDescription());
+			pstat.setString(3, dto.getCapacity());
+			int result1 = pstat.executeUpdate();
+			
+			sql = "insert into study_member (seq, memberseq, studyseq, regdate, type) values (studymemberSeq.nextVal, ?, studySeq.currVal, default, 1)";
+			pstat = conn.prepareStatement(sql);
+			pstat.setString(1, mdto.getSeq());
+			int result2 = pstat.executeUpdate();
+			
+			if (result1 == 1 && result2 == 1) {
+	            conn.commit();
+	            result = 1;
+	        } else {
+	            conn.rollback();
+	            result = 0;
+	        }
+			
+			return result;
+			
+			
+		} catch (Exception e) {
+			try {
+	            if (conn != null) conn.rollback();
+	        } catch (Exception ex) {
+	            ex.printStackTrace();
+	        }
+	        e.printStackTrace();
+	    } finally {
+	        try {
+	            conn.setAutoCommit(true);
+	        } catch (Exception e) {}
+	        closeAll();
+	    }
+		
+		return result;
+	}
+
+	public MemberDto getMemberSeq(String id) {
+		
+		try {
+	
+			String sql = "select * from Member where id = ?";
+			
+			pstat = conn.prepareStatement(sql);
+			pstat.setString(1, id);
+			rs = pstat.executeQuery();
+			
+			if(rs.next()) {
+				MemberDto dto = new MemberDto();
+				dto.setSeq(rs.getString("seq"));
+				
+				return dto;
+			}
+			
+		} catch (Exception e) {
+			e.printStackTrace();
+		} finally {
+			closeAll();
+		}
+		
+		return null;
+		
+	}
+
 	
 	
 }

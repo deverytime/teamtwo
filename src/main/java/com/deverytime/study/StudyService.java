@@ -110,5 +110,20 @@ public class StudyService {
 		return dao.getTotalCountM(seq);
 		
 	}
+
+	public int add(StudyDto dto, MemberDto mdto) {
+		
+		StudyDao dao = new StudyDao();
+		
+		return dao.add(dto, mdto);
+		
+	}
+
+	public MemberDto getMemberSeq(String id) {
+		
+		StudyDao dao = new StudyDao();
+		
+		return dao.getMemberSeq(id);
+	}
 	
 }

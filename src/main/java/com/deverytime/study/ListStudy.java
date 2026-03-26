@@ -13,6 +13,7 @@ import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 import javax.websocket.Session;
 
+import com.deverytime.model.MemberDto;
 import com.deverytime.model.StudyDto;
 
 @WebServlet(value = "/study/study-list.do")
@@ -20,7 +21,7 @@ public class ListStudy extends HttpServlet{
 
 	@Override
 	protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
-			
+					
 		String word = req.getParameter("word");
 		String search = "n"; //목록보기(n), 검색하기(y)
 		
@@ -68,7 +69,7 @@ public class ListStudy extends HttpServlet{
 		ArrayList<StudyDto> list = new ArrayList<StudyDto>();
 		
 		list = service.list(map);
-		
+	
 		
 		totalCount = service.getTotalCount(map);
 		
@@ -106,7 +107,7 @@ public class ListStudy extends HttpServlet{
 			pagebar += String.format("<a href='#!'>[다음 %d페이지]</a>", blockSize);
 		} else {
 			pagebar += String.format("<a href='/teamtwo/study/study-list.do?page=%d'>[다음 %d페이지]</a>", n, blockSize);
-		}
+		}	
 		
 		req.setAttribute("pagebar", pagebar);
 		req.setAttribute("list", list);
