@@ -265,6 +265,58 @@ public class StudyDao extends BasicDao{
 		
 	}
 
+	public ArrayList<StudyDto> mylist(HashMap<String, String> map, MemberDto mdto) {
+		
+		try {
+			
+			String where = "";
+			
+			if(map.get("search").equals("y")) {
+				where = String.format("where %s like '%%%s%%'"
+						, map.get("word"));
+			}
+			
+			String sql = "";
+			
+			sql = String.format("select * from (select a.*, rownum as rnum from vwStudyByMseq a where memberSeq = ?) where rnum between %s and %s"
+							,map.get("begin")
+							,map.get("end"));
+			
+			pstat = conn.prepareStatement(sql);
+			pstat.setString(1, mdto.getSeq());
+			rs = pstat.executeQuery();
+			
+			ArrayList<StudyDto> list = new ArrayList<StudyDto>();
+			
+			while(rs.next()) {
+				StudyDto dto = new StudyDto();
+				
+				dto.setSeq(rs.getString("seq"));
+				dto.setName(rs.getString("name"));
+				dto.setDescription(rs.getString("description"));
+				dto.setCapacity(rs.getString("capacity"));
+				dto.setStatus(rs.getString("status"));
+				dto.setCreateDate(rs.getString("createDate"));
+				
+				dto.setScheduleCount(rs.getString("scheduleCount"));
+				dto.setHeadCount(rs.getString("headCount"));
+				
+				
+				list.add(dto);
+			}
+			
+			return list;
+			
+		} catch (Exception e) {
+			e.printStackTrace();
+		} finally {
+			closeAll();	
+		}
+		
+		return null;
+		
+	}
+
 	
 	
 }

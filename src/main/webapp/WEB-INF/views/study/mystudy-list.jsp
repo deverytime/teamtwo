@@ -51,13 +51,13 @@
     <main class="page-wrap">
 		
 		<div class="mb-8">
-			<h1 class="section-title">스터디 목록</h1>
-			<p class="section-desc">참여하고 싶은 스터디를 확인해보세요!</p>
+			<h1 class="section-title">내 스터디 목록</h1>
+			<p class="section-desc">내가 참여하고 있는 스터디를 확인하세요!</p>
 		</div>
 
 		<div class="content-card card-pad">
 			
-	<!-- 스터디 목록 -->
+	<!-- 내 스터디 목록 -->
 	<section class="demo-block">
 	<div id="main-layout">
 	  <div id="main">
