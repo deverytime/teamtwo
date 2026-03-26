@@ -63,7 +63,7 @@
 							<button class="btn btn-soft-brand btn-sm"
 								onclick="location.href='edit.do?seq=${dto.seq}&board=${dto.boardType}'">수정</button>
 							<button class="btn btn-error btn-sm"
-								onclick="location.href='delete.do?seq=${dto.seq}&board=${dto.boardType}'">삭제</button>
+								onclick="location.href='del.do?seq=${dto.seq}&board=${dto.boardType}'">삭제</button>
 						</div>
 					</c:if>
 				</div>
