@@ -50,7 +50,7 @@
                 <thead>
                 <tr>
                   <th>학습계획명</th>
-                  <th>진행률</th>
+                  <th>주제</th>
                   <th>설명</th>
                   <th>완료여부</th>
                   <th>시작일</th>
@@ -59,13 +59,21 @@
                 <tbody>
                 <c:forEach items="${list}" var="dto">
                       
-                      <tr onclick="location.href='/plan/detail.do?seq=101'" style="cursor:pointer;"
+                      <tr onclick="location.href='/teamtwo/plan/view.do?seq=${dto.seq}'" style="cursor:pointer;"
                         class="hover:bg-slate-100 cursor-pointer">
                         <td>${dto.title}</td>
-<%--                         <td>${dto.progress}%</td> --%>
-                        <td>80%</td>
+                        <td>${dto.subject}</td>
                         <td>${dto.description}</td>
-                        <td><span class="badge badge-success badge-outline">${dto.progressStatus}</span></td>
+                        <td>
+                          <span class="
+                            badge badge-outline
+                            ${dto.progressStatus == '진행중' ? 'badge-info' : ''}
+                            ${dto.progressStatus == '완료' ? 'badge-success' : ''}
+                            ${dto.progressStatus == '미완료' ? 'badge-error' : ''}
+                          ">
+                            ${dto.progressStatus}
+                          </span>
+                        </td>
                         <td>${dto.regDate}</td>
                       </tr>
                     </c:forEach>
