@@ -21,9 +21,21 @@ public class ListMyStudy extends HttpServlet{
 	@Override
 	protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
 		
+		resp.setCharacterEncoding("UTF-8");
+        resp.setContentType("text/html; charset=UTF-8");
+		
 		HttpSession session = req.getSession();
 		
-		String id = session.getAttribute("auth").toString();
+		Object auth = session.getAttribute("auth");
+		
+		//로그인 체크 로직
+		if(auth == null) {
+			resp.getWriter().print("<script>alert('로그인이 필요한 서비스입니다.');history.back();</script>");
+			resp.getWriter().close();
+			return;
+		}
+		
+		String id = auth.toString();
 		
 		String word = req.getParameter("word");
 		String search = "n"; //목록보기(n), 검색하기(y)
@@ -74,7 +86,6 @@ public class ListMyStudy extends HttpServlet{
 		MemberDto mdto = service.getMember(id);
 		
 		list = service.mylist(map, mdto);
-	
 		
 		totalCount = service.getTotalCount(map);
 		

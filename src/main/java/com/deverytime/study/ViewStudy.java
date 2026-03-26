@@ -21,7 +21,7 @@ public class ViewStudy extends HttpServlet{
 
 	@Override
 	protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
-		
+				
 		String seq = req.getParameter("seq");
 		
 		StudyService service = new StudyService();
@@ -99,9 +99,13 @@ public class ViewStudy extends HttpServlet{
 			pagebar += String.format("<a href='/teamtwo/study/study-view.do?seq=%s&page=%d'>[다음 %d페이지]</a>", seq, n, blockSize);
 		}
 		
+		//해당 스터디에 참여중인 회원들의 seq가 담긴 리스트
+		ArrayList<MemberDto> smlist = service.getStudyMember(dto);
+		
 		req.setAttribute("pagebar", pagebar);
 		req.setAttribute("dto", dto);
 		req.setAttribute("mlist", mlist);
+		req.setAttribute("smlist", smlist);
 		
 		req.getRequestDispatcher("/WEB-INF/views/study/study-view.jsp").forward(req, resp);
 		
