@@ -11,4 +11,16 @@ public class RecordService {
 		return dao.add(dto);
 	}
 
+	public RecordDto get(String seq, String memberSeq) {
+		RecordDao dao = new RecordDao();
+		
+		return dao.get(seq, memberSeq);
+	}
+
+	public int edit(RecordDto dto) {
+		RecordDao dao = new RecordDao();
+		
+		return dao.edit(dto);
+	}
+
 }

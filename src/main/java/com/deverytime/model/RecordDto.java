@@ -21,4 +21,6 @@ public class RecordDto {
     private Date updateDate;      // 수정일
     private String recordStatus;  // 기록상태 (완료, 진행중)
     private String planSeq;       // 계획번호
+    
+    private String memberSeq;
 }
