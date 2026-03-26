@@ -32,7 +32,7 @@ public class Edit extends HttpServlet {
 		PlanDto dto = service.get(seq, memberSeq);
 		
 		// 본인 학습계획 아닐때 처리
-		if (dto == null || dto.getMemberSeq() != memberSeq) {
+		if (dto == null || !dto.getMemberSeq().equals(memberSeq)) {
 			resp.getWriter().print("<script>alert('권한이 없습니다.');history.back();</script>");
 			resp.getWriter().close();
 			return;
@@ -80,8 +80,8 @@ public class Edit extends HttpServlet {
 		
 		if (result == 1) {
 			// TODO 임시 (나중에상세페이지로 가게 바꿔야 함)
-//			resp.sendRedirect("/plan/detail.do?seq=" + dto.getSeq());
-			resp.sendRedirect("/plan/list.do");
+			resp.sendRedirect("/plan/view.do?seq=" + dto.getSeq());
+//			resp.sendRedirect("/plan/list.do");
 		} else {
 			req.setAttribute("dto", dto); // 입력값 다시 넘김
 			
