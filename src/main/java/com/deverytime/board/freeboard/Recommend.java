@@ -26,11 +26,7 @@ public class Recommend extends HttpServlet {
 		
 		// 로그인 안한 사용자면 안내 메시지 출력
 		if(session.getAttribute("auth") == null) {
-		    PrintWriter out = resp.getWriter();
-		    out.println("<script>");
-		    out.println("alert('로그인한 사용자만 추천할 수 있습니다!');");
-		    out.println("history.back();");
-		    out.println("</script>");
+		    resp.sendRedirect("view.do?board=" + req.getParameter("board") + "&seq=" + req.getParameter("seq") +"&msg=login");
 		    return;
 		}
 		
@@ -52,11 +48,7 @@ public class Recommend extends HttpServlet {
 			
 		} else {
 			// 이미 추천한 경우
-			PrintWriter out = resp.getWriter();
-		    out.println("<script>");
-		    out.println("alert('이미 추천한 글입니다!');");
-		    out.println("history.back();");
-		    out.println("</script>");
+			resp.sendRedirect("view.do?board=" + board + "&seq=" + seq + "&msg=already");
 		}
 		 
 		

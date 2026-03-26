@@ -11,6 +11,22 @@
 <body class="bg-slate-50 text-slate-800">
 	<%@ include file="/WEB-INF/views/inc/header.jsp"%>
 
+	<%-- 추천 메시지 처리// 화면이 모두 로드된 후 실행되어야 같은 페이지에서 열린거같은 느낌을 낼 수 있음 --%>
+	<c:if test="${param.msg == 'login'}">
+		<script>
+			window.onload = function() {
+				alert('로그인한 사용자만 추천할 수 있습니다!');
+			}
+		</script>
+	</c:if>
+	<c:if test="${param.msg == 'already'}">
+		<script>
+			window.onload = function() {
+				alert('이미 추천한 글입니다!');
+			}
+		</script>
+	</c:if>
+
 	<main class="page-wrap">
 
 		<!-- 게시판 이름 -->
@@ -34,14 +50,14 @@
 
 					<!-- ② 수정/삭제 버튼 (본인 글 조건 나중에 추가) -->
 					<c:if test="${dto.id == auth}">
-						
+
 						<div class="flex gap-2 flex-shrink-0">
 							<button class="btn btn-soft-brand btn-sm"
 								onclick="location.href='edit.do?seq=${dto.seq}&board=${dto.boardType}'">수정</button>
 							<button class="btn btn-error btn-sm"
 								onclick="location.href='delete.do?seq=${dto.seq}&board=${dto.boardType}'">삭제</button>
-					</div>
-					</c:if> 
+						</div>
+					</c:if>
 				</div>
 
 				<!-- 작성자 / 조회수 / 날짜 -->
@@ -107,7 +123,7 @@
 			</c:if>
 			<button class="btn btn-soft-brand"
 				onclick="location.href='list.do?board=${dto.boardType}'">돌아가기</button>
-			<c:if test="${not empty dto.nextSeq}">	
+			<c:if test="${not empty dto.nextSeq}">
 				<button class="btn btn-soft-brand"
 					onclick="location.href='view.do?seq=${dto.nextSeq}&board=${dto.boardType}'">다음
 					글 보기</button>
