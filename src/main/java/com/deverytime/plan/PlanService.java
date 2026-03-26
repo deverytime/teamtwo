@@ -1,5 +1,7 @@
 package com.deverytime.plan;
 
+import java.time.LocalDate;
+import java.time.temporal.ChronoUnit;
 import java.util.ArrayList;
 import java.util.HashMap;
 
@@ -137,6 +139,38 @@ public class PlanService {
 		PlanDao dao = new PlanDao();
 		
 		return dao.get(seq, memberSeq);
+	}
+	
+	public PlanDto getDetailInfo(String seq, String memberSeq) {
+		PlanDao dao = new PlanDao();
+		
+		PlanDto planDto = dao.get(seq, memberSeq);
+		
+		// 상세정보 용 변수 넣어주기
+		LocalDate today = LocalDate.now();
+
+		// 시작일 처리 (없으면 regDate 사용)
+		LocalDate startDate = null;
+		if (planDto.getStartDate() != null) {
+		    startDate = planDto.getStartDate().toLocalDate();
+		} else if (planDto.getRegDate() != null) {
+		    startDate = planDto.getRegDate().toLocalDate();
+		}
+
+		// 시작일 있을 때만 계산
+		if (startDate != null) {
+		    long daysFromStart = ChronoUnit.DAYS.between(startDate, today);
+		    planDto.setDaysFromStart(daysFromStart);
+		}
+
+		// 종료일 있을 때만 계산
+		if (planDto.getEndDate() != null) {
+		    LocalDate endDate = planDto.getEndDate().toLocalDate();
+		    long daysToEnd = ChronoUnit.DAYS.between(today, endDate);
+		    planDto.setDaysToEnd(daysToEnd);
+		}
+		
+		return planDto;
 	}
 
 	public int edit(PlanDto dto) {

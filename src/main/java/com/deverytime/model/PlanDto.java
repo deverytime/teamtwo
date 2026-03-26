@@ -25,4 +25,8 @@ public class PlanDto {
 	private Date updateDate;
 	private String progressStatus;
 	private String memberSeq;
+	
+	// 학습계획 상세정보 용 변수
+	private long daysFromStart;
+	private long daysToEnd;
 }
