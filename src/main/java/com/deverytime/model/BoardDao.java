@@ -91,12 +91,13 @@ public class BoardDao extends BasicDao {
 		}
 
 		// add에서 conn을 쓸예정이니 add에서 닫아줌
-//		} finally {
+//		finally {
 //			closeAll();
 //		}
 
 		return null;
 	}
+	
 
 	public BoardDto view(BoardDto dto) {
 		
@@ -128,6 +129,7 @@ public class BoardDao extends BasicDao {
 				dto.setNickname(rs.getString("nickname"));
 				dto.setNextSeq(rs.getString("nextSeq"));
 				dto.setPrevSeq(rs.getString("prevSeq"));
+				dto.setId(rs.getString("id"));
 			}
 				
 			return dto;	

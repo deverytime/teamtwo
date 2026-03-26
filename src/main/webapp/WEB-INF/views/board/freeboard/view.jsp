@@ -33,14 +33,15 @@
 					<h2 class="text-2xl font-bold">${dto.title}</h2>
 
 					<!-- ② 수정/삭제 버튼 (본인 글 조건 나중에 추가) -->
-					<%-- <c:if test="${dto.nickname == auth.nickname}"> --%>
-					<div class="flex gap-2 flex-shrink-0">
-						<button class="btn btn-soft-brand btn-sm"
-							onclick="location.href='edit.do?seq=${dto.seq}&board=${dto.boardType}'">수정</button>
-						<button class="btn btn-error btn-sm"
-							onclick="location.href='delete.do?seq=${dto.seq}&board=${dto.boardType}'">삭제</button>
+					<c:if test="${dto.id == auth}">
+						
+						<div class="flex gap-2 flex-shrink-0">
+							<button class="btn btn-soft-brand btn-sm"
+								onclick="location.href='edit.do?seq=${dto.seq}&board=${dto.boardType}'">수정</button>
+							<button class="btn btn-error btn-sm"
+								onclick="location.href='delete.do?seq=${dto.seq}&board=${dto.boardType}'">삭제</button>
 					</div>
-					<%-- </c:if> --%>
+					</c:if> 
 				</div>
 
 				<!-- 작성자 / 조회수 / 날짜 -->
