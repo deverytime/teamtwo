@@ -272,5 +272,25 @@ public class PlanDao extends BasicDao {
 		
 		return -1;
 	}
+
+	public int del(PlanDto dto) {
+		
+		try {
+			String sql = "delete from plan where seq = ? and memberSeq = ?";
+
+			pstat = conn.prepareStatement(sql);
+			pstat.setString(1, dto.getSeq());
+			pstat.setString(2, dto.getMemberSeq());
+
+			return pstat.executeUpdate();
+
+		} catch (Exception e) {
+			e.printStackTrace();
+		} finally {
+			closeAll();
+		}
+		
+		return -1;
+	}
 }
 

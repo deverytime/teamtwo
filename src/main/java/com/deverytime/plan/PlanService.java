@@ -151,4 +151,10 @@ public class PlanService {
 		return -1;
 	}
 
+	public int del(PlanDto dto) {
+		PlanDao dao = new PlanDao();
+		
+		return dao.del(dto);
+	}
+
 }

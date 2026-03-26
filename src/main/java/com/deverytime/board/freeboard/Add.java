@@ -26,7 +26,7 @@ public class Add extends HttpServlet {
 		// 1.로그인 했나 안했나
 		HttpSession session = req.getSession();
 
-		session.setAttribute("auth", "um1234"); // 로그인 기능 연결전 임시 세션 만들기 끝나면 삭제
+		//session.setAttribute("auth", "um1234"); // 로그인 기능 연결전 임시 세션 만들기 끝나면 삭제
 
 		if (session.getAttribute("auth") == null) {
 			resp.sendRedirect("/teamtwo/user/login.do");
