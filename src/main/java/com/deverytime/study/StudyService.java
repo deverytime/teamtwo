@@ -88,7 +88,27 @@ public class StudyService {
 		
 		StudyDao dao = new StudyDao();
 		
-		return dao.memberlist(seq, map);
+		ArrayList<MemberDto> list =  dao.memberlist(seq, map);
+		
+		for(MemberDto dto : list) {
+		
+		String createDate = dto.getRegdate();
+		
+		createDate = createDate.substring(0, 10);
+		
+		dto.setRegdate(createDate);
+		}
+		
+		return list;
+		
+	}
+
+	public int getTotalCountM(String seq) {
+		
+		StudyDao dao = new StudyDao();
+		
+		return dao.getTotalCountM(seq);
+		
 	}
 	
 }

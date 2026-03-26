@@ -12,6 +12,11 @@
 			margin: 50px 120px;
 		}
 		
+		#pagebar {
+			display: flex;
+			justify-content: center;
+		}
+		
 	</style>
 </head>
 <body class="bg-slate-50 text-slate-800">
@@ -114,25 +119,29 @@
                 	<%-- <c:if test="${}">
                 		<button type="button" class="badge badge-warning badge-outline">권한위임</button>
                 	</c:if> --%>
+                	<button type="button" class="btn btn-warning btn-outline">권한위임</button>
                 </td>
                 <td>
-                	<button type="button" class="badge badge-error badge-outline">추방하기</button>
+                	<button type="button" class="btn btn-error btn-outline">추방하기</button>
                 </td>
-                <td></td>
+                <td>${memberDto.regdate}</td>
               </tr>
               </c:forEach>
             </tbody>
           </table>
         </div>
+        
+       <!-- 페이지 바 -->
+       <div id="pagebar">${pagebar}</div>
 
-        <div class="card-pad border-t border-slate-200 flex justify-between items-center">
+       <!--  <div class="card-pad border-t border-slate-200 flex justify-between items-center">
           <p class="text-sm text-slate-500"></p>
           <div class="join">
             <button class="join-item btn btn-sm">1</button>
             <button class="join-item btn btn-sm btn-active">2</button>
             <button class="join-item btn btn-sm">3</button>
           </div>
-        </div>
+        </div> -->
       </div>
     </section>
     </div>

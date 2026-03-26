@@ -82,11 +82,11 @@
             </div>
             <div class="stats-box">
               <p class="text-sm text-slate-500">일정</p>
-              <p class="mt-2 text-2xl font-bold">${dto.scheduleCount}개</p>
+              <p class="mt-2 text-xl font-bold">${dto.scheduleCount}개</p>
             </div>
             <div class="stats-box">
               <p class="text-sm text-slate-500">생성일</p>
-              <p class="mt-2 text-2xl font-bold">${dto.createDate}</p>
+              <p class="mt-2 text-xl font-bold">${dto.createDate}</p>
             </div>
           </div>
 	

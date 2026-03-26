@@ -36,13 +36,13 @@ public class ViewStudy extends HttpServlet{
 		
 		int nowPage = 0;		//현재 페이지 번호
 		int totalCount = 0; 	//총 스터디 수
-		int pageSize = 8; 		//한페이지에서 보여줄 스터디 수
+		int pageSize = 5; 		//한페이지에서 보여줄 스터디 수
 		int totalPage = 0;      //총 페이지 수
 		int begin = 0;			//페이징 시작 위치
 		int end = 0;			//페이징 끝 위치
 		int n = 0; 				//페이지 바의 페이지 번호
 		int loop = 0 ;			//페이지 바의 루프변수
-		int blockSize = 10; 	//페이지 바의 페이지 개수
+		int blockSize = 5; 	//페이지 바의 페이지 개수
 		
 		if(page == null || Objects.equals(page, "")) {
 			nowPage = 1;
@@ -61,7 +61,7 @@ public class ViewStudy extends HttpServlet{
 		
 		mlist = service.memberList(seq, map);
 		
-		totalCount = service.getTotalCount(map);
+		totalCount = service.getTotalCountM(seq);
 		
 		totalPage = (int)Math.ceil((double)totalCount / pageSize); 
 		
@@ -77,7 +77,7 @@ public class ViewStudy extends HttpServlet{
 		if(n == 1) {
 			pagebar += String.format("<a href='#!'>[이전 %d페이지]</a>", blockSize);
 		} else {
-			pagebar += String.format("<a href='/teamtwo/study/study-list.do?page=%d'>[이전 %d페이지]</a>", n-1, blockSize);
+			pagebar += String.format("<a href='/teamtwo/study/study-view.do?seq=%s&page=%d'>[이전 %d페이지]</a>", seq, n-1, blockSize);
 		}
 		
 		while(!(loop > blockSize || n > totalPage)) {
@@ -85,7 +85,7 @@ public class ViewStudy extends HttpServlet{
 			if(n ==  nowPage) {
 				pagebar += String.format("<a href='#!' style='color: tomato;'>%d</a>", n);
 			} else {
-				pagebar += String.format("<a href='/teamtwo/study/study-list.do?page=%d'>%d</a>", n, n);
+				pagebar += String.format("<a href='/teamtwo/study/study-view.do?seq=%s&page=%d'>%d</a>", seq, n, n);
 			}
 			
 			loop++;
@@ -96,14 +96,10 @@ public class ViewStudy extends HttpServlet{
 		if(n >= totalPage) {
 			pagebar += String.format("<a href='#!'>[다음 %d페이지]</a>", blockSize);
 		} else {
-			pagebar += String.format("<a href='/teamtwo/study/study-list.do?page=%d'>[다음 %d페이지]</a>", n, blockSize);
+			pagebar += String.format("<a href='/teamtwo/study/study-view.do?seq=%s&page=%d'>[다음 %d페이지]</a>", seq, n, blockSize);
 		}
 		
 		req.setAttribute("pagebar", pagebar);
-		
-		HttpSession session = req.getSession();
-		
-		
 		req.setAttribute("dto", dto);
 		req.setAttribute("mlist", mlist);
 		

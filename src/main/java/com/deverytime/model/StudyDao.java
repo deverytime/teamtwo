@@ -149,6 +149,7 @@ public class StudyDao extends BasicDao{
 				dto.setId(rs.getString("id"));
 				dto.setName(rs.getString("name"));
 				dto.setEmail(rs.getString("email"));
+				dto.setRegdate(rs.getString("regdate"));
 				
 				list.add(dto);
 			}
@@ -163,6 +164,29 @@ public class StudyDao extends BasicDao{
 		
 		return null;
 		
+	}
+
+	public int getTotalCountM(String seq) {
+		
+		try {
+			
+			String sql = "select count(*) as cnt from vwStudyMember where studySeq = ?";
+			
+			pstat = conn.prepareStatement(sql);
+			pstat.setString(1, seq);
+			rs = pstat.executeQuery();
+			
+			if(rs.next()) {
+				return rs.getInt("cnt");
+			}
+			
+		} catch (Exception e) {
+			e.printStackTrace();
+		} finally {
+			closeAll();
+		}
+		
+		return 0;
 	}
 
 	
