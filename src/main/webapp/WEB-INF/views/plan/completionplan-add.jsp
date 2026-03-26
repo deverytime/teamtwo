@@ -25,13 +25,13 @@
                   <label class="form-label inline! text-center">학습 계획명</label>
                   <input type="text" class="input input-bordered w-2/3 placeholder:text-gray-500 placeholder:italic"
                     id="title" name="title"
-                    placeholder="학습 계획의 제목을 입력해주세요">
+                    placeholder="학습 계획의 제목을 입력해주세요" required maxlength="160">
               </div>
               <div class="flex justify-between items-center">
                   <label class="form-label inline! text-center">주제</label>
                   <input type="text" class="input input-bordered w-2/3 placeholder:text-gray-500 placeholder:italic"
                     id="subject" name="subject"
-                    placeholder="학습 계획의 주제를 입력해주세요">
+                    placeholder="학습 계획의 주제를 입력해주세요" required maxlength="160">
               </div>
 
               <div>
@@ -40,7 +40,7 @@
                     class="textarea textarea-bordered w-full h-64"
                     id="description" name="description"
                     placeholder="학습할 내용, 목표, 진행 방법 등을 자유롭게 작성하세요&#13;&#10;(예: 자바 기본 문법 복습 및 프로젝트 적용 연습)"
-                    ></textarea>
+                    required maxlength="1000"></textarea>
               </div>
               
             </div>

@@ -27,13 +27,13 @@
             <div class="flex justify-between items-center">
                 <label class="form-label inline! text-center">학습 계획명</label>
                 <input type="text" class="input input-bordered w-2/3"
-                  name="title" value="${dto.title}">
+                  name="title" value="${dto.title}" required maxlength="160">
             </div>
         
             <div class="flex justify-between items-center">
                 <label class="form-label inline! text-center">주제</label>
                 <input type="text" class="input input-bordered w-2/3"
-                  name="subject" value="${dto.subject}">
+                  name="subject" value="${dto.subject}" required maxlength="160">
             </div>
             <div class="flex justify-between items-center">
               <label class="form-label inline! text-center">진행 상태</label>
@@ -48,7 +48,9 @@
                 <label class="form-label">학습계획 설명</label>
                 <textarea 
                   class="textarea textarea-bordered w-full h-64"
-                  name="description">${dto.description}</textarea>
+                  name="description"
+                  required maxlength="1000"
+                  >${dto.description}</textarea>
             </div>
             <label class="form-label">학습 기간</label>
             <div class="flex items-center gap-3 flex-wrap">
@@ -58,7 +60,7 @@
                   name="startDate" value="${dto.startDate}" readonly>
                 <span class="ml-2">종료일</span>
                 <input type="date" class="input input-bordered w-auto"
-                  name="endDate" value="${dto.endDate}">
+                  name="endDate" value="${dto.endDate}" required>
             </div>
           </div>
           <input type="hidden" name="memberSeq" value="${dto.memberSeq}">
