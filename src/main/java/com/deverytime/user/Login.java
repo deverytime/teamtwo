@@ -11,7 +11,6 @@ import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
 import com.deverytime.model.MemberDto;
-import com.deverytime.model.MemberService;
 
 @WebServlet("/user/login.do")
 public class Login extends HttpServlet {
@@ -73,7 +72,7 @@ public class Login extends HttpServlet {
 			out.print("<script>alert('존재하지 않는 아이디입니다.'); history.back();</script>");
 			out.close();
 		} else if (result == -1) {
-			out.print("<script>alert('로그인에 5회 이상 실패하여 계정 이용이 제한됩니다.'); location.href='/teamtwo/user/find-pw.do';</script>");
+			out.print("<script>alert('로그인에 5회 이상 실패하여 계정 이용이 제한됩니다.'); location.href='/teamtwo/user/pw-find.do';</script>");
 			out.close();
 		} else if (result == -2) {
 			// Service에서 넘겨준 현재 실패 횟수 꺼내기

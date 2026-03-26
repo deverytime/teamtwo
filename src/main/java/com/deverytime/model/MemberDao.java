@@ -94,6 +94,8 @@ public class MemberDao extends BasicDao {
 				dto.setPw(rs.getString("pw"));
 				dto.setName(rs.getString("name"));
 				dto.setNickname(rs.getString("nickname"));
+				dto.setEmail(rs.getString("email")); 
+				dto.setPic(rs.getString("pic"));
 				dto.setStatus(rs.getInt("status"));
 				dto.setFailCount(rs.getInt("failCount"));
 				dto.setTwoFactor(rs.getInt("twoFactor"));
@@ -192,25 +194,21 @@ public class MemberDao extends BasicDao {
 		return 0;
 	}
 
-	public int unregStudy(MemberDto dto) {
-		
+
+	// 11. 회원 정보 수정 (닉네임, 이메일, 프로필 사진 변경)
+	public int updateMember(String id, String nickname, String email, String pic) {
 		try {
-			
-			String sql = "delete from study_member where memberseq = ?";
-			
+			String sql = "update member set nickname = ?, email = ?, pic = ? where id = ?";
 			pstat = conn.prepareStatement(sql);
-			pstat.setString(1, dto.getSeq());
-			
-			return pstat.executeUpdate();
-			
+			pstat.setString(1, nickname);
+			pstat.setString(2, email);
+			pstat.setString(3, pic);
+			pstat.setString(4, id);
+			return pstat.executeUpdate(); // 성공 시 1 반환
 		} catch (Exception e) {
 			e.printStackTrace();
-		} finally {
-			closeAll();
 		}
-		
 		return 0;
-		
 	}
 
 }

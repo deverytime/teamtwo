@@ -182,7 +182,7 @@ public class StudyService {
 
 	public int unregStudy(MemberDto dto) {
 		
-		MemberDao dao = new MemberDao();
+		StudyDao dao = new StudyDao();
 		
 		return dao.unregStudy(dto);
 		

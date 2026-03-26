@@ -374,6 +374,26 @@ public class StudyDao extends BasicDao{
 		
 	}
 
+	public int unregStudy(MemberDto dto) {
+		
+		try {
+			
+			String sql = "delete from study_member where memberseq = ?";
+			
+			pstat = conn.prepareStatement(sql);
+			pstat.setString(1, dto.getSeq());
+			
+			return pstat.executeUpdate();
+			
+		} catch (Exception e) {
+			e.printStackTrace();
+		} finally {
+			closeAll();
+		}
+		
+		return 0;
+	}
+
 	
 	
 }

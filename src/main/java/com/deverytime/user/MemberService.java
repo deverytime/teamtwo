@@ -1,7 +1,9 @@
-package com.deverytime.model;
+package com.deverytime.user;
 
 import javax.servlet.http.HttpServletRequest;
 
+import com.deverytime.model.MemberDao;
+import com.deverytime.model.MemberDto;
 import com.oreilly.servlet.MultipartRequest;
 import com.oreilly.servlet.multipart.DefaultFileRenamePolicy;
 
@@ -203,6 +205,67 @@ public class MemberService {
 				req.getSession().removeAttribute("findPwAuthCode"); // 세션 청소
 				return 1;
 			}
+		}
+		return 0;
+	}
+
+	// -------------------------------------------------------------
+	// 마이페이지 공용 자물쇠: 현재 비밀번호 확인 로직
+	// -------------------------------------------------------------
+	public int checkPassword(HttpServletRequest req) {
+		// 1. 현재 세션에 로그인되어 있는 사용자의 아이디를 꺼냄
+		String id = (String) req.getSession().getAttribute("auth");
+		// 2. 방금 화면에서 사용자가 입력한 비밀번호를 가져옴
+		String inputPw = req.getParameter("pw");
+
+		MemberDao dao = new MemberDao();
+		MemberDto dto = dao.getMember(id); // DB에서 최신 회원 정보 조회
+
+		// 3. 비밀번호가 일치하면 1, 틀리면 0 반환
+		if (dto != null && dto.getPw().equals(inputPw)) {
+			return 1;
+		}
+		return 0;
+	}
+
+	// -------------------------------------------------------------
+	// 회원 정보 수정 (파일 업로드 포함) 및 세션 동기화 로직
+	// -------------------------------------------------------------
+	public int editInfo(HttpServletRequest req) {
+		try {
+			// 1. 프로필 사진 저장 경로 및 세팅
+			String path = req.getServletContext().getRealPath("/asset/pic");
+			int size = 1024 * 1024 * 10; // 10MB
+			com.oreilly.servlet.MultipartRequest multi = new com.oreilly.servlet.MultipartRequest(req, path, size,
+					"UTF-8", new com.oreilly.servlet.multipart.DefaultFileRenamePolicy());
+
+			// 2. 파라미터 꺼내기 (req가 아닌 multi에서 꺼내야 함)
+			String id = (String) req.getSession().getAttribute("auth");
+			String nickname = multi.getParameter("nickname");
+			String email = multi.getParameter("email");
+			String pic = multi.getFilesystemName("pic"); // 첨부한 새 사진 파일명
+
+			MemberDao dao = new MemberDao();
+			MemberDto oldDto = dao.getMember(id); // DB에 있던 기존 내 정보 꺼내기
+
+			// 사용자가 새 사진을 첨부하지 않았다면, 기존 사진 이름을 그대로 유지
+			if (pic == null || pic.trim().equals("")) {
+				pic = oldDto.getPic();
+			}
+
+			// 3. DB 업데이트
+			int result = dao.updateMember(id, nickname, email, pic);
+
+			// 4. 세션 동기화
+			if (result > 0) {
+				MemberDto newDto = dao.getMember(id);
+				req.getSession().setAttribute("authDto", newDto);
+			}
+
+			return result;
+
+		} catch (Exception e) {
+			e.printStackTrace();
 		}
 		return 0;
 	}
