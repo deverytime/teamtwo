@@ -96,14 +96,24 @@
 
 		<!-- ⑥ 이전글 / 다음글 -->
 		<div class="flex justify-between">
-			<button class="btn btn-soft-brand"
-				onclick="location.href='prev.do?seq=${dto.seq}&board=${dto.boardType}'">이전
-				글 보기</button>
+			<c:if test="${not empty dto.prevSeq}">
+				<button class="btn btn-soft-brand"
+					onclick="location.href='view.do?seq=${dto.prevSeq}&board=${dto.boardType}'">이전
+					글 보기</button>
+			</c:if>
+			<c:if test="${empty dto.prevSeq }">
+				<button class="btn">이전글이 없습니다</button>
+			</c:if>
 			<button class="btn btn-soft-brand"
 				onclick="location.href='list.do?board=${dto.boardType}'">돌아가기</button>
-			<button class="btn btn-soft-brand"
-				onclick="location.href='next.do?seq=${dto.seq}&board=${dto.boardType}'">다음
-				글 보기</button>
+			<c:if test="${not empty dto.nextSeq}">	
+				<button class="btn btn-soft-brand"
+					onclick="location.href='view.do?seq=${dto.nextSeq}&board=${dto.boardType}'">다음
+					글 보기</button>
+			</c:if>
+			<c:if test="${empty dto.nextSeq }">
+				<button class="btn">다음글이 없습니다</button>
+			</c:if>
 		</div>
 
 	</main>
