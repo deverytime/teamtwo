@@ -121,8 +121,8 @@
       
        <!-- 버튼 -->
        <div class="flex flex-wrap justify-between gap-2 btns">
-            <button class="btn btn-soft-brand" onclick="/teamtwo/study/study-add.do?seq=${seq}" id="btn1">스터디 등록</button>
-            <button class="btn btn-soft-brand" onclick="/teamtwo/study/mystudy.do?seq=${seq}" id="btn2">내 스터디 목록</button>
+			<button class="btn btn-soft-brand" onclick="location.href='/teamtwo/study/study-add.do';">스터디 등록</button>
+			<button class="btn btn-soft-brand" onclick="location.href='/teamtwo/study/mystudy.do';">내 스터디 목록</button>
        </div>
       
     </section>
