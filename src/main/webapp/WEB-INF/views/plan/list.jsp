@@ -59,7 +59,7 @@
                 <tbody>
                 <c:forEach items="${list}" var="dto">
                       
-                      <tr onclick="location.href='/plan/detail.do?seq=101'" style="cursor:pointer;"
+                      <tr onclick="location.href='/teamtwo/plan/view.do?seq=${dto.seq}'" style="cursor:pointer;"
                         class="hover:bg-slate-100 cursor-pointer">
                         <td>${dto.title}</td>
 <%--                         <td>${dto.progress}%</td> --%>
