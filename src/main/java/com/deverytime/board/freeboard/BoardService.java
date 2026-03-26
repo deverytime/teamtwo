@@ -83,7 +83,6 @@ public class BoardService {
 		
 		BoardDao dao = new BoardDao();
 
-
 		dto = dao.view(dto);
 		
 		// 카테고리 한글 처리
@@ -127,5 +126,27 @@ public class BoardService {
 		
 		return result;
 	}
+
+	public BoardDto getPostBySeq(BoardDto dto) {
+
+		BoardDao dao = new BoardDao();
+		
+		dto = dao.getPostBySeq(dto);
+		
+		return dto;
+	}
+
+	public int edit(BoardDto dto) {
+
+		BoardDao dao = new BoardDao();
+
+		int result = dao.edit(dto);
+
+		return result;
+	
+	}
+
+		
+		
 
 }
