@@ -9,6 +9,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
+import com.deverytime.model.MemberDto;
 import com.deverytime.model.PlanDto;
 
 @WebServlet("/plan/del.do")
@@ -25,9 +26,16 @@ public class Del extends HttpServlet {
 		// 삭제할 학습계획 번호
 		String seq = req.getParameter("seq");
 		
-		// TODO 로그인 연동 후 수정
-		// 원래는 session 의 authDto 에서 memberSeq 꺼내기
-		String memberSeq = "4";
+		// 세션에서 memberDto 가져오기
+		MemberDto auth = (MemberDto) session.getAttribute("authDto");
+		
+		// 로그인안했으면 로그인 페이지로
+		if (auth == null) {
+		    resp.sendRedirect("/teamtwo/user/login.do");
+		    return;
+		}
+		// dto 에 저장된 memberSeq 가져오기
+		String memberSeq = auth.getSeq();
 
 		// 방어 코드
 		if (seq == null || seq.trim().equals("")) {
