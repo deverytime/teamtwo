@@ -133,4 +133,28 @@ public class PlanService {
 	    return pagebar.toString();
 	}
 
+	public PlanDto get(String seq, String memberSeq) {
+		PlanDao dao = new PlanDao();
+		
+		return dao.get(seq, memberSeq);
+	}
+
+	public int edit(PlanDto dto) {
+		PlanDao dao = new PlanDao();
+		
+		if (dto.getType().equals("기간기반")) {
+			return dao.editPeriod(dto);
+		} else if (dto.getType().equals("완료기반")) {
+			return dao.editCompletion(dto);
+		} 
+		
+		return -1;
+	}
+
+	public int del(PlanDto dto) {
+		PlanDao dao = new PlanDao();
+		
+		return dao.del(dto);
+	}
+
 }

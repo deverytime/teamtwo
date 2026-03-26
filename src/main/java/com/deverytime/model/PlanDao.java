@@ -118,70 +118,179 @@ public class PlanDao extends BasicDao {
 	public int getTotalCount(HashMap<String, String> map) {
 		
 		 try {
-		        StringBuilder sql = new StringBuilder();
-		        sql.append("select count(*) as cnt ");
-		        sql.append("from plan ");
-		        sql.append("where memberSeq = ? ");
+	        StringBuilder sql = new StringBuilder();
+	        sql.append("select count(*) as cnt ");
+	        sql.append("from plan ");
+	        sql.append("where memberSeq = ? ");
 
-		        if (map.get("title") != null && !map.get("title").equals("")) {
-		            sql.append("and title like ? ");
-		        }
+	        if (map.get("title") != null && !map.get("title").equals("")) {
+	            sql.append("and title like ? ");
+	        }
 
-		        if (map.get("type") != null && !map.get("type").equals("")) {
-		            sql.append("and type = ? ");
-		        }
+	        if (map.get("type") != null && !map.get("type").equals("")) {
+	            sql.append("and type = ? ");
+	        }
 
-		        pstat = conn.prepareStatement(sql.toString());
+	        pstat = conn.prepareStatement(sql.toString());
 
-		        int index = 1;
-		        pstat.setInt(index++, Integer.parseInt(map.get("memberSeq")));
+	        int index = 1;
+	        pstat.setInt(index++, Integer.parseInt(map.get("memberSeq")));
 
-		        if (map.get("title") != null && !map.get("title").equals("")) {
-		            pstat.setString(index++, "%" + map.get("title") + "%");
-		        }
+	        if (map.get("title") != null && !map.get("title").equals("")) {
+	            pstat.setString(index++, "%" + map.get("title") + "%");
+	        }
 
-		        if (map.get("type") != null && !map.get("type").equals("")) {
-		            pstat.setString(index++, map.get("type"));
-		        }
+	        if (map.get("type") != null && !map.get("type").equals("")) {
+	            pstat.setString(index++, map.get("type"));
+	        }
 
-		        rs = pstat.executeQuery();
+	        rs = pstat.executeQuery();
 
-		        if (rs.next()) {
-		            return rs.getInt("cnt");
-		        }
+	        if (rs.next()) {
+	            return rs.getInt("cnt");
+	        }
 
-		    } catch (Exception e) {
-		        e.printStackTrace();
-		    } finally {
-		        closeAll();
-		    }
+	    } catch (Exception e) {
+	        e.printStackTrace();
+	    } finally {
+	        closeAll();
+	    }
 
 		    return 0;
 		}
+	
 
-		public int addCompletion(PlanDto dto) {
+	public int addCompletion(PlanDto dto) {
+		
+		try {
+			String sql = "INSERT INTO plan (seq, title, subject, description, type, regdate, updatedate, progressStatus, memberSeq) "
+			           + "VALUES (planSeq.nextval, ?, ?, ?, ?, sysdate, sysdate, DEFAULT, ?)";
 			
-			try {
-				String sql = "INSERT INTO plan (seq, title, subject, description, type, regdate, updatedate, progressStatus, memberSeq) "
-				           + "VALUES (planSeq.nextval, ?, ?, ?, ?, sysdate, sysdate, DEFAULT, ?)";
-				
-				pstat = conn.prepareStatement(sql);
+			pstat = conn.prepareStatement(sql);
 
-				pstat.setString(1, dto.getTitle());
-				pstat.setString(2, dto.getSubject());
-				pstat.setString(3, dto.getDescription());
-				pstat.setString(4, dto.getType());
-				pstat.setString(5, dto.getMemberSeq());
-				
-				return pstat.executeUpdate();
-				
-			} catch (Exception e) {
-				e.printStackTrace();
-			} finally {
-		        closeAll();
-			}
+			pstat.setString(1, dto.getTitle());
+			pstat.setString(2, dto.getSubject());
+			pstat.setString(3, dto.getDescription());
+			pstat.setString(4, dto.getType());
+			pstat.setString(5, dto.getMemberSeq());
 			
-			return 0;
+			return pstat.executeUpdate();
+			
+		} catch (Exception e) {
+			e.printStackTrace();
+		} finally {
+	        closeAll();
 		}
+		
+		return 0;
 	}
+
+	public PlanDto get(String seq, String memberSeq) {
+		
+		try {
+			String sql = "select * from plan where seq = ? and memberSeq = ?";
+			
+			pstat = conn.prepareStatement(sql);
+
+			pstat.setString(1, seq);
+			pstat.setString(2, memberSeq);
+			
+			rs = pstat.executeQuery();
+			
+			if (rs.next()) {
+				PlanDto dto = PlanDto.builder()
+					.seq(rs.getString("seq"))
+	                .title(rs.getString("title"))
+	                .subject(rs.getString("subject"))
+	                .description(rs.getString("description"))
+	                .type(rs.getString("type"))
+	                .startDate(rs.getDate("startDate"))
+	                .endDate(rs.getDate("endDate"))
+	                .progressStatus(rs.getString("progressStatus"))
+	                .memberSeq(rs.getString("memberSeq"))
+	                .build();
+				
+				return dto;
+			}
+
+		} catch (Exception e) {
+			e.printStackTrace();
+		} finally {
+			closeAll();
+		}
+		
+		return null;
+	}
+
+	public int editPeriod(PlanDto dto) {
+		
+		try {
+			String sql = "update plan set title = ?, subject = ?, description = ?, progressStatus = ?, endDate = ?, updateDate = sysdate where seq = ? and memberSeq = ?";
+			
+			pstat = conn.prepareStatement(sql);
+			
+			pstat.setString(1, dto.getTitle());
+			pstat.setString(2, dto.getSubject());
+			pstat.setString(3, dto.getDescription());
+			pstat.setString(4, dto.getProgressStatus());
+			pstat.setDate(5, dto.getEndDate());
+			pstat.setString(6, dto.getSeq());
+			pstat.setString(7, dto.getMemberSeq());
+			
+			return pstat.executeUpdate();
+
+		} catch (Exception e) {
+			e.printStackTrace();
+		} finally {
+			closeAll();
+		}
+		
+		return -1;
+	}
+	
+	public int editCompletion(PlanDto dto) {
+		
+		try {
+			String sql = "update plan set title = ?, subject = ?, description = ?, progressStatus = ?, updateDate = sysdate where seq = ? and memberSeq = ?";
+			
+			pstat = conn.prepareStatement(sql);
+			
+			pstat.setString(1, dto.getTitle());
+			pstat.setString(2, dto.getSubject());
+			pstat.setString(3, dto.getDescription());
+			pstat.setString(4, dto.getProgressStatus());
+			pstat.setString(5, dto.getSeq());
+			pstat.setString(6, dto.getMemberSeq());
+			
+			return pstat.executeUpdate();
+
+		} catch (Exception e) {
+			e.printStackTrace();
+		} finally {
+			closeAll();
+		}
+		
+		return -1;
+	}
+
+	public int del(PlanDto dto) {
+		
+		try {
+			String sql = "delete from plan where seq = ? and memberSeq = ?";
+
+			pstat = conn.prepareStatement(sql);
+			pstat.setString(1, dto.getSeq());
+			pstat.setString(2, dto.getMemberSeq());
+
+			return pstat.executeUpdate();
+
+		} catch (Exception e) {
+			e.printStackTrace();
+		} finally {
+			closeAll();
+		}
+		
+		return -1;
+	}
+}
 

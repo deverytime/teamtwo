@@ -11,17 +11,20 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
-import javax.websocket.Session;
 
 import com.deverytime.model.MemberDto;
 import com.deverytime.model.StudyDto;
 
-@WebServlet(value = "/study/study-list.do")
-public class ListStudy extends HttpServlet{
+@WebServlet(value = "/study/mystudy-list.do")
+public class ListMyStudy extends HttpServlet{
 
 	@Override
 	protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
-					
+		
+		HttpSession session = req.getSession();
+		
+		String id = session.getAttribute("auth").toString();
+		
 		String word = req.getParameter("word");
 		String search = "n"; //목록보기(n), 검색하기(y)
 		
@@ -68,7 +71,9 @@ public class ListStudy extends HttpServlet{
 		
 		ArrayList<StudyDto> list = new ArrayList<StudyDto>();
 		
-		list = service.list(map);
+		MemberDto mdto = service.getMember(id);
+		
+		list = service.mylist(map, mdto);
 	
 		
 		totalCount = service.getTotalCount(map);
@@ -87,7 +92,7 @@ public class ListStudy extends HttpServlet{
 		if(n == 1) {
 			pagebar += String.format("<a href='#!'>[이전 %d페이지]</a>", blockSize);
 		} else {
-			pagebar += String.format("<a href='/teamtwo/study/study-list.do?page=%d'>[이전 %d페이지]</a>", n-1, blockSize);
+			pagebar += String.format("<a href='/teamtwo/study/mystudy-list.do?page=%d'>[이전 %d페이지]</a>", n-1, blockSize);
 		}
 		
 		while(!(loop > blockSize || n > totalPage)) {
@@ -95,7 +100,7 @@ public class ListStudy extends HttpServlet{
 			if(n ==  nowPage) {
 				pagebar += String.format("<a href='#!' style='color: tomato;'>%d</a>", n);
 			} else {
-				pagebar += String.format("<a href='/teamtwo/study/study-list.do?page=%d'>%d</a>", n, n);
+				pagebar += String.format("<a href='/teamtwo/study/mystudy-list.do?page=%d'>%d</a>", n, n);
 			}
 			
 			loop++;
@@ -106,14 +111,14 @@ public class ListStudy extends HttpServlet{
 		if(n >= totalPage) {
 			pagebar += String.format("<a href='#!'>[다음 %d페이지]</a>", blockSize);
 		} else {
-			pagebar += String.format("<a href='/teamtwo/study/study-list.do?page=%d'>[다음 %d페이지]</a>", n, blockSize);
+			pagebar += String.format("<a href='/teamtwo/study/mystudy-list.do?page=%d'>[다음 %d페이지]</a>", n, blockSize);
 		}	
 		
 		req.setAttribute("pagebar", pagebar);
 		req.setAttribute("list", list);
 		req.setAttribute("map", map);
 	
-		req.getRequestDispatcher("/WEB-INF/views/study/study-list.jsp").forward(req, resp);
+		req.getRequestDispatcher("/WEB-INF/views/study/mystudy-list.jsp").forward(req, resp);
 		
 	}
 	

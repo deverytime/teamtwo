@@ -100,4 +100,32 @@ public class BoardService {
 		
 	}
 
+	public int recommend(BoardDto dto) {
+		
+		BoardDao dao = new BoardDao();
+		
+		// DB에 인서트하기전에 id로 memberSeq를 알아오기
+		String memberSeq = dao.getMemberSeqById(dto.getId());
+
+		dto.setMemberSeq(memberSeq);
+
+		int result = dao.recommend(dto);
+		
+		return result;
+	}
+
+	public int report(BoardDto dto) {
+		
+		BoardDao dao = new BoardDao();
+		
+		// DB에 인서트하기전에 id로 memberSeq를 알아오기
+		String memberSeq = dao.getMemberSeqById(dto.getId());
+
+		dto.setMemberSeq(memberSeq);
+
+		int result = dao.report(dto);
+		
+		return result;
+	}
+
 }
