@@ -20,7 +20,7 @@
     <div class="content-card card-pad">
       <div class="flex justify-center gap-4 pt-2">
         <a href="/teamtwo/plan/edit.do?seq=${dto.seq}" class="btn btn-soft btn-accent">수정</a>
-        <a href="/teamtwo/plan/delete.do?seq=${dto.seq}" class="btn btn-soft btn-error">삭제</a>
+        <a href="/teamtwo/plan/del.do?seq=${dto.seq}" class="btn btn-soft btn-error">삭제</a>
       </div>
     </div>
     
