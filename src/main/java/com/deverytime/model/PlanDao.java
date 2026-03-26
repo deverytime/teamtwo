@@ -221,5 +221,54 @@ public class PlanDao extends BasicDao {
 		
 		return null;
 	}
+
+	public int editPeriod(PlanDto dto) {
+		
+		try {
+			String sql = "update plan set title = ?, subject = ?, description = ?, endDate = ?, updateDate = sysdate where seq = ? and memberSeq = ?";
+			
+			pstat = conn.prepareStatement(sql);
+			
+			pstat.setString(1, dto.getTitle());
+			pstat.setString(2, dto.getSubject());
+			pstat.setString(3, dto.getDescription());
+			pstat.setDate(4, dto.getEndDate());
+			pstat.setString(5, dto.getSeq());
+			pstat.setString(6, dto.getMemberSeq());
+			
+			return pstat.executeUpdate();
+
+		} catch (Exception e) {
+			e.printStackTrace();
+		} finally {
+			closeAll();
+		}
+		
+		return -1;
+	}
+	
+	public int editCompletion(PlanDto dto) {
+		
+		try {
+			String sql = "update plan set title = ?, subject = ?, description = ?, updateDate = sysdate where seq = ? and memberSeq = ?";
+			
+			pstat = conn.prepareStatement(sql);
+			
+			pstat.setString(1, dto.getTitle());
+			pstat.setString(2, dto.getSubject());
+			pstat.setString(3, dto.getDescription());
+			pstat.setString(4, dto.getSeq());
+			pstat.setString(5, dto.getMemberSeq());
+			
+			return pstat.executeUpdate();
+
+		} catch (Exception e) {
+			e.printStackTrace();
+		} finally {
+			closeAll();
+		}
+		
+		return -1;
+	}
 }
 
