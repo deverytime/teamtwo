@@ -9,6 +9,8 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
+import com.deverytime.model.PlanDto;
+
 @WebServlet("/plan/del.do")
 public class Del extends HttpServlet {
 
@@ -35,8 +37,13 @@ public class Del extends HttpServlet {
 			return;
 		}
 
+		PlanDto dto = PlanDto.builder()
+			.seq(seq)
+			.memberSeq(memberSeq)
+			.build();
+		
 		// 삭제 실행
-		int result = service.del(seq, memberSeq);
+		int result = service.del(dto);
 
 		resp.setContentType("text/html; charset=UTF-8");
 
