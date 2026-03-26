@@ -23,7 +23,8 @@ public class BoardDto {
 	
 	private String nickname; // member와 조인 닉네임 
 	
-	
+	private String prevSeq; // 이전글
+	private String nextSeq; // 다음
 	
 	
 
