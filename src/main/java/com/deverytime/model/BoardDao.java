@@ -45,6 +45,7 @@ public class BoardDao extends BasicDao {
 		return null;
 	}
 
+	// 글쓰기
 	public int add(BoardDto dto) {
 
 		try {
@@ -108,7 +109,7 @@ public class BoardDao extends BasicDao {
 	public BoardDto view(BoardDto dto) {
 
 		try {
-
+			
 			String sql = "select * from vwPost ";
 			String board = "";
 			String seq = String.format("seq = %s", dto.getSeq());
@@ -203,7 +204,7 @@ public class BoardDao extends BasicDao {
 	}
 
 	public int report(BoardDto dto) {
-		
+
 		int result = 0;
 
 		try {
@@ -217,7 +218,6 @@ public class BoardDao extends BasicDao {
 			pstat.setString(3, dto.getReasonSeq());
 			pstat.setString(4, dto.getSeq());
 			pstat.setString(5, dto.getMemberSeq());
-			
 
 			result = pstat.executeUpdate();
 
@@ -238,6 +238,63 @@ public class BoardDao extends BasicDao {
 		}
 
 		return result;
+	}
+
+	// 수정하기에서 가져가야할 정보 처리
+	public BoardDto getPostBySeq(BoardDto dto) {
+
+		try {
+
+			String sql = "select * from vwPost where seq=?";
+
+			pstat = conn.prepareStatement(sql);
+			pstat.setString(1, dto.getSeq());
+
+			rs = pstat.executeQuery();
+
+			if (rs.next()) {
+				dto.setCategory(rs.getString("category"));
+				dto.setBoardType(rs.getString("boardType"));
+				dto.setTitle(rs.getString("title"));
+				dto.setContent(rs.getString("content"));
+			}
+
+			return dto;
+
+		} catch (Exception e) {
+			e.printStackTrace();
+		} finally {
+			closeAll();
+		}
+
+		return null;
+
+	}
+
+	public int edit(BoardDto dto) {
+
+		try {
+			
+			String sql = "update post set postCategorySeq = ?, title = ?, content = ? where seq = ?";
+
+			pstat = conn.prepareStatement(sql);
+
+			pstat.setString(1, dto.getCategory());
+			pstat.setString(2, dto.getTitle());
+			pstat.setString(3, dto.getContent());
+			pstat.setString(4, dto.getSeq());
+
+			int result = pstat.executeUpdate();
+
+			return result;
+
+		} catch (Exception e) {
+			e.printStackTrace();
+		} finally {
+			closeAll();
+		}
+
+		return 0;
 	}
 
 }
