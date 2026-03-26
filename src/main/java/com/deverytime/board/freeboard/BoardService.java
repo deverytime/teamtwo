@@ -82,13 +82,22 @@ public class BoardService {
 	public BoardDto view(BoardDto dto) {
 		
 		BoardDao dao = new BoardDao();
-		
+
+
 		dto = dao.view(dto);
 		
 		// 카테고리 한글 처리
 		dto.setCategory(getCategoryName(dto.getCategory()));
 		
 		return dto;
+	}
+
+	public void increaseReadCount(String seq) {
+		
+		BoardDao dao = new BoardDao();
+		
+		dao.increaseReadCount(seq);
+		
 	}
 
 }

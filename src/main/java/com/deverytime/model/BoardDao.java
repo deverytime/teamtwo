@@ -143,4 +143,21 @@ public class BoardDao extends BasicDao {
 		return null;
 	}
 
+	public void increaseReadCount(String seq) {
+		
+		try {
+			
+			String sql = "update post set readCount = readCount + 1 where seq = ?";
+			
+			pstat = conn.prepareStatement(sql);
+			pstat.setString(1, seq);
+			
+			pstat.executeUpdate();
+			
+		} catch (Exception e) {
+			e.printStackTrace();
+		} // db 연결 아직 닫으면 안됨 다른 작업 있음
+		
+	}
+
 }
