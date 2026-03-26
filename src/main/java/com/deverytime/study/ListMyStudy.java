@@ -71,7 +71,7 @@ public class ListMyStudy extends HttpServlet{
 		
 		ArrayList<StudyDto> list = new ArrayList<StudyDto>();
 		
-		MemberDto mdto = service.getMemberSeq(id);
+		MemberDto mdto = service.getMember(id);
 		
 		list = service.mylist(map, mdto);
 	

@@ -238,7 +238,7 @@ public class StudyDao extends BasicDao{
 		return result;
 	}
 
-	public MemberDto getMemberSeq(String id) {
+	public MemberDto getMember(String id) {
 		
 		try {
 	
@@ -314,6 +314,32 @@ public class StudyDao extends BasicDao{
 		}
 		
 		return null;
+		
+	}
+
+	public int regStudy(StudyDto dto, MemberDto mdto) {
+		
+		try {
+			
+			String sql = "INSERT INTO study_member (seq, memberSeq, studySeq, regdate, type) "
+					+ "SELECT studymemberSeq.nextVal, ?, ?, sysdate, 0 FROM dual "
+					+ "WHERE NOT EXISTS (SELECT 1 FROM study_member WHERE memberSeq = ? AND studySeq = ?)";
+			
+			pstat = conn.prepareStatement(sql);
+			pstat.setString(1, mdto.getSeq());
+			pstat.setString(2, dto.getSeq());
+			pstat.setString(3, mdto.getSeq());
+			pstat.setString(4, dto.getSeq());
+			
+			return pstat.executeUpdate();
+			
+		} catch (Exception e) {
+			e.printStackTrace();
+		} finally {
+			closeAll();
+		}
+		
+		return 0;
 		
 	}
 

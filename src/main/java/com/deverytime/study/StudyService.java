@@ -119,11 +119,11 @@ public class StudyService {
 		
 	}
 
-	public MemberDto getMemberSeq(String id) {
+	public MemberDto getMember(String id) {
 		
 		StudyDao dao = new StudyDao();
 		
-		return dao.getMemberSeq(id);
+		return dao.getMember(id);
 	}
 
 	public ArrayList<StudyDto> mylist(HashMap<String, String> map, MemberDto mdto) {
@@ -163,6 +163,13 @@ public class StudyService {
 		
 		return list;
 		
+	}
+
+	public int regStudy(StudyDto dto, MemberDto mdto) {
+		
+		StudyDao dao = new StudyDao();
+		
+		return dao.regStudy(dto, mdto);
 	}
 	
 }

@@ -52,7 +52,7 @@ public class AddStudy extends HttpServlet{
 		
 		StudyService service = new StudyService();
 		
-		MemberDto mdto = service.getMemberSeq(id);
+		MemberDto mdto = service.getMember(id);
 		
 		StudyDto dto = new StudyDto();
 		

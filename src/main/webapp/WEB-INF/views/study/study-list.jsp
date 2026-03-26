@@ -92,7 +92,7 @@
 	
           <div class="flex flex-wrap justify-between gap-2">
             <button class="btn btn-brand" onclick="location.href='/teamtwo/study/study-view.do?seq=${dto.seq}';">상세 보기</button>
-            <button class="btn btn-brand" onclick="location.href='/teamtwo/study/study-member.do?seq=${dto.seq}';">참여 하기</button>
+            <button class="btn btn-brand" onclick="location.href='/teamtwo/study/study-reg.do?seq=${dto.seq}';">참여 하기</button>
           </div>
         </div>
       </c:forEach>
