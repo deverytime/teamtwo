@@ -112,9 +112,8 @@ public class StudyDao extends BasicDao{
 				dto.setScheduleCount(rs.getString("scheduleCount"));
 				dto.setHeadCount(rs.getString("headCount"));
 				
+				return dto;	
 			}
-			
-			return dto;
 			
 		} catch (Exception e) {
 			e.printStackTrace();
