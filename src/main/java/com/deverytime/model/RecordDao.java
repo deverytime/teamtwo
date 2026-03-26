@@ -70,5 +70,31 @@ public class RecordDao extends BasicDao{
 		
 		return 0;
 	}
+
+	public int add(RecordDto dto) {
+		
+		try {
+			String sql = "INSERT INTO record (seq, studyDate, content, progress, memo, regdate, updateDate, recordStatus, planSeq) "
+			           + "VALUES (recordSeq.nextval, ?, ?, ?, ?, sysdate, sysdate, ?, ?)";
+
+			pstat = conn.prepareStatement(sql);
+
+			pstat.setDate(1, dto.getStudyDate());
+			pstat.setString(2, dto.getContent());
+			pstat.setInt(3, dto.getProgress());
+			pstat.setString(4, dto.getMemo());
+			pstat.setString(5, dto.getRecordStatus());
+			pstat.setString(6, dto.getPlanSeq());
+
+			return pstat.executeUpdate();
+
+		} catch (Exception e) {
+			e.printStackTrace();
+		} finally {
+			closeAll();
+		}
+		
+		return -1;
+	}
 	
 }
