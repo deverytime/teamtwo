@@ -34,4 +34,5 @@ public class PlanDto {
 	// lombok 이 초기화 무시 안하게 어노테이션 추가
 	@Builder.Default
 	private List<RecordDto> records = new ArrayList<>();
+	private long recordCount;
 }

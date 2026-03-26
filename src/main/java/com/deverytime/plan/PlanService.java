@@ -178,6 +178,10 @@ public class PlanService {
 		List<RecordDto> records = recordDao.getRecordsByPlan(seq, cnt);
 		planDto.setRecords(records);
 		
+		// 학습기록 총 개수 가져오기
+		int recordCount = recordDao.getRecordCountByPlan(seq);
+		planDto.setRecordCount(recordCount);
+		
 		return planDto;
 	}
 

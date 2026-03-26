@@ -45,14 +45,20 @@
         </div>
       
         <!-- 우측 (진행률) -->
-        <div class="shrink-0">
-          <div
-            class="radial-progress text-emerald-500 font-bold text-xl"
-            style="--value:35; --size:96px; --thickness:10px;"
-          >
-            35%
-          </div>
+        <div
+          class="radial-progress text-indigo-500 font-bold text-lg"
+          style="--value:${empty dto.records ? 0 : dto.records[0].progress}; --size:96px; --thickness:10px;">
+          ${empty dto.records ? 0 : dto.records[0].progress}%
         </div>
+        
+<!--         <div class="shrink-0"> -->
+<!--           <div -->
+<!--             class="radial-progress text-emerald-500 font-bold text-xl" -->
+<!--             style="--value:35; --size:96px; --thickness:10px;" -->
+<!--           > -->
+<!--             35% -->
+<!--           </div> -->
+<!--         </div> -->
       
       </div>
 
@@ -165,7 +171,7 @@
 
       <div class="rounded-xl bg-violet-50 p-4">
         <p class="text-sm text-violet-500 mb-1">학습기록 수</p>
-        <p class="text-2xl font-bold text-violet-700">5개</p>
+        <p class="text-2xl font-bold text-violet-700">${dto.recordCount}개</p>
       </div>
 
     </div>
@@ -189,9 +195,10 @@
         <thead class="bg-slate-50 text-slate-500">
           <tr>
             <th class="px-6 py-3 font-medium">날짜</th>
-            <th class="px-6 py-3 font-medium">학습 내용</th>
             <th class="px-6 py-3 font-medium">진행률</th>
-            <th class="px-6 py-3 font-medium">비고</th>
+            <th class="px-6 py-3 font-medium">학습 내용</th>
+            <th class="px-6 py-3 font-medium">상태</th>
+            <th class="px-6 py-3 font-medium">메모</th>
           </tr>
         </thead>
 
@@ -246,7 +253,7 @@
       </table>
     </div>
     
-    <c:if test="${dto.records.size() == 5}">
+    <c:if test="${cnt < dto.recordCount}">
       <div class="flex justify-center mt-6">
         <a href="/teamtwo/plan/view.do?seq=${dto.seq}&cnt=${cnt + 5}"
           class="px-6 py-2 rounded-xl btn btn-wide border-2 border-indigo-200 hover:bg-indigo-50
@@ -315,6 +322,5 @@
         
         });
   </script>
-</body>
 </body>
 </html>

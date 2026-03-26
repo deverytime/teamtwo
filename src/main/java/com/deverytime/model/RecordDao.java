@@ -47,5 +47,28 @@ public class RecordDao extends BasicDao{
 		
 		return null;
 	}
+
+	public int getRecordCountByPlan(String planSeq) {
+		
+		try {
+			String sql = "SELECT COUNT(*) FROM record WHERE planSeq = ?";
+
+	        pstat = conn.prepareStatement(sql);
+	        pstat.setString(1, planSeq);
+
+	        rs = pstat.executeQuery();
+
+	        if (rs.next()) {
+	            return rs.getInt(1);
+	        }
+
+		} catch (Exception e) {
+			e.printStackTrace();
+		} finally {
+			closeAll();
+		}
+		
+		return 0;
+	}
 	
 }
