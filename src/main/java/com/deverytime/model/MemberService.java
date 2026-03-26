@@ -71,7 +71,7 @@ public class MemberService {
 			return -1;
 		}
 
-		// 3. 비밀번호 일치 (로그인 성공!)
+		// 3. 비밀번호 일치 (로그인 성공)
 		if (dto.getPw().equals(pw)) {
 			dao.resetFailCount(id); // 실패 횟수 0으로 초기화
 
@@ -88,4 +88,123 @@ public class MemberService {
 			return -2;
 		}
 	}
+
+	// -------------------------------------------------------------
+	// 아이디 찾기 1단계: 이메일 존재 검사
+	// -------------------------------------------------------------
+	public int checkEmail(HttpServletRequest req) {
+		String email = req.getParameter("email");
+		MemberDao dao = new MemberDao();
+		return dao.checkEmail(email);
+	}
+
+	// -------------------------------------------------------------
+	// 아이디 찾기 2단계: 인증번호 메일 발송
+	// -------------------------------------------------------------
+	public int sendAuthMail(HttpServletRequest req) {
+		String email = req.getParameter("email");
+		String name = req.getParameter("name");
+		MemberDao dao = new MemberDao();
+
+		String id = dao.findId(name, email);
+
+		if (id != null) {
+			// 무작위로 6자리 인증번호 생성 및 세션 저장
+			String authCode = String.format("%06d", (int) (Math.random() * 1000000));
+			req.getSession().setAttribute("findIdAuthCode", authCode);
+
+			// 메일 전송
+			String subject = "[deverytime] 아이디 찾기 인증번호 안내";
+			String content = "<h3>요청하신 인증번호입니다.</h3><h1>" + authCode + "</h1><p>화면에 위 번호를 입력해주세요.</p>";
+			com.deverytime.library.MailUtil.sendMail(email, subject, content);
+			return 1; // 성공
+		}
+		return 0; // 실패
+	}
+
+	// -------------------------------------------------------------
+	// 아이디 찾기 3단계: 인증번호 확인 및 아이디 메일 발송
+	// -------------------------------------------------------------
+	public int verifyAuthCode(HttpServletRequest req) {
+		String inputCode = req.getParameter("authCode");
+		String sessionCode = (String) req.getSession().getAttribute("findIdAuthCode");
+
+		if (sessionCode != null && sessionCode.equals(inputCode)) {
+			String email = req.getParameter("email");
+			String name = req.getParameter("name");
+			MemberDao dao = new MemberDao();
+			String id = dao.findId(name, email);
+
+			// 아이디가 포함된 메일 전송
+			String subject = "[deverytime] 아이디 찾기 결과 안내";
+			String content = "<h3>" + name + "님의 아이디입니다.</h3><h1>" + id + "</h1><p>로그인 페이지를 이용해주세요.</p>";
+			com.deverytime.library.MailUtil.sendMail(email, subject, content);
+
+			// 모든 작업이 끝난 세션 파기
+			req.getSession().removeAttribute("findIdAuthCode");
+			return 1; // 성공
+		}
+		return 0; // 실패
+	}
+
+	// -------------------------------------------------------------
+	// 비밀번호 찾기 1단계: 아이디 존재 검사
+	// -------------------------------------------------------------
+	public int checkIdForPw(HttpServletRequest req) {
+		String id = req.getParameter("id");
+		MemberDao dao = new MemberDao();
+		// 기존에 만들어둔 checkId 재사용 (있으면 1, 없으면 0 반환)
+		return dao.checkId(id);
+	}
+
+	// -------------------------------------------------------------
+	// 비밀번호 찾기 2단계: 아이디+이메일 확인 및 인증번호 발송
+	// -------------------------------------------------------------
+	public int sendAuthMailForPw(HttpServletRequest req) {
+		String id = req.getParameter("id");
+		String email = req.getParameter("email");
+		MemberDao dao = new MemberDao();
+
+		if (dao.checkIdAndEmail(id, email) > 0) {
+			String authCode = String.format("%06d", (int) (Math.random() * 1000000));
+			req.getSession().setAttribute("findPwAuthCode", authCode);
+
+			String subject = "[deverytime] 비밀번호 찾기 인증번호 안내";
+			String content = "<h3>요청하신 인증번호입니다.</h3><h1>" + authCode + "</h1><p>화면에 위 번호를 입력해주세요.</p>";
+			com.deverytime.library.MailUtil.sendMail(email, subject, content);
+			return 1;
+		}
+		return 0;
+	}
+
+	// -------------------------------------------------------------
+	// 비밀번호 찾기 3단계: 인증 통과 시 임시비밀번호 발급 및 DB 변경
+	// -------------------------------------------------------------
+	public int verifyAuthCodeAndSendPw(HttpServletRequest req) {
+		String inputCode = req.getParameter("authCode");
+		String sessionCode = (String) req.getSession().getAttribute("findPwAuthCode");
+
+		if (sessionCode != null && sessionCode.equals(inputCode)) {
+			String id = req.getParameter("id");
+			String email = req.getParameter("email");
+			MemberDao dao = new MemberDao();
+
+			// 8자리 무작위 임시 비밀번호 생성
+			// 비밀번호 생성 조건(영문, 숫자, 특수문자 포함 8자리 이상)에 부합하도록 ! 추가
+			String tempPw = java.util.UUID.randomUUID().toString().substring(0, 8) + "!";
+
+			// DB의 비밀번호를 임시 비밀번호로 덮어쓰기
+			if (dao.updatePw(id, tempPw) > 0) {
+				String subject = "[deverytime] 임시 비밀번호 발급 안내";
+				String content = "<h3>" + id + "님의 임시 비밀번호입니다.</h3><h1>" + tempPw
+						+ "</h1><p>로그인 후 반드시 비밀번호를 변경해주세요.</p>";
+				com.deverytime.library.MailUtil.sendMail(email, subject, content);
+
+				req.getSession().removeAttribute("findPwAuthCode"); // 세션 청소
+				return 1;
+			}
+		}
+		return 0;
+	}
+
 }

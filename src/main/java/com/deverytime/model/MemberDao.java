@@ -81,7 +81,7 @@ public class MemberDao extends BasicDao {
 	// 4. 회원 정보 통째로 가져오기 (아이디로 검색)
 	public MemberDto getMember(String id) {
 		try {
-			// 실패 횟수까지 모두 가져옵니다.
+			// 실패 횟수까지 모두 가져옴
 			String sql = "select * from member where id = ?";
 			pstat = conn.prepareStatement(sql);
 			pstat.setString(1, id);
@@ -160,6 +160,36 @@ public class MemberDao extends BasicDao {
 			e.printStackTrace();
 		}
 		return null; // 정보 불일치 시 null
+	}
+
+	// 9. 아이디 + 이메일 일치 여부 확인 (비밀번호 찾기 2단계)
+	public int checkIdAndEmail(String id, String email) {
+		try {
+			String sql = "select count(*) as cnt from member where id = ? and email = ?";
+			pstat = conn.prepareStatement(sql);
+			pstat.setString(1, id);
+			pstat.setString(2, email);
+			rs = pstat.executeQuery();
+			if (rs.next())
+				return rs.getInt("cnt");
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		return 0;
+	}
+
+	// 10. 임시 비밀번호로 업데이트 (비밀번호 찾기 3단계)
+	public int updatePw(String id, String tempPw) {
+		try {
+			String sql = "update member set pw = ? where id = ?";
+			pstat = conn.prepareStatement(sql);
+			pstat.setString(1, tempPw);
+			pstat.setString(2, id);
+			return pstat.executeUpdate(); // 성공하면 1 반환
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		return 0;
 	}
 
 }
