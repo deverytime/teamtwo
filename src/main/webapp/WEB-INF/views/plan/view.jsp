@@ -184,7 +184,7 @@
     </div>
 
     <!-- 테이블 -->
-    <div class="overflow-x-auto">
+    <div class="overflow-x-auto px-6">
       <table class="min-w-full text-sm text-left">
         <thead class="bg-slate-50 text-slate-500">
           <tr>
@@ -196,31 +196,66 @@
         </thead>
 
         <tbody class="divide-y divide-slate-100">
-
-          <tr class="hover:bg-slate-50">
-            <td class="px-6 py-4">2026-03-21</td>
-            <td class="px-6 py-4">학습계획 등록 기능 구현</td>
-            <td class="px-6 py-4">10%</td>
-            <td class="px-6 py-4 text-slate-500">폼 구성 완료</td>
-          </tr>
-
-          <tr class="hover:bg-slate-50">
-            <td class="px-6 py-4">2026-03-23</td>
-            <td class="px-6 py-4">목록 조회 + 페이징</td>
-            <td class="px-6 py-4">25%</td>
-            <td class="px-6 py-4 text-slate-500">검색 기능 포함</td>
-          </tr>
-
-          <tr class="hover:bg-slate-50">
-            <td class="px-6 py-4">2026-03-25</td>
-            <td class="px-6 py-4">수정 기능 구현</td>
-            <td class="px-6 py-4">35%</td>
-            <td class="px-6 py-4 text-slate-500">세션 연동 완료</td>
-          </tr>
+          <c:choose>
+            <!-- records 없을 때 -->
+            <c:when test="${empty dto.records}">
+              <tr>
+                <td colspan="5" class="text-center py-6 text-slate-400">
+                  등록된 학습 기록이 없습니다.
+                </td>
+              </tr>
+            </c:when>
+            <!-- records 있을 때 -->
+            <c:otherwise>
+              <c:forEach items="${dto.records}" var="record">
+                <tr class="hover:bg-slate-100">
+                  <td>${record.studyDate}</td>
+                  <td>${record.progress}%</td>
+          
+                  <td>
+                    <div class="max-w-[400px] truncate" title="${record.content}">
+                      ${record.content}
+                    </div>
+                  </td>
+          
+                  <td>
+                    <c:choose>
+                      <c:when test="${record.recordStatus eq '진행중'}">
+                        <span class="badge badge-outline badge-info">진행중</span>
+                      </c:when>
+                      <c:when test="${record.recordStatus eq '완료'}">
+                        <span class="badge badge-outline badge-success">완료</span>
+                      </c:when>
+                      <c:otherwise>
+                        <span class="badge badge-outline badge-error">미완료</span>
+                      </c:otherwise>
+                    </c:choose>
+                  </td>
+          
+                  <td>
+                    <div class="max-w-[180px] truncate" title="${record.memo}">
+                      ${record.memo}
+                    </div>
+                  </td>
+                </tr>
+              </c:forEach>
+            </c:otherwise>
+          </c:choose>
 
         </tbody>
       </table>
     </div>
+    
+    <c:if test="${dto.records.size() == 5}">
+      <div class="flex justify-center mt-6">
+        <a href="/teamtwo/plan/view.do?seq=${dto.seq}&cnt=${cnt + 5}"
+          class="px-6 py-2 rounded-xl btn btn-wide border-2 border-indigo-200 hover:bg-indigo-50
+            text-slate-600">
+          더보기
+        </a>
+      </div>
+    </c:if>
+    
     <!-- 기록 추가 버튼 (고정) -->
     <button
       class="fixed bottom-6 right-12 z-50 px-5 py-3 rounded-full bg-sky-500 text-white font-semibold shadow-lg hover:bg-sky-600 active:scale-95 transition cursor-pointer"
