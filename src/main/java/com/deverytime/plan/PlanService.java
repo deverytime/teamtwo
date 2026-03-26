@@ -1,7 +1,10 @@
-package com.deverytime.model;
+package com.deverytime.plan;
 
 import java.util.ArrayList;
 import java.util.HashMap;
+
+import com.deverytime.model.PlanDao;
+import com.deverytime.model.PlanDto;
 
 public class PlanService {
 	
@@ -12,10 +15,16 @@ public class PlanService {
 		return dao.list(map);
 	}
 	
-	public PlanDto add() {
+	public int add(PlanDto dto) {
 		PlanDao dao = new PlanDao();
 		
-		return dao.add();
+		if (dto.getType().equals("기간기반")) {
+			return dao.addPeriod(dto);
+		} else if (dto.getType().equals("완료기반")) {
+			return dao.addCompletion(dto);
+		} 
+		
+		return -1;
 	}
 
 	public HashMap<String, String> getPaging(String page, String title, String type, int memberSeq) {

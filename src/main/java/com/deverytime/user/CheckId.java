@@ -1,3 +1,5 @@
+// 아이디 중복 확인
+// 작성자: 황윤재(26.03.25)
 package com.deverytime.user;
 
 import java.io.IOException;
