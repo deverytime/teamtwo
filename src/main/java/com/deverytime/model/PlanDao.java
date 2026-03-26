@@ -206,6 +206,7 @@ public class PlanDao extends BasicDao {
 	                .type(rs.getString("type"))
 	                .startDate(rs.getDate("startDate"))
 	                .endDate(rs.getDate("endDate"))
+	                .updateDate(rs.getDate("updateDate"))
 	                .progressStatus(rs.getString("progressStatus"))
 	                .memberSeq(rs.getString("memberSeq"))
 	                .build();

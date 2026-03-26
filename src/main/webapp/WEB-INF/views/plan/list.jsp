@@ -61,9 +61,21 @@
                       
                       <tr onclick="location.href='/teamtwo/plan/view.do?seq=${dto.seq}'" style="cursor:pointer;"
                         class="hover:bg-slate-100 cursor-pointer">
-                        <td>${dto.title}</td>
-                        <td>${dto.subject}</td>
-                        <td>${dto.description}</td>
+                        <td>
+                          <div class="max-w-[180px] truncate" title="${dto.title}">
+                            ${dto.title}
+                          </div>
+                        </td>
+                        <td>
+                          <div class="max-w-[120px] truncate" title="${dto.subject}">
+                            ${dto.subject}
+                          </div>
+                        </td>
+                        <td>
+                          <div class="max-w-[260px] truncate" title="${dto.description}">
+                            ${dto.description}
+                          </div>
+                        </td>
                         <td>
                           <span class="
                             badge badge-outline

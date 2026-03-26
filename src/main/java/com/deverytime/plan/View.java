@@ -33,7 +33,7 @@ public class View extends HttpServlet {
 		String memberSeq = auth.getSeq();
 		
 		String seq = req.getParameter("seq");
-		PlanDto dto = service.get(seq, memberSeq);
+		PlanDto dto = service.getDetailInfo(seq, memberSeq);
 		
 		// 내 학습계획이 아니면 뒤로가기
 		resp.setContentType("text/html; charset=UTF-8");
