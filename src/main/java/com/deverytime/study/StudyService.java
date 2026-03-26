@@ -171,5 +171,21 @@ public class StudyService {
 		
 		return dao.regStudy(dto, mdto);
 	}
+
+	public ArrayList<MemberDto> getStudyMember(StudyDto dto) {
+		
+		StudyDao dao = new StudyDao();
+		
+		return dao.getStudyMember(dto);
+		
+	}
+
+	public int unregStudy(MemberDto dto) {
+		
+		StudyDao dao = new StudyDao();
+		
+		return dao.unregStudy(dto);
+		
+	}
 	
 }

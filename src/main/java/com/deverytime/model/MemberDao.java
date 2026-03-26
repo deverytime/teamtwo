@@ -194,6 +194,7 @@ public class MemberDao extends BasicDao {
 		return 0;
 	}
 
+
 	// 11. 회원 정보 수정 (닉네임, 이메일, 프로필 사진 변경)
 	public int updateMember(String id, String nickname, String email, String pic) {
 		try {

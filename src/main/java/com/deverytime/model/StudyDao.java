@@ -343,6 +343,57 @@ public class StudyDao extends BasicDao{
 		
 	}
 
+	public ArrayList<MemberDto> getStudyMember(StudyDto dto) {
+		
+		try {
+			
+			String sql = "select * from study_member where studySeq = ?";
+			
+			pstat = conn.prepareStatement(sql);
+			pstat.setString(1, dto.getSeq());
+			rs = pstat.executeQuery();
+			
+			ArrayList<MemberDto> list = new ArrayList<MemberDto>();
+			
+			while(rs.next()) {
+				MemberDto mdto = new MemberDto();
+				mdto.setSeq(rs.getString("memberSeq"));
+				
+				list.add(mdto);
+			}
+			
+			return list;
+			
+		} catch (Exception e) {
+			e.printStackTrace();
+		} finally {
+			closeAll();
+		}
+		
+		return null;
+		
+	}
+
+	public int unregStudy(MemberDto dto) {
+		
+		try {
+			
+			String sql = "delete from study_member where memberseq = ?";
+			
+			pstat = conn.prepareStatement(sql);
+			pstat.setString(1, dto.getSeq());
+			
+			return pstat.executeUpdate();
+			
+		} catch (Exception e) {
+			e.printStackTrace();
+		} finally {
+			closeAll();
+		}
+		
+		return 0;
+	}
+
 	
 	
 }

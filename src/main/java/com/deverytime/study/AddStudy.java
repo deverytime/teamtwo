@@ -25,11 +25,21 @@ public class AddStudy extends HttpServlet{
 	@Override
 	protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
 		
-		req.setCharacterEncoding("UTF-8");
+		resp.setCharacterEncoding("UTF-8");
+        resp.setContentType("text/html; charset=UTF-8");
 		
 		HttpSession session = req.getSession();
 		
-		String id = session.getAttribute("auth").toString();
+		Object auth = session.getAttribute("auth");
+		
+		//로그인 체크 로직
+		if(auth == null) {
+			resp.getWriter().print("<script>alert('로그인이 필요한 서비스입니다.');history.back();</script>");
+			resp.getWriter().close();
+			return;
+		}
+		
+		String id = auth.toString();
 		
 		String name = req.getParameter("name");
 		String description =  req.getParameter("description");
