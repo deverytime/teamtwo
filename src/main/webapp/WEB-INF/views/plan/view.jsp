@@ -20,10 +20,64 @@
     <div class="content-card card-pad">
       <div class="flex justify-center gap-4 pt-2">
         <a href="/teamtwo/plan/edit.do?seq=${dto.seq}" class="btn btn-soft btn-accent">수정</a>
-        <a href="/teamtwo/plan/del.do?seq=${dto.seq}" class="btn btn-soft btn-error">삭제</a>
+        <button type="button" class="btn btn-soft btn-error"
+        onclick="openModal(${dto.seq})">
+            삭제
+        </button>
       </div>
     </div>
     
+    
+<!-- 모달 -->
+<dialog id="deleteModal" class="modal">
+  <div class="modal-box">
+    <h3 class="font-bold text-lg">학습계획 삭제 확인</h3>
+    <p class="pt-4 pb-1">
+    정말 삭제하시겠습니까?<br>학습계획 삭제시 학습기록도 함께 사라집니다. 
+    </p>
+
+    <div class="modal-action">
+      <!-- 취소 버튼 (여기에 포커스) -->
+      <button class="btn" id="cancelBtn">취소</button>
+
+      <!-- 삭제 -->
+      <form method="POST" action="${pageContext.request.contextPath}/plan/del.do">
+        <input type="hidden" name="seq" id="deleteSeq">
+        <button class="btn btn-error">삭제</button>
+      </form>
+    </div>
+  </div>
+</dialog>
+    <script>
+        document.addEventListener('DOMContentLoaded', function () {
+        
+          function openModal(seq) {
+            const modal = document.getElementById('deleteModal');
+            document.getElementById('deleteSeq').value = seq;
+        
+            modal.showModal();
+        
+            setTimeout(() => {
+              document.getElementById('cancelBtn').focus();
+            }, 0);
+          }
+        
+          window.openModal = openModal; // 버튼에서 쓰려고 전역 등록
+        
+          document.getElementById('cancelBtn').onclick = function () {
+            document.getElementById('deleteModal').close();
+          };
+        
+          const modal = document.getElementById('deleteModal');
+        
+          modal.addEventListener('click', function (e) {
+            if (e.target === modal) {
+              modal.close();
+            }
+          });
+        
+        });
+	</script>
 </main>
 </body>
 </html>
