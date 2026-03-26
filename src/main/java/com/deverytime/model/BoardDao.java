@@ -1,5 +1,7 @@
 package com.deverytime.model;
 
+import java.sql.PreparedStatement;
+import java.sql.ResultSet;
 import java.util.ArrayList;
 
 import com.deverytime.library.BasicDao;
@@ -76,15 +78,20 @@ public class BoardDao extends BasicDao {
 		try {
 
 			String sql = "select seq from member where id=?";
-			pstat = conn.prepareStatement(sql);
+	        PreparedStatement ps = conn.prepareStatement(sql); // pstat 대신 로컬변수!
+	        
+	        ps.setString(1, id);
+	        ResultSet r = ps.executeQuery(); // rs 대신 로컬변수!
 
-			pstat.setString(1, id);
-
-			rs = pstat.executeQuery();
-
-			if (rs.next()) {
-				return rs.getString("seq");
+			if (r.next()) {
+				
+				String result = r.getString("seq");
+				r.close();
+				ps.close();
+				return result;
 			}
+			r.close();
+			ps.close();
 
 		} catch (Exception e) {
 			e.printStackTrace();
@@ -158,6 +165,44 @@ public class BoardDao extends BasicDao {
 			e.printStackTrace();
 		} // db 연결 아직 닫으면 안됨 다른 작업 있음
 		
+	}
+
+	public int recommend(BoardDto dto) {
+
+		int result = 0;
+		
+		try {
+			
+			//insert는 where절을 못쓰니 values대신 select로 직접 값 넣기
+			String sql = "insert into post_recommend (seq, regdate, postseq, memberseq) select postRecommendSeq.nextval, sysdate, ?, ? from dual where not exists (select * from post_recommend where postseq=? and memberseq=?)";
+			
+			pstat = conn.prepareStatement(sql);
+			pstat.setString(1, dto.getSeq());
+			pstat.setString(2, dto.getMemberSeq());
+			pstat.setString(3, dto.getSeq());
+			pstat.setString(4, dto.getMemberSeq());
+			
+			result = pstat.executeUpdate();
+			
+			// 해당 글의 추천수도 증가
+			if (result == 1) {
+			    String updateSql = "UPDATE POST SET RECOMMEND = RECOMMEND + 1 WHERE SEQ = ?";
+			    pstat = conn.prepareStatement(updateSql);
+			    pstat.setString(1, dto.getSeq());
+			    pstat.executeUpdate();
+			}
+			
+			return result;
+			
+		} catch (Exception e) {
+			e.printStackTrace();
+		} finally {
+			closeAll();
+		}
+		
+		
+		
+		return result;
 	}
 
 }

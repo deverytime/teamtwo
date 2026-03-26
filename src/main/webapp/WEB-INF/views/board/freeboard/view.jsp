@@ -74,7 +74,7 @@
 				<!-- ④ 추천 / 신고 -->
 				<div class="card-pad flex gap-2 items-center justify-center">
 					<button class="btn btn-soft-brand btn-sm"
-						onclick="location.href='recommend.do?seq=${dto.seq}'">추천
+						onclick="location.href='recommend.do?seq=${dto.seq}&board=${dto.boardType}'">추천
 						${dto.recommend}</button>
 					<button class="btn btn-error btn-sm"
 						onclick="location.href='report.do?seq=${dto.seq}'">신고
