@@ -81,12 +81,12 @@
 				</c:forEach>
 			
 	          <div class="flex flex-wrap justify-between gap-2">
-	            <button class="btn btn-brand" onclick="location.href='/teamtwo/study/studyschedule-list.do?seq=${seq}';">일정 보기</button>
+	            <button class="btn btn-brand" onclick="location.href='/teamtwo/study/studyschedule-list.do?seq=${dto.seq}';">일정 보기</button>
 	            <c:if test="${isMember}">
-		            <button class="btn btn-brand" onclick="location.href='/teamtwo/study/study-unreg.do?seq=${seq}';">탈퇴 하기</button>
+		            <button class="btn btn-brand" onclick="location.href='/teamtwo/study/study-unreg.do?seq=${dto.seq}';">탈퇴 하기</button>
 		        </c:if>
 		        <c:if test="${!isMember}">
-		        <button class="btn btn-brand" onclick="location.href='/teamtwo/study/study-reg.do?seq=${seq}';">참여 하기</button>
+		        <button class="btn btn-brand" onclick="location.href='/teamtwo/study/study-reg.do?seq=${dto.seq}';">참여 하기</button>
 		         </c:if>
 	          </div>
 	        </div>

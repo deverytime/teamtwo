@@ -88,11 +88,11 @@
               <p class="text-sm text-slate-500">생성일</p>
               <p class="mt-2 text-xl font-bold">${dto.createDate}</p>
             </div>
-          </div>
-	
+          </div>        
+		
           <div class="flex flex-wrap justify-between gap-2">
-            <button class="btn btn-brand" onclick="location.href='/teamtwo/study/study-view.do?seq=${dto.seq}';">상세 보기</button>
-            <button class="btn btn-brand" onclick="location.href='/teamtwo/study/study-reg.do?seq=${dto.seq}';">참여 하기</button>
+            <button class="btn btn-brand" onclick="location.href='/teamtwo/study/studyschedule-list.do?seq=${dto.seq}';">일정 보기</button>
+	        <button class="btn btn-brand" onclick="location.href='/teamtwo/study/study-unreg.do?seq=${dto.seq}';">탈퇴 하기</button>
           </div>
         </div>
       </c:forEach>

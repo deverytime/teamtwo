@@ -21,29 +21,31 @@ public class StudyService {
 		
 		for(StudyDto dto : list) {
 			
-			String createDate = dto.getCreateDate();
-			
-			createDate = createDate.substring(0, 10);
-			
-			dto.setCreateDate(createDate);
-			
-			String name = dto.getName();
-			
-			String desc = dto.getDescription();
-			
-			name = name.replace("<", "&lt;").replace(">", "&rt;");
-			
-			if(name.length() > 15) {
-				name = name.substring(0, 15) + "...";
+			if(dto != null) {
+				String createDate = dto.getCreateDate();
+				
+				createDate = createDate.substring(0, 10);
+				
+				dto.setCreateDate(createDate);
+				
+				String name = dto.getName();
+				
+				String desc = dto.getDescription();
+				
+				name = name.replace("<", "&lt;").replace(">", "&rt;");
+				
+				if(name.length() > 15) {
+					name = name.substring(0, 15) + "...";
+				}
+				
+				dto.setName(name);
+				
+				if(desc.length() > 30) {
+					desc = desc.substring(0, 30) + "...";
+				}
+				
+				dto.setDescription(desc);
 			}
-			
-			dto.setName(name);
-			
-			if(desc.length() > 30) {
-				desc = desc.substring(0, 30) + "...";
-			}
-			
-			dto.setDescription(desc);
 			
 		}
 		
@@ -66,11 +68,13 @@ public class StudyService {
 		
 		StudyDto dto = dao.get(seq);
 		
-		String createDate = dto.getCreateDate();
-		
-		createDate = createDate.substring(0, 10);
-		
-		dto.setCreateDate(createDate);
+		if(dto != null) {
+			String createDate = dto.getCreateDate();
+			
+			createDate = createDate.substring(0, 10);
+			
+			dto.setCreateDate(createDate);
+		}
 		
 		return dto;
 		
@@ -90,13 +94,15 @@ public class StudyService {
 		
 		ArrayList<MemberDto> list =  dao.memberlist(seq, map);
 		
-		for(MemberDto dto : list) {
+		for(MemberDto mdto : list) {
 		
-		String createDate = dto.getRegdate();
-		
-		createDate = createDate.substring(0, 10);
-		
-		dto.setRegdate(createDate);
+			if(mdto != null) {
+				String createDate = mdto.getRegdate();
+				
+				createDate = createDate.substring(0, 10);
+				
+				mdto.setRegdate(createDate);
+			}
 		}
 		
 		return list;
@@ -180,11 +186,11 @@ public class StudyService {
 		
 	}
 
-	public int unregStudy(MemberDto dto) {
+	public int unregStudy(MemberDto mdto, String seq) {
 		
 		StudyDao dao = new StudyDao();
 		
-		return dao.unregStudy(dto);
+		return dao.unregStudy(mdto, seq);
 		
 	}
 	

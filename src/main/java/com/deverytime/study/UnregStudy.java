@@ -34,12 +34,13 @@ public class UnregStudy extends HttpServlet{
 		
 		StudyService service = new StudyService();
 		
-		MemberDto dto = (MemberDto)auth;
+		MemberDto mdto = (MemberDto)auth;
 		
-		int result = service.unregStudy(dto);
+		int result = service.unregStudy(mdto, seq);
 		
 		if(result > 0) {
-			resp.sendRedirect("/study/study-view.do?seq=" + seq);
+			resp.getWriter().print("<script>alert('스터디 탈퇴 완료');location.href='/teamtwo/study/study-list.do';</script>");
+			resp.getWriter().close();
 		} else {
 			resp.getWriter().print("<script>alert('failed');history.back();</script>");
 			resp.getWriter().close();
