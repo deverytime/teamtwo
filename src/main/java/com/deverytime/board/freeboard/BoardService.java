@@ -127,6 +127,7 @@ public class BoardService {
 		return result;
 	}
 
+	// 수정을 위한 게시글 정보를 가져옴
 	public BoardDto getPostBySeq(BoardDto dto) {
 
 		BoardDao dao = new BoardDao();
@@ -144,6 +145,16 @@ public class BoardService {
 
 		return result;
 	
+	}
+
+	public int del(String seq) {
+		
+		BoardDao dao = new BoardDao();
+		
+		int result = dao.del(seq); 
+		
+		return result;
+		
 	}
 
 		

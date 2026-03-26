@@ -297,4 +297,27 @@ public class BoardDao extends BasicDao {
 		return 0;
 	}
 
+	public int del(String seq) {
+		
+		try {
+			
+			String sql = "delete from post where seq = ?";
+			 
+			pstat = conn.prepareStatement(sql);
+			pstat.setString(1, seq);
+			
+			int result = pstat.executeUpdate();
+			
+			return result;
+			
+		} catch (Exception e) {
+			e.printStackTrace();
+		} finally {
+			closeAll();
+		}
+		
+		return 0;
+		
+	}
+
 }
