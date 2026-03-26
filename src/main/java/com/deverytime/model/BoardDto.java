@@ -26,6 +26,8 @@ public class BoardDto {
 	private String prevSeq; // 이전글
 	private String nextSeq; // 다음
 	
+	private String reasonSeq; //신고사유
+	
 	
 
 }

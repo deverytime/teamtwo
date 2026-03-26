@@ -26,6 +26,14 @@
 			}
 		</script>
 	</c:if>
+	<c:if test="${param.msg == 'reportalready'}">
+		<script>
+			window.onload = function() {
+				alert('이미 신고한 글입니다!');
+			}
+		</script>
+	</c:if>
+
 
 	<main class="page-wrap">
 
@@ -93,8 +101,29 @@
 						onclick="location.href='recommend.do?seq=${dto.seq}&board=${dto.boardType}'">추천
 						${dto.recommend}</button>
 					<button class="btn btn-error btn-sm"
-						onclick="location.href='report.do?seq=${dto.seq}'">신고
-						${dto.report}</button>
+						onclick="report_modal.showModal()">신고</button>
+					<!-- 모달 -->
+					<dialog id="report_modal" class="modal">
+					<div class="modal-box">
+						<h3 class="font-bold text-lg mb-4">신고 사유 선택</h3>
+						<form method="get" action="report.do">
+							<input type="hidden" name="seq" value="${dto.seq}">
+							<input type="hidden" name="board" value="${dto.boardType}"> 
+							<select
+								name="reasonSeq" class="select select-bordered w-full mb-4">
+								<option value="1">스팸/광고</option>
+								<option value="2">욕설/혐오</option>
+								<option value="3">음란물</option>
+								<option value="4">개인정보 노출</option>
+								<option value="5">기타</option>
+							</select>
+							<div class="modal-action">
+								<button type="submit" class="btn btn-error">신고</button>
+								<button type="button" class="btn" onclick="report_modal.close()">취소</button>
+							</div>
+						</form>
+					</div>
+					</dialog>
 				</div>
 
 				<!-- ⑤ 공유 -->
