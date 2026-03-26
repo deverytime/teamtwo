@@ -1,6 +1,7 @@
 package com.deverytime.plan;
 
 import java.io.IOException;
+import java.sql.Date;
 
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
@@ -9,6 +10,8 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
 import com.deverytime.model.PlanDto;
+
+
 
 @WebServlet("/plan/edit.do")
 public class Edit extends HttpServlet {
@@ -29,7 +32,7 @@ public class Edit extends HttpServlet {
 		PlanDto dto = service.get(seq, memberSeq);
 		
 		// 본인 학습계획 아닐때 처리
-		if (dto == null) {
+		if (dto == null || dto.getMemberSeq() != memberSeq) {
 			resp.getWriter().print("<script>alert('권한이 없습니다.');history.back();</script>");
 			resp.getWriter().close();
 			return;
@@ -45,6 +48,51 @@ public class Edit extends HttpServlet {
 		    // 비정상 데이터
 		    resp.sendError(HttpServletResponse.SC_BAD_REQUEST);
 		    return;
+		}
+	}
+	
+	@Override
+	protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
+		
+		PlanService service = new PlanService();
+		
+		// 완료기반은 endDate 없으므로 오류 안나게 처리
+	    String endDateStr = req.getParameter("endDate");
+	    Date endDate = null;
+	    
+	    if (endDateStr != null) {
+	    	endDate = Date.valueOf(endDateStr);
+	    }
+		
+		PlanDto dto = PlanDto.builder()
+			.seq(req.getParameter("seq"))
+			.title(req.getParameter("title"))
+			.type(req.getParameter("type"))
+			.subject(req.getParameter("subject"))
+			.description(req.getParameter("description"))
+			.startDate(Date.valueOf(req.getParameter("startDate")))
+			.endDate(endDate)
+			.updateDate(new Date(System.currentTimeMillis()))
+			.memberSeq(req.getParameter("memberSeq"))
+			.build();
+		
+		int result = service.edit(dto);
+		
+		if (result == 1) {
+			// TODO 임시 (나중에상세페이지로 가게 바꿔야 함)
+//			resp.sendRedirect("/plan/detail.do?seq=" + dto.getSeq());
+			resp.sendRedirect("/plan/list.do");
+		} else {
+			req.setAttribute("dto", dto); // 입력값 다시 넘김
+			
+			// jsp 에서 error 들어있으면 alert 나오게 처리해야 함 (js로)
+			req.setAttribute("error", "수정 실패");
+			
+			if (dto.getType().equals("기간기반")) {
+				req.getRequestDispatcher("/WEB-INF/views/plan/period-edit.jsp").forward(req, resp);
+			} else {
+				req.getRequestDispatcher("/WEB-INF/views/plan/completion-edit.jsp").forward(req, resp);
+			}
 		}
 		
 	}
