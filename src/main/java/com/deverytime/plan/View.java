@@ -20,6 +20,7 @@ public class View extends HttpServlet {
 
 		PlanService service = new PlanService();
 		HttpSession session = req.getSession();
+		String cntParam = req.getParameter("cnt");
 		
 		// 세션에서 memberDto 가져오기
 		MemberDto auth = (MemberDto) session.getAttribute("authDto");
@@ -33,7 +34,16 @@ public class View extends HttpServlet {
 		String memberSeq = auth.getSeq();
 		
 		String seq = req.getParameter("seq");
-		PlanDto dto = service.getDetailInfo(seq, memberSeq);
+		
+		
+		// 학습계획에 대한 학습기록들 cnt 만큼 가져오기
+		// cnt 없는 경우 기본값 5
+		int cnt = 5;
+		if (cntParam != null && !cntParam.equals("")) {
+		    cnt = Integer.parseInt(cntParam);
+		}
+		
+		PlanDto dto = service.getDetailInfo(seq, memberSeq, cnt);
 		
 		// 내 학습계획이 아니면 뒤로가기
 		resp.setContentType("text/html; charset=UTF-8");
@@ -43,6 +53,7 @@ public class View extends HttpServlet {
 		}
 		
 		req.setAttribute("dto", dto);
+		req.setAttribute("cnt", cnt);
 
 		req.getRequestDispatcher("/WEB-INF/views/plan/view.jsp").forward(req, resp);
 	}

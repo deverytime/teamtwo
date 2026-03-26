@@ -3,6 +3,8 @@ package com.deverytime.model;
 
 
 import java.sql.Date;
+import java.util.ArrayList;
+import java.util.List;
 
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -29,4 +31,8 @@ public class PlanDto {
 	// 학습계획 상세정보 용 변수
 	private long daysFromStart;
 	private long daysToEnd;
+	// lombok 이 초기화 무시 안하게 어노테이션 추가
+	@Builder.Default
+	private List<RecordDto> records = new ArrayList<>();
+	private long recordCount;
 }
