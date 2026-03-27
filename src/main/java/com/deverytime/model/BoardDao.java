@@ -11,30 +11,60 @@ public class BoardDao extends BasicDao {
 	public ArrayList<BoardDto> list(BoardDto param) {
 
 		try {
-			
+
 			// 게시판타입/주제
 			String board = param.getBoardType();
 			String category = param.getCategory();
-			
-			
+
+			// 검색
+			String searchType = param.getSearchType();
+			String keyword = param.getKeyword();
+
+			// 검색어 쿼리 구간
 			// String.format피하기
 			StringBuilder sql = new StringBuilder();
 			sql.append("select * from vwPost where boardType = ?");
-			
+
 			// preparedStatement용 파라미터 리스트 ? 개수에 맞게 setString
 			ArrayList<String> params = new ArrayList<>();
 			params.add(board);
-			
-			if(category!=null) {
+
+			if (category != null && !category.trim().equals("")) {
 				sql.append(" and category = ?");
 				params.add(category);
 			}
-			
-			sql.append(" order by seq desc");
 
+			// 검색은 주제 선택보다 뒤에 일어나야함
+			// Oracle에서 LIKE 연산자와 파라미터를 결합할 때는 문자열 연결 연산자인 ||를 사용하는 것이 가장 안전하고 일반적
+			if (searchType != null && keyword != null && !keyword.trim().isEmpty()) {
+				switch (searchType) {
+				case "title" -> {
+					sql.append(" and title like '%' || ? || '%'");
+					params.add(keyword);
+				}
+				case "content" -> {
+					sql.append(" and content like '%' || ? || '%'");
+					params.add(keyword);
+				}
+				case "nickname" -> {
+					sql.append(" and nickname like '%' || ? || '%'");
+					params.add(keyword);
+				}
+				case "title_content" -> {
+					sql.append(" and title like '%' || ? || '%' or content like '%' || ? || '%'");
+					params.add(keyword);
+					params.add(keyword);
+				}
+				}
+			}
+
+			// 정렬
+			sql.append(" order by seq desc");
+			// 검색어 쿼리 구간 끝
+			
 			pstat = conn.prepareStatement(sql.toString());
-			for(int i=0; i<params.size(); i++) {
-				pstat.setString(i+1, params.get(i));
+			for (int i = 0; i < params.size(); i++) {
+				pstat.setString(i + 1, params.get(i));
 			}
 			
 			rs = pstat.executeQuery();
@@ -132,7 +162,7 @@ public class BoardDao extends BasicDao {
 	public BoardDto view(BoardDto dto) {
 
 		try {
-			
+
 			String sql = "select * from vwPost ";
 			String board = "";
 			String seq = String.format("seq = %s", dto.getSeq());
@@ -297,7 +327,7 @@ public class BoardDao extends BasicDao {
 	public int edit(BoardDto dto) {
 
 		try {
-			
+
 			String sql = "update post set postCategorySeq = ?, title = ?, content = ? where seq = ?";
 
 			pstat = conn.prepareStatement(sql);
@@ -321,26 +351,26 @@ public class BoardDao extends BasicDao {
 	}
 
 	public int del(String seq) {
-		
+
 		try {
-			
+
 			String sql = "delete from post where seq = ?";
-			 
+
 			pstat = conn.prepareStatement(sql);
 			pstat.setString(1, seq);
-			
+
 			int result = pstat.executeUpdate();
-			
+
 			return result;
-			
+
 		} catch (Exception e) {
 			e.printStackTrace();
 		} finally {
 			closeAll();
 		}
-		
+
 		return 0;
-		
+
 	}
 
 }
