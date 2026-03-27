@@ -20,13 +20,17 @@ public class List extends HttpServlet {
 		//List.java
 		// 1. 파라미터 받기
 		String board = req.getParameter("board");
-		if(board == null) board = "1"; // 기본값 자유게시판
+		if(board == null || board.equals("")) board = "1"; // 기본값 자유게시판
 		
 		String category = req.getParameter("category"); //null 가능 -> 전체 주제
 		
 		// 검색 기능을 위해 추가
 		String searchType = req.getParameter("searchType");
 		String keyword = req.getParameter("keyword");
+		
+		// 페이징을 위해 추가
+		String page = req.getParameter("page");
+		if(page == null || page.equals("")) page = "1";
 		
 		// 2. 목록조회
 
@@ -37,7 +41,8 @@ public class List extends HttpServlet {
 		dto.setCategory(category);
 		dto.setSearchType(searchType);
 		dto.setKeyword(keyword);
-				
+		
+		// 페이징 적
 		ArrayList<BoardDto> list = service.list(dto);
 		
 		
