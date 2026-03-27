@@ -138,7 +138,7 @@
 		<div class="content-card card-pad mb-4">
 
 			<!-- ① 댓글 입력 폼 (상단 고정) -->
-			<form method="post" action="commentAdd.do">
+			<form method="get" action="/teamtwo/comment/add.do">
 				<div class="border-b pb-4 mb-6 border-slate-200">
 					<div class="flex items-start gap-3 opacity-60">
 						<div
