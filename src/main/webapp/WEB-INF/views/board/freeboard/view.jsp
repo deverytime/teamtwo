@@ -107,9 +107,8 @@
 					<div class="modal-box">
 						<h3 class="font-bold text-lg mb-4">신고 사유 선택</h3>
 						<form method="get" action="report.do">
-							<input type="hidden" name="seq" value="${dto.seq}">
-							<input type="hidden" name="board" value="${dto.boardType}"> 
-							<select
+							<input type="hidden" name="seq" value="${dto.seq}"> <input
+								type="hidden" name="board" value="${dto.boardType}"> <select
 								name="reasonSeq" class="select select-bordered w-full mb-4">
 								<option value="1">스팸/광고</option>
 								<option value="2">욕설/혐오</option>
@@ -135,10 +134,81 @@
 			</div>
 		</div>
 
-		<!-- 댓글 영역 (BOARD-06) -->
+		<!-- 댓글 영역 (입력폼 상단) -->
 		<div class="content-card card-pad mb-4">
-			<p class="text-slate-400 text-center">댓글 영역 (BOARD-06)</p>
+
+			<!-- ① 댓글 입력 폼 (상단 고정) -->
+			<div class="border-b pb-4 mb-6">
+				<div class="flex items-start gap-3 opacity-60">
+					<div
+						class="w-10 h-10 bg-slate-200 rounded-full flex items-center justify-center">
+						<span class="text-xs font-semibold">U</span>
+					</div>
+					<div class="flex-1">
+						<textarea
+							class="textarea textarea-bordered w-full h-20 resize-none"
+							placeholder="댓글을 작성하세요... (연동 후 활성화)" disabled></textarea>
+						<div class="flex justify-end mt-2">
+							<button class="btn btn-brand btn-sm px-6" disabled>댓글 등록</button>
+						</div>
+					</div>
+				</div>
+				<p class="text-xs text-slate-400 mt-2 text-center">서블릿 연동 후
+					활성화됩니다</p>
+			</div>
+
+			<!-- ② 댓글 통계 -->
+			<div
+				class="flex justify-between items-center mb-4 pb-2 border-b border-slate-200">
+				<h3 class="text-lg font-semibold">
+					댓글 <span class="text-brand">3</span>
+				</h3>
+				<span class="text-xs text-slate-500">로그인 후 댓글 작성 가능</span>
+			</div>
+
+			<!-- ③ 댓글 리스트 (하단 스크롤) -->
+			<div class="space-y-3 max-h-80 overflow-y-auto">
+
+				<!-- 더미 댓글 1 -->
+				<div class="comment-item border-l-4 border-brand pl-4 pb-3">
+					<div class="flex justify-between items-start mb-1">
+						<div class="flex items-center gap-2">
+							<span class="font-semibold text-sm">홍길동</span> <span
+								class="text-xs text-slate-500">2026.03.27 10:12</span>
+						</div>
+						<div class="text-xs">
+							<a href="#" class="text-brand hover:underline">수정</a> <a href="#"
+								class="text-error hover:underline ml-2">삭제</a>
+						</div>
+					</div>
+					<p class="text-sm leading-relaxed">좋은 글 잘 읽었습니다! 도움이 되네요~</p>
+				</div>
+
+				<!-- 더미 댓글 2 -->
+				<div class="comment-item border-l-4 border-brand pl-4 pb-3">
+					<div class="flex justify-between items-start mb-1">
+						<div class="flex items-center gap-2">
+							<span class="font-semibold text-sm">김철수</span> <span
+								class="text-xs text-slate-500">2026.03.27 11:03</span>
+						</div>
+					</div>
+					<p class="text-sm leading-relaxed">감사합니다. 배울 점이 많네요.</p>
+				</div>
+
+				<!-- 더미 댓글 3 -->
+				<div class="comment-item border-l-4 border-brand pl-4 pb-3">
+					<div class="flex justify-between items-start mb-1">
+						<div class="flex items-center gap-2">
+							<span class="font-semibold text-sm">이영희</span> <span
+								class="text-xs text-slate-500">2026.03.27 11:45</span>
+						</div>
+					</div>
+					<p class="text-sm leading-relaxed">정말 유익한 글이네요. 저장해둡니다!</p>
+				</div>
+			</div>
 		</div>
+
+
 
 		<!-- ⑥ 이전글 / 다음글 -->
 		<div class="flex justify-between">
