@@ -35,10 +35,10 @@ public class BoardService {
 		return CATEGORY_MAP;
 	}
 
-	public ArrayList<BoardDto> list() {
+	public ArrayList<BoardDto> list(BoardDto param) {
 
 		BoardDao dao = new BoardDao();
-		ArrayList<BoardDto> list = dao.list();
+		ArrayList<BoardDto> list = dao.list(param);
 
 		for (BoardDto dto : list) {
 

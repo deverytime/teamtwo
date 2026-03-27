@@ -8,13 +8,36 @@ import com.deverytime.library.BasicDao;
 
 public class BoardDao extends BasicDao {
 
-	public ArrayList<BoardDto> list() {
+	public ArrayList<BoardDto> list(BoardDto param) {
 
 		try {
+			
+			// 게시판타입/주제
+			String board = param.getBoardType();
+			String category = param.getCategory();
+			
+			
+			// String.format피하기
+			StringBuilder sql = new StringBuilder();
+			sql.append("select * from vwPost where boardType = ?");
+			
+			// preparedStatement용 파라미터 리스트 ? 개수에 맞게 setString
+			ArrayList<String> params = new ArrayList<>();
+			params.add(board);
+			
+			if(category!=null) {
+				sql.append(" and category = ?");
+				params.add(category);
+			}
+			
+			sql.append(" order by seq desc");
 
-			String sql = "select * from vwPost";
-
-			rs = stat.executeQuery(sql);
+			pstat = conn.prepareStatement(sql.toString());
+			for(int i=0; i<params.size(); i++) {
+				pstat.setString(i+1, params.get(i));
+			}
+			
+			rs = pstat.executeQuery();
 
 			ArrayList<BoardDto> list = new ArrayList<>();
 
@@ -42,7 +65,7 @@ public class BoardDao extends BasicDao {
 			closeAll();
 		}
 
-		return null;
+		return new ArrayList<>();
 	}
 
 	// 글쓰기
