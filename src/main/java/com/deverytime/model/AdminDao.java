@@ -76,7 +76,7 @@ public class AdminDao extends BasicDao {
 			}
 
 			sql.append("        order by seq desc ");
-			sql.append("    m) ");
+			sql.append("    ) m ");
 			sql.append(") where rnum between ? and ?");
 
 			pstat = conn.prepareStatement(sql.toString());
@@ -107,7 +107,7 @@ public class AdminDao extends BasicDao {
 				dto.setSeq(rs.getString("seq"));
 				dto.setId(rs.getString("id"));
 				dto.setName(rs.getString("name"));
-				dto.setNickname(rs.getString("nick"));
+				dto.setNickname(rs.getString("nickname"));
 				dto.setRegdate(rs.getString("regdate"));
 
 				list.add(dto);
@@ -167,8 +167,6 @@ public class AdminDao extends BasicDao {
 
 		} catch (Exception e) {
 			e.printStackTrace();
-		} finally {
-			closeAll();
 		}
 
 		return 0;

@@ -48,7 +48,7 @@ public class AdminService {
 
 		String pagebar = pagingService.getPagebar(
 			pagingMap,
-			"/admin/list-member.do",
+			"/teamtwo/admin/member-list.do",
 			"type", "word"
 		);
 
