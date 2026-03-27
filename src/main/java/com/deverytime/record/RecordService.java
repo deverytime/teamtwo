@@ -37,4 +37,10 @@ public class RecordService {
 		return null;
 	}
 
+	public RecordDto getDetailInfo(String seq, String memberSeq) {
+		RecordDao dao = new RecordDao();
+		
+		return dao.getDetailInfo(seq, memberSeq);
+	}
+
 }

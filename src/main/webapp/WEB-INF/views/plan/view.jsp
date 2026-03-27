@@ -19,7 +19,7 @@
         <h2 class="text-3xl font-bold text-slate-800">학습계획 상세</h2>
         <p class="text-sm text-slate-500 mt-1">학습계획 관리 및 해당학습의 기록 조회가 가능합니다</p>
       </div>
-      <button class="px-4 py-2 btn btn-soft" onclick="location.href = '/teamtwo/plan/list.do';">
+      <button class="px-4 py-2 btn btn-soft-brand" onclick="location.href = '/teamtwo/plan/list.do';">
         목록으로
       </button>
     </div>
@@ -184,7 +184,7 @@
     <!-- 헤더 -->
     <div class="px-6 py-4 border-b border-slate-200 flex items-center justify-start">
       <div>
-        <h4 class="text-lg font-semibold text-slate-800">학습기록 (임시임시)</h4>
+        <h4 class="text-lg font-semibold text-slate-800">학습기록 목록</h4>
         <p class="text-sm text-slate-500">해당 계획에 등록된 학습기록입니다.</p>
       </div>
     </div>

@@ -132,6 +132,43 @@ public class RecordDao extends BasicDao {
 	    return null;
 	}
 	
+	public RecordDto getDetailInfo(String seq, String memberSeq) {
+
+	    try {
+	        String sql = "select r.*, p.title as planTitle, p.subject as planSubject "
+	                   + "from record r "
+	                   + "inner join plan p on r.planSeq = p.seq "
+	                   + "where r.seq = ? and p.memberSeq = ?";
+
+	        pstat = conn.prepareStatement(sql);
+	        pstat.setString(1, seq);
+	        pstat.setString(2, memberSeq);
+
+	        rs = pstat.executeQuery();
+
+	        if (rs.next()) {
+	            return RecordDto.builder()
+	                    .seq(rs.getString("seq"))
+	                    .studyDate(rs.getDate("studyDate"))
+	                    .content(rs.getString("content"))
+	                    .progress(rs.getInt("progress"))
+	                    .memo(rs.getString("memo"))
+	                    .regdate(rs.getDate("regdate"))
+	                    .updateDate(rs.getDate("updateDate"))
+	                    .recordStatus(rs.getString("recordStatus"))
+	                    .planSeq(rs.getString("planSeq"))
+	                    .planTitle(rs.getString("planTitle"))
+	                    .planSubject(rs.getString("planSubject"))
+	                    .build();
+	        }
+
+	    } catch (Exception e) {
+	        e.printStackTrace();
+	    }
+
+	    return null;
+	}
+	
 	public int edit(RecordDto dto) {
 
 	    try {

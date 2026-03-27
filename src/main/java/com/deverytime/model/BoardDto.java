@@ -1,5 +1,7 @@
 package com.deverytime.model;
 
+import java.util.ArrayList;
+
 import lombok.Getter;
 import lombok.Setter;
 import lombok.ToString;
@@ -9,7 +11,7 @@ import lombok.ToString;
 @ToString
 public class BoardDto {
 	
-	private String boardType; // board 타입 1자유 2질문 3자료공유 4학습공유   vw
+	private String boardType; // board 타입 1자유 2질문 3자료공유 4학습공유   
 	private String category;  // 1잡담/2개발/3에러/4인사/5유머/6자랑/7정보/8나눔/9토론/10공지 
 	private String seq;
 	private String title;
@@ -31,5 +33,14 @@ public class BoardDto {
 	// 검색 관련
 	private String searchType; //title, content, nickname, title_content
 	private String keyword; //검색어
+	
+	// 페이징 관련
+	private String pageStr; //브라우저에서 넘어오는 ?page로 넘어오는 문자열을 저장
+	private int startRow;	// 페이징 시작위치
+	private int pageSize = 15; // 페이지당 개수
+	
+	// 댓글 관련
+	private ArrayList<CommentDto> comments;
+	
 
 }
