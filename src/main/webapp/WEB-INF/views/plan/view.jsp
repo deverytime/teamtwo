@@ -190,8 +190,9 @@
     </div>
 
     <!-- 테이블 -->
-    <div class="overflow-x-auto px-6">
-      <table class="min-w-full text-sm text-left">
+    <div class="p-6">
+    <div class="overflow-x-auto">
+      <table class="table">
         <thead class="bg-slate-50 text-slate-500">
           <tr>
             <th class="px-6 py-3 font-medium">날짜</th>
@@ -204,7 +205,7 @@
 
         <tbody class="divide-y divide-slate-100">
           <c:choose>
-            <!-- records 없을 때 -->
+            <%-- records 없을 때 --%>
             <c:when test="${empty dto.records}">
               <tr>
                 <td colspan="5" class="text-center py-6 text-slate-400">
@@ -212,10 +213,11 @@
                 </td>
               </tr>
             </c:when>
-            <!-- records 있을 때 -->
+            <%-- records 있을 때 --%>
             <c:otherwise>
               <c:forEach items="${dto.records}" var="record">
-                <tr class="hover:bg-slate-100">
+                <tr class="hover:bg-slate-100"
+                    id="record-${record.seq}">
                   <td>${record.studyDate}</td>
                   <td>${record.progress}%</td>
           
@@ -252,24 +254,28 @@
         </tbody>
       </table>
     </div>
+    </div>
     
-    <c:if test="${cnt < dto.recordCount}">
-      <div class="flex justify-center mt-6">
-        <a href="/teamtwo/plan/view.do?seq=${dto.seq}&cnt=${cnt + 5}"
-          class="px-6 py-2 rounded-xl btn btn-wide border-2 border-indigo-200 hover:bg-indigo-50
-            text-slate-600">
-          더보기
-        </a>
-      </div>
-    </c:if>
+    
     
     <!-- 기록 추가 버튼 (고정) -->
     <button
       class="fixed bottom-6 right-12 z-50 px-5 py-3 rounded-full bg-sky-500 text-white font-semibold shadow-lg hover:bg-sky-600 active:scale-95 transition cursor-pointer"
+      onclick="location.href = '/teamtwo/record/add.do?seq=${dto.seq}';"
       >
       + 기록 추가
     </button>
   </div>
+  <c:if test="${cnt < dto.recordCount}">
+      <div class="flex justify-center mt-6">
+        <a href="/teamtwo/plan/view.do?seq=${dto.seq}&cnt=${cnt + 5}"
+          class="px-6 py-2 rounded-xl btn btn-wide border-2 border-indigo-200 hover:bg-indigo-50
+            text-slate-600"
+          onclick="saveScrollAndLastRecord()">
+          더보기
+        </a>
+      </div>
+    </c:if>
 
   </div>
 <!-- 모달 -->
@@ -321,6 +327,60 @@
           });
         
         });
+                
+        function saveLastRecord() {
+      	    const rows = document.querySelectorAll('[id^="record-"]');
+      	    if (rows.length > 0) {
+      	      const lastRowId = rows[rows.length - 1].id;
+      	      sessionStorage.setItem('lastRecordId', lastRowId);
+      	    }
+      	  }
+
+		function saveScrollAndLastRecord() {
+            sessionStorage.setItem('prevScrollY', String(window.scrollY));
+        
+            const rows = document.querySelectorAll('[id^="record-"]');
+            if (rows.length > 0) {
+              sessionStorage.setItem('lastRecordId', rows[rows.length - 1].id);
+            }
+          }
+        
+          // 브라우저 자동 스크롤 복원 끄기
+          if ('scrollRestoration' in history) {
+            history.scrollRestoration = 'manual';
+          }
+        
+          window.addEventListener('pageshow', function () {
+            const prevScrollY = sessionStorage.getItem('prevScrollY');
+            const lastRecordId = sessionStorage.getItem('lastRecordId');
+        
+            if (!prevScrollY || !lastRecordId) return;
+        
+            // 1차: 이전 위치로 즉시 이동
+            window.scrollTo(0, parseInt(prevScrollY, 10));
+        
+            // 2차: 렌더링 한 번 끝난 뒤 다시 보정
+            requestAnimationFrame(() => {
+              window.scrollTo(0, parseInt(prevScrollY, 10));
+        
+              // 3차: 마지막 항목 위치로 부드럽게
+              requestAnimationFrame(() => {
+                const target = document.getElementById(lastRecordId);
+        
+                if (target) {
+                  const y = target.getBoundingClientRect().top + window.scrollY - 80;
+        
+                  window.scrollTo({
+                    top: y,
+                    behavior: 'smooth'
+                  });
+                }
+        
+                sessionStorage.removeItem('prevScrollY');
+                sessionStorage.removeItem('lastRecordId');
+              });
+            });
+          });
   </script>
 </body>
 </html>

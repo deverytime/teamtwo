@@ -58,6 +58,21 @@ public class Edit extends HttpServlet {
 
         req.setCharacterEncoding("UTF-8");
 
+        HttpSession session = req.getSession();
+        
+     // 세션에서 memberDto 가져오기
+        MemberDto auth = (MemberDto) session.getAttribute("authDto");
+
+        // 로그인 안했으면 로그인 페이지로
+        if (auth == null) {
+            resp.sendRedirect("/teamtwo/user/login.do");
+            return;
+        }
+
+        // dto 에 저장된 memberSeq 가져오기
+        String memberSeq = auth.getSeq();
+        
+        
         RecordService service = new RecordService();
 
         RecordDto dto = RecordDto.builder()
@@ -69,8 +84,9 @@ public class Edit extends HttpServlet {
                 .memo(req.getParameter("memo"))
                 .updateDate(new Date(System.currentTimeMillis()))
                 .planSeq(req.getParameter("planSeq"))
+                .memberSeq(memberSeq)
                 .build();
-
+        
         int result = service.edit(dto);
 
         if (result == 1) {
