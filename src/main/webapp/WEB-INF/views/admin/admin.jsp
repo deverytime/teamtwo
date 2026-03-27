@@ -23,15 +23,15 @@
 			<div class="grid grid-cols-3 gap-6 mb-8">
 				<div class="bg-white p-6 rounded-2xl shadow-sm border border-slate-100 text-center">
 					<div class="text-slate-500 mb-2 font-semibold">총 회원 수</div>
-					<div class="text-4xl font-bold text-primary">${stats.totalMember} <span class="text-lg font-normal text-slate-600">명</span></div>
+					<div class="text-4xl font-bold text-primary"><span class="counter-up inline-block" data-target="${stats.totalMember}">0</span> <span class="text-lg font-normal text-slate-600">명</span></div>
 				</div>
 				<div class="bg-white p-6 rounded-2xl shadow-sm border border-slate-100 text-center">
 					<div class="text-slate-500 mb-2 font-semibold">총 게시글 수</div>
-					<div class="text-4xl font-bold text-primary">${stats.totalPost} <span class="text-lg font-normal text-slate-600">개</span></div>
+					<div class="text-4xl font-bold text-primary"><span class="counter-up inline-block" data-target="${stats.totalPost}">0</span> <span class="text-lg font-normal text-slate-600">개</span></div>
 				</div>
 				<div class="bg-white p-6 rounded-2xl shadow-sm border border-slate-100 text-center">
 					<div class="text-slate-500 mb-2 font-semibold">진행 중 스터디</div>
-					<div class="text-4xl font-bold text-primary">${stats.activeStudy} <span class="text-lg font-normal text-slate-600">개</span></div>
+					<div class="text-4xl font-bold text-primary"><span class="counter-up inline-block" data-target="${stats.activeStudy}">0</span> <span class="text-lg font-normal text-slate-600">개</span></div>
 				</div>
 			</div>
 
@@ -69,5 +69,42 @@
 
 		</main>
 	</div>
+<style>
+		/* 위에서 아래로 부드럽게 떨어지는 애니메이션 */
+		@keyframes dropDown {
+			0% { transform: translateY(-20px); opacity: 0; }
+			100% { transform: translateY(0); opacity: 1; }
+		}
+		.counter-up {
+			animation: dropDown 0.8s ease-out forwards;
+		}
+</style>
+
+	<script>
+		// 숫자 촤르륵 카운팅 애니메이션 로직
+		const counters = document.querySelectorAll('.counter-up');
+		const speed = 30; // 숫자가 올라가는 속도 (낮을수록 더 오래 걸림)
+
+		counters.forEach(counter => {
+			const updateCount = () => {
+				const target = +counter.getAttribute('data-target');
+				const count = +counter.innerText;
+
+				// 한번에 올라갈 숫자 단위 계산
+				const inc = target / speed;
+
+				if (count < target) {
+					// 소수점 올림으로 부드럽게 더해줌
+					counter.innerText = Math.ceil(count + inc);
+					// 20ms마다 다시 실행
+					setTimeout(updateCount, 20);
+				} else {
+					// 최종 숫자에 도달하면 딱 맞춰줌
+					counter.innerText = target;
+				}
+			};
+			updateCount();
+		});
+	</script>
 </body>
 </html>
