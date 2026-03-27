@@ -28,5 +28,8 @@ public class BoardDto {
 	
 	private String reasonSeq; //신고사유
 	
+	// 검색 관련
+	private String searchType; //title, content, nickname, title_content
+	private String keyword; //검색어
 
 }
