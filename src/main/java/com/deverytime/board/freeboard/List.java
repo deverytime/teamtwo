@@ -2,6 +2,7 @@ package com.deverytime.board.freeboard;
 
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.HashMap;
 
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
@@ -10,6 +11,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
 import com.deverytime.model.BoardDto;
+import com.deverytime.paging.PagingService;
 
 @WebServlet(value = "/board/freeboard/list.do")
 public class List extends HttpServlet {
@@ -41,17 +43,25 @@ public class List extends HttpServlet {
 		dto.setCategory(category);
 		dto.setSearchType(searchType);
 		dto.setKeyword(keyword);
+		dto.setPageStr(page);
 		
-		// 페이징 적
+		// 3. 목록보기
 		ArrayList<BoardDto> list = service.list(dto);
 		
+		// 4. 페이징
+		int totalCount = service.getTotalCount(dto);
+		PagingService pagingService = new PagingService();
+		HashMap<String, String> pagingMap = pagingService.getPaging(page, totalCount, dto.getPageSize());
+		String pagebar = pagingService.getPagebar(pagingMap, "list.do", "list.do", 
+		        "board", "category", "searchType", "keyword");
 		
-		// 3. 첨부
+		// 5. 첨부
 		req.setAttribute("list", list);
 		req.setAttribute("board", board);
 		req.setAttribute("param", dto);
 		req.setAttribute("category", category);
 		req.setAttribute("categoryMap", service.getCategoryMap());
+		req.setAttribute("pagebar", pagebar);
 
 		req.getRequestDispatcher("/WEB-INF/views/list.jsp").forward(req, resp);
 	}
