@@ -77,7 +77,7 @@ public class MemberService {
 		if (dto.getPw().equals(pw)) {
 			dao.resetFailCount(id); // 실패 횟수 0으로 초기화
 
-			// 서블릿(Login.java)에서 authDto 세션을 구울 수 있도록,
+			// 서블릿(Login.java)에서 authDto 세션을 생성할 수 있도록,
 			// DB에서 가져온 회원 정보 뭉치(dto)를 request에 임시로 담아서 넘겨줌
 			req.setAttribute("memberDto", dto);
 			return 1;
@@ -268,6 +268,82 @@ public class MemberService {
 			e.printStackTrace();
 		}
 		return 0;
+	}
+
+	// 2차 인증 끄고 켜기 (status: 0이면 끄기, 1이면 켜기) + 세션 갱신까지 처리
+	public int toggleTwoFactor(HttpServletRequest req, int status) {
+		String id = (String) req.getSession().getAttribute("auth");
+		MemberDao dao = new MemberDao();
+
+		int result = dao.updateTwoFactor(id, status);
+		if (result > 0) {
+			req.getSession().setAttribute("authDto", dao.getMember(id)); // 세션 최신화
+		}
+		return result;
+	}
+
+	// -------------------------------------------------------------
+	// 2차 인증 이메일 발송 및 난수 생성 (TwofactorSetup 서블릿이 호출)
+	// -------------------------------------------------------------
+	public String sendTwoFactorAuthMail(HttpServletRequest req) {
+		String email = req.getParameter("email");
+
+		// 6자리 랜덤 인증코드 생성
+		java.util.Random rnd = new java.util.Random();
+		String code = String.valueOf(rnd.nextInt(900000) + 100000);
+
+		String subject = "[deverytime] 2차 인증 번호 안내";
+		String content = "<div style='font-family: sans-serif; padding: 20px; border: 1px solid #e2e8f0; border-radius: 10px; max-width: 400px;'>"
+				+ "<h2 style='color: #2563eb;'>인증 번호 안내</h2>" + "<p>요청하신 2차 인증 번호입니다.</p>"
+				+ "<div style='background-color: #f8fafc; padding: 15px; text-align: center; font-size: 24px; font-weight: bold; letter-spacing: 5px; border-radius: 5px;'>"
+				+ code + "</div></div>";
+
+		boolean isSuccess = com.deverytime.library.MailUtil.sendMail(email, subject, content);
+
+		if (isSuccess) {
+			return code; // 성공하면 생성된 코드를 반환!
+		}
+		return null; // 실패하면 null 반환
+	}
+
+	// -------------------------------------------------------------
+	// 비밀번호 변경 및 세션 파기 (로그아웃) 로직
+	// -------------------------------------------------------------
+	public int editPassword(HttpServletRequest req) {
+		String id = (String) req.getSession().getAttribute("auth");
+		String newPw = req.getParameter("pw");
+
+		MemberDao dao = new MemberDao();
+		int result = dao.updatePw(id, newPw); // MemberDao의 10번 메서드 재활용
+
+		if (result > 0) {
+			// 비밀번호가 바뀌었으니 세션을 파기하고 강제 로그아웃
+			req.getSession().invalidate();
+		}
+		return result;
+	}
+
+	// -------------------------------------------------------------
+	// 회원 탈퇴 로직 (스터디장 검사 + 소프트 딜리트 + 세션 파기)
+	// -------------------------------------------------------------
+	public int unregisterMember(HttpServletRequest req) {
+		String id = (String) req.getSession().getAttribute("auth");
+		MemberDao dao = new MemberDao();
+
+		// 1. 스터디장인지 검사
+		if (dao.checkStudyLeader(id) > 0) {
+			return -1; // 스터디장이면 탈퇴 불가 암호(-1) 반환
+		}
+
+		// 2. 스터디장이 아니면 실제 탈퇴 처리 (비식별화) 진행
+		int result = dao.unregister(id);
+
+		if (result > 0) {
+			// 3. 탈퇴 성공 시 세션(로그인 기록) 파기
+			req.getSession().invalidate();
+		}
+
+		return result;
 	}
 
 }

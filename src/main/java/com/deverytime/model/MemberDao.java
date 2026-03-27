@@ -94,7 +94,7 @@ public class MemberDao extends BasicDao {
 				dto.setPw(rs.getString("pw"));
 				dto.setName(rs.getString("name"));
 				dto.setNickname(rs.getString("nickname"));
-				dto.setEmail(rs.getString("email")); 
+				dto.setEmail(rs.getString("email"));
 				dto.setPic(rs.getString("pic"));
 				dto.setStatus(rs.getInt("status"));
 				dto.setFailCount(rs.getInt("failCount"));
@@ -204,6 +204,78 @@ public class MemberDao extends BasicDao {
 			pstat.setString(3, pic);
 			pstat.setString(4, id);
 			return pstat.executeUpdate(); // 성공 시 1 반환
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		return 0;
+	}
+
+	// 12. 2차 인증 활성화/비활성화 업데이트
+	public int updateTwoFactor(String id, int twoFactor) {
+		try {
+			String sql = "update member set twoFactor = ? where id = ?";
+			pstat = conn.prepareStatement(sql);
+			pstat.setInt(1, twoFactor);
+			pstat.setString(2, id);
+			return pstat.executeUpdate(); // 성공 시 1 반환
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		return 0;
+	}
+
+	// 13. 스터디장 여부 확인 (탈퇴 방어용)
+	public int checkStudyLeader(String id) {
+		try {
+			// member 테이블과 study_member 테이블을 조인해서
+			// 아이디가 일치하고, 스터디 구성원 타입이 1(스터디장)인 데이터의 개수를 센다
+			String sql = "select count(*) as cnt " + "from study_member sm "
+					+ "inner join member m on sm.memberSeq = m.seq " + "where m.id = ? and sm.type = 1";
+
+			pstat = conn.prepareStatement(sql);
+			pstat.setString(1, id);
+			rs = pstat.executeQuery();
+
+			if (rs.next()) {
+				// 이 값이 0보다 크면 스터디장을 맡고 있는 곳이 있다는 뜻
+				return rs.getInt("cnt");
+			}
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		return 0;
+	}
+
+	// 14. 회원 탈퇴 (소프트 딜리트 + 개인정보 비식별화)
+	public int unregister(String originalId) {
+		try {
+			String uuid = java.util.UUID.randomUUID().toString();
+
+			String dummyId = "del_" + uuid.substring(0, 8);
+			String dummyPw = uuid;
+			String dummyName = "탈퇴회원";
+			String dummyNickname = "알수없음_" + uuid.substring(0, 5);
+			String dummyEmail = uuid.substring(0, 15) + "@deleted.com";
+
+			// 물음표가 정확히 6개인지 확인
+			String sql = "update member set " + "status = 2, " + "id = ?, " // 1
+					+ "pw = ?, " // 2
+					+ "name = ?, " // 3
+					+ "nickname = ?, " // 4
+					+ "email = ?, " // 5
+					+ "pic = 'pic.png', " + "twoFactor = 0 " + "where id = ?"; // 6
+
+			pstat = conn.prepareStatement(sql);
+			// 1~6번까지 순서대로 세팅
+			pstat.setString(1, dummyId);
+			pstat.setString(2, dummyPw);
+			pstat.setString(3, dummyName);
+			pstat.setString(4, dummyNickname);
+			pstat.setString(5, dummyEmail);
+			pstat.setString(6, originalId);
+
+			return pstat.executeUpdate();
+
 		} catch (Exception e) {
 			e.printStackTrace();
 		}

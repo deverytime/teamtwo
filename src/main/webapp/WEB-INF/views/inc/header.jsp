@@ -1,7 +1,7 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 
-<c:set var="uri" value="${pageContext.request.requestURI}" />
+<c:set var="uri" value="${not empty requestScope['javax.servlet.forward.request_uri'] ? requestScope['javax.servlet.forward.request_uri'] : pageContext.request.requestURI}" />
 
 <style>
 	.nav-active {
@@ -43,7 +43,7 @@
 				</li>
 				
 				<li class="dropdown dropdown-hover h-full">
-					<a href="/teamtwo/board/trendingboard/list.do" class="relative h-full flex items-center px-4 hover:bg-slate-50 transition-colors cursor-pointer ${uri.contains('/board/') ? 'nav-active' : ''}">게시판</a>
+					<a href="/teamtwo/board/trendingboard/list.do" class="relative h-full flex items-center px-4 hover:bg-slate-50 transition-colors cursor-pointer ${uri.contains('board') ? 'nav-active' : ''}">게시판</a>
 					
 					<ul tabindex="0" class="dropdown-content menu bg-white rounded-xl w-48 p-2 shadow-md border border-slate-200 top-full left-1/2 -translate-x-1/2 z-[50]">
 						<li><a href="/teamtwo/board/trendingboard/list.do">인기글 게시판</a></li>
