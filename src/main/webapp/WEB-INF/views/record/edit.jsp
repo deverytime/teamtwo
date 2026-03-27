@@ -12,7 +12,7 @@
   <div class="page-wrap">  	
     <main class="demo-block mb-8">
       <form method="POST" action="/teamtwo/record/edit.do" class="space-y-5 mt-5">      
-        <div class="content-card card-pad mb-5 border-3 border-indigo-300!">
+        <div class="content-card card-pad mb-5 border-3 border-emerald-300!">
           <h2 class="section-title text-center">학습 기록 수정 페이지</h2>
       
           <div class="space-y-5 mt-5">
@@ -91,7 +91,7 @@
       
         <div class="flex justify-end gap-4">
           <button type="button" class="btn btn-ghost" onclick="history.back();">취소</button>
-          <button type="submit" class="btn btn-brand">수정하기</button>
+          <button type="submit" class="btn btn-accent">수정하기</button>
         </div>
       
       </form>

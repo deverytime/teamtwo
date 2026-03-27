@@ -23,4 +23,7 @@ public class RecordDto {
     private String planSeq;       // 계획번호
     
     private String memberSeq;
+    // 상세 조회 용
+    private String planTitle;
+    private String planSubject;
 }

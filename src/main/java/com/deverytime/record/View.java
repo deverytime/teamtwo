@@ -31,7 +31,7 @@ public class View extends HttpServlet {
         String seq = req.getParameter("seq");
         String memberSeq = auth.getSeq();
 
-        RecordDto dto = service.get(seq, memberSeq);
+        RecordDto dto = service.getDetailInfo(seq, memberSeq);
 
         if (dto == null) {
             resp.getWriter().print("<script>alert('권한이 없습니다.');history.back();</script>");
