@@ -20,6 +20,9 @@ public class AddStudySchdule extends HttpServlet{
 	@Override
 	protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
 			
+		String seq = req.getParameter("seq");
+		req.setAttribute("seq", seq);
+		
 		req.getRequestDispatcher("/WEB-INF/views/study/studyschedule-add.jsp").forward(req, resp);
 		
 	}
@@ -43,8 +46,6 @@ public class AddStudySchdule extends HttpServlet{
 		
 		String seq = req.getParameter("seq");
 		
-		MemberDto mdto = (MemberDto)auth;
-		
 		String title = req.getParameter("title");
 		String content =  req.getParameter("content");
 		String startDate =  req.getParameter("startDate");
@@ -58,14 +59,16 @@ public class AddStudySchdule extends HttpServlet{
 		dto.setStartDate(startDate);
 		dto.setEndDate(endDate);
 		
-//		int result = service.add(dto, mdto);
-//		
-//		if(result > 0) {
-//			resp.sendRedirect("/teamtwo/study/studyschedule-list.do?seq=" + seq);
-//		} else {
-//			resp.getWriter().print("<script>alert('failed');history.back();</script>");
-//			resp.getWriter().close();
-//		}
+		System.out.println(seq);
+		
+		int result = service.add(dto, seq);
+		
+		if(result > 0) {
+			resp.sendRedirect("/teamtwo/study/studyschedule-list.do?seq=" + seq);
+		} else {
+			resp.getWriter().print("<script>alert('failed');history.back();</script>");
+			resp.getWriter().close();
+		}
 		
 	}
 	

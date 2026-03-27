@@ -27,7 +27,7 @@
 
       <div class="content-card card-pad max-w-3xl">
 
-        <form class="space-y-5" method="POST" action="/teamtwo/study/studyschedule-add.do?seq=${dto.seq}">
+        <form class="space-y-5" method="POST" action="/teamtwo/study/studyschedule-add.do?seq=${seq}">
           <div>
             <label class="form-label">스터디 일정 명</label>
             <input
@@ -59,7 +59,7 @@
           </div>
 
           <div class="flex justify-end gap-2 pt-2">
-            <button type="button" class="btn btn-ghost" onclick="location.href='history.back()처리하기!!!!!!!!!!!!!';">취소</button>
+            <button type="button" class="btn btn-ghost" onclick="history.back();">취소</button>
             <button type="submit" class="btn btn-brand">등록하기</button>
           </div>
         </form>
@@ -71,7 +71,7 @@
 	</main>
 	
 	<script>
-		// 현재 페이지 전용 JavaScript가 필요하면 여기에 작성
+	
 	</script>
 </body>
 </html>
