@@ -58,14 +58,22 @@ public class BoardDao extends BasicDao {
 				}
 			}
 
-			// 정렬
-			sql.append(" order by seq desc");
+			// 정렬 및 페이
+			sql.append(" order by seq desc")
+				.append(" offset ? rows fetch next ? rows only");
+			
+			// OFFSET ? ROWS      → "이만큼 건너뛰어!" (30개 스킵)
+			// FETCH NEXT ? ROWS → "이만큼만 가져와!" (15개 가져오기)
 			// 검색어 쿼리 구간 끝
 			
 			pstat = conn.prepareStatement(sql.toString());
 			for (int i = 0; i < params.size(); i++) {
 				pstat.setString(i + 1, params.get(i));
 			}
+			
+			// 페이징 파라미터 추가
+			pstat.setInt(params.size() + 1, param.getStartRow());
+			pstat.setInt(params.size() + 2, param.getPageSize());
 			
 			rs = pstat.executeQuery();
 
@@ -371,6 +379,66 @@ public class BoardDao extends BasicDao {
 
 		return 0;
 
+	}
+
+	// list와 비슷하지만 성능을 위해 분리 // 하는일도 다름
+	public int getTotalCount(BoardDto param) {
+		try {
+	        // 1. 검색 조건 동일하게 설정
+	        String board = param.getBoardType();
+	        String category = param.getCategory();
+	        String searchType = param.getSearchType();
+	        String keyword = param.getKeyword();
+
+	        // 2. COUNT(*)
+	        StringBuilder sql = new StringBuilder("SELECT COUNT(*) FROM vwPost WHERE boardType = ?");
+	        ArrayList<String> params = new ArrayList<>();
+	        params.add(board);
+
+	        // 3. list()와 **똑같은** 조건 적용!
+	        if (category != null && !category.trim().equals("")) {
+	            sql.append(" AND category = ?");
+	            params.add(category);
+	        }
+
+	        if (searchType != null && keyword != null && !keyword.trim().isEmpty()) {
+	            switch (searchType) {
+	                case "title" -> {
+	                    sql.append(" AND title LIKE '%' || ? || '%'");
+	                    params.add(keyword);
+	                }
+	                case "content" -> {
+	                    sql.append(" AND content LIKE '%' || ? || '%'");
+	                    params.add(keyword);
+	                }
+	                case "nickname" -> {
+	                    sql.append(" AND nickname LIKE '%' || ? || '%'");
+	                    params.add(keyword);
+	                }
+	                case "title_content" -> {
+	                    sql.append(" AND (title LIKE '%' || ? || '%' OR content LIKE '%' || ? || '%')");
+	                    params.add(keyword);
+	                    params.add(keyword);
+	                }
+	            }
+	        }
+
+	        pstat = conn.prepareStatement(sql.toString());
+	        for (int i = 0; i < params.size(); i++) {
+	            pstat.setString(i + 1, params.get(i));
+	        }
+
+	        rs = pstat.executeQuery();
+	        if (rs.next()) {
+	            return rs.getInt(1);  // 총 개수만 반환
+	        }
+
+	    } catch (Exception e) {
+	        e.printStackTrace();
+	    } finally {
+	        closeAll();
+	    }
+	    return 0;
 	}
 
 }
