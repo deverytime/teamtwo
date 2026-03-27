@@ -172,5 +172,141 @@ public class AdminDao extends BasicDao {
 		return 0;
 	}
 	
+	public List<BoardDto> getBoardList(int begin, int end, String type, String word) {
+
+		try {
+			StringBuilder sql = new StringBuilder();
+
+			sql.append("select * from (");
+			sql.append("    select rownum as rnum, t.* from (");
+			sql.append("        select ");
+			sql.append("            b.seq, b.title, b.content, ");
+			sql.append("            b.readCount, b.regDate, b.recommend, b.report, ");
+			sql.append("            b.memberSeq, m.id, m.nickname ");
+			sql.append("        from post b ");
+			sql.append("        inner join member m on b.memberSeq = m.seq ");
+
+			boolean hasWord = word != null && !word.trim().equals("");
+
+			if (hasWord) {
+				if ("title".equals(type)) {
+					sql.append("where b.title like ? ");
+				} else if ("content".equals(type)) {
+					sql.append("where b.content like ? ");
+				} else if ("nickname".equals(type)) {
+					sql.append("where m.nickname like ? ");
+				} else if ("all".equals(type)) {
+					sql.append("where b.title like ? ");
+					sql.append("   or b.content like ? ");
+					sql.append("   or m.nickname like ? ");
+				}
+			}
+
+			sql.append("        order by b.seq desc ");
+			sql.append("    ) t ");
+			sql.append(") where rnum between ? and ?");
+
+			pstat = conn.prepareStatement(sql.toString());
+
+			int index = 1;
+
+			if (hasWord) {
+				String searchWord = "%" + word + "%";
+
+				if ("all".equals(type)) {
+					pstat.setString(index++, searchWord);
+					pstat.setString(index++, searchWord);
+					pstat.setString(index++, searchWord);
+				} else if ("title".equals(type) || "content".equals(type) || "nickname".equals(type)) {
+					pstat.setString(index++, searchWord);
+				}
+			}
+
+			pstat.setInt(index++, begin);
+			pstat.setInt(index++, end);
+
+			rs = pstat.executeQuery();
+
+			List<BoardDto> list = new ArrayList<>();
+
+			while (rs.next()) {
+				BoardDto dto = new BoardDto();
+				dto.setSeq(rs.getString("seq"));				
+				dto.setTitle(rs.getString("title"));
+				dto.setContent(rs.getString("content"));
+				dto.setReadCount(rs.getString("readCount"));
+				dto.setRegDate(rs.getString("regDate"));
+				dto.setRecommend(rs.getString("recommend"));
+				dto.setReport(rs.getString("report"));
+				dto.setMemberSeq(rs.getString("memberSeq"));
+				dto.setId(rs.getString("id"));
+				dto.setNickname(rs.getString("nickname"));
+
+				list.add(dto);
+			}
+
+			return list;
+
+		} catch (Exception e) {
+			e.printStackTrace();
+		} finally {
+			closeAll();
+		}
+
+		return new ArrayList<>();
+	}
+	
+	public int getBoardCount(String type, String word) {
+
+		try {
+			StringBuilder sql = new StringBuilder();
+
+			sql.append("select count(*) as cnt ");
+			sql.append("from post b ");
+			sql.append("inner join member m on b.memberSeq = m.seq ");
+
+			boolean hasWord = word != null && !word.trim().equals("");
+
+			if (hasWord) {
+				if ("title".equals(type)) {
+					sql.append("where b.title like ? ");
+				} else if ("content".equals(type)) {
+					sql.append("where b.content like ? ");
+				} else if ("nickname".equals(type)) {
+					sql.append("where m.nickname like ? ");
+				} else if ("all".equals(type)) {
+					sql.append("where b.title like ? ");
+					sql.append("   or b.content like ? ");
+					sql.append("   or m.nickname like ? ");
+				}
+			}
+
+			pstat = conn.prepareStatement(sql.toString());
+
+			if (hasWord) {
+				String searchWord = "%" + word + "%";
+
+				if ("all".equals(type)) {
+					pstat.setString(1, searchWord);
+					pstat.setString(2, searchWord);
+					pstat.setString(3, searchWord);
+				} else if ("title".equals(type) || "content".equals(type) || "nickname".equals(type)) {
+					pstat.setString(1, searchWord);
+				}
+			}
+
+			rs = pstat.executeQuery();
+
+			if (rs.next()) {
+				return rs.getInt("cnt");
+			}
+
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+
+		return 0;
+	}
+	
 	
 }
