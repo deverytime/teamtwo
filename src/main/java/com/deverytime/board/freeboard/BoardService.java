@@ -7,6 +7,7 @@ import java.util.Map;
 
 import com.deverytime.model.BoardDao;
 import com.deverytime.model.BoardDto;
+import com.deverytime.paging.PagingUtil;
 
 public class BoardService {
 
@@ -24,10 +25,10 @@ public class BoardService {
 		CATEGORY_MAP.put("9", "토론");
 		CATEGORY_MAP.put("10", "공지");
 	}
-	
+
 	// 주제 한글 처리
 	private String getCategoryName(String categoryKey) {
-	    return CATEGORY_MAP.get(categoryKey);
+		return CATEGORY_MAP.get(categoryKey);
 	}
 
 	// 카테고리 보내주기
@@ -38,6 +39,15 @@ public class BoardService {
 	public ArrayList<BoardDto> list(BoardDto param) {
 
 		BoardDao dao = new BoardDao();
+
+		// 페이징 자동 계산
+		String pageStr = param.getPageStr();
+		int nowPage = PagingUtil.parseNowPage(pageStr);
+		int pageSize = param.getPageSize(); // 15개씩 보여줌
+		int startRow = (nowPage - 1) * pageSize; // db결과에서 얼마나 가져올지
+		param.setStartRow(startRow);
+
+		// 목록 조회
 		ArrayList<BoardDto> list = dao.list(param);
 
 		for (BoardDto dto : list) {
@@ -80,50 +90,50 @@ public class BoardService {
 	}
 
 	public BoardDto view(BoardDto dto) {
-		
+
 		BoardDao dao = new BoardDao();
 
 		dto = dao.view(dto);
-		
+
 		// 카테고리 한글 처리
 		dto.setCategory(getCategoryName(dto.getCategory()));
-		
+
 		return dto;
 	}
 
 	public void increaseReadCount(String seq) {
-		
+
 		BoardDao dao = new BoardDao();
-		
+
 		dao.increaseReadCount(seq);
-		
+
 	}
 
 	public int recommend(BoardDto dto) {
-		
+
 		BoardDao dao = new BoardDao();
-		
+
 		// DB에 인서트하기전에 id로 memberSeq를 알아오기
 		String memberSeq = dao.getMemberSeqById(dto.getId());
 
 		dto.setMemberSeq(memberSeq);
 
 		int result = dao.recommend(dto);
-		
+
 		return result;
 	}
 
 	public int report(BoardDto dto) {
-		
+
 		BoardDao dao = new BoardDao();
-		
+
 		// DB에 인서트하기전에 id로 memberSeq를 알아오기
 		String memberSeq = dao.getMemberSeqById(dto.getId());
 
 		dto.setMemberSeq(memberSeq);
 
 		int result = dao.report(dto);
-		
+
 		return result;
 	}
 
@@ -131,9 +141,9 @@ public class BoardService {
 	public BoardDto getPostBySeq(BoardDto dto) {
 
 		BoardDao dao = new BoardDao();
-		
+
 		dto = dao.getPostBySeq(dto);
-		
+
 		return dto;
 	}
 
@@ -144,20 +154,23 @@ public class BoardService {
 		int result = dao.edit(dto);
 
 		return result;
-	
+
 	}
 
 	public int del(String seq) {
-		
+
 		BoardDao dao = new BoardDao();
-		
-		int result = dao.del(seq); 
-		
+
+		int result = dao.del(seq);
+
 		return result;
-		
+
 	}
 
-		
-		
+	// 총 개수 조회 (List.java에서 호출)
+	public int getTotalCount(BoardDto param) {
+		BoardDao dao = new BoardDao();
+		return dao.getTotalCount(param);
+	}
 
 }

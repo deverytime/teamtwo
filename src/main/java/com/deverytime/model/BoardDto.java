@@ -31,5 +31,10 @@ public class BoardDto {
 	// 검색 관련
 	private String searchType; //title, content, nickname, title_content
 	private String keyword; //검색어
+	
+	// 페이징 관련
+	private String pageStr; //브라우저에서 넘어오는 ?page로 넘어오는 문자열을 저장
+	private int startRow;	// 페이징 시작위치
+	private int pageSize = 15; // 페이지당 개수
 
 }

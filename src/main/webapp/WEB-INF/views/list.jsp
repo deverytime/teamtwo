@@ -105,11 +105,7 @@
 					<div class="w-24"></div>
 
 					<!-- 가운데 페이지바 -->
-					<div class="flex gap-1">
-						<button class="btn">1</button>
-						<button class="btn">2</button>
-						<button class="btn">3</button>
-					</div>
+					<div>${pagebar}</div>
 
 					<!-- 오른쪽 글쓰기 버튼 -->
 					<div class="w-24 flex justify-end">
