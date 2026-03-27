@@ -54,6 +54,14 @@ public class StudyService {
 		
 	}
 
+	public int getTotalCountSM(HashMap<String, String> map, MemberDto mdto) {
+		
+		StudyDao dao = new StudyDao();
+		
+		return dao.getTotalCountSM(map, mdto);
+		
+	}
+	
 	public int getTotalCount(HashMap<String, String> map) {
 		
 		StudyDao dao = new StudyDao();
@@ -193,5 +201,6 @@ public class StudyService {
 		return dao.unregStudy(mdto, seq);
 		
 	}
+
 	
 }
