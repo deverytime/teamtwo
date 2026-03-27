@@ -22,7 +22,11 @@ public class List extends HttpServlet {
 		String board = req.getParameter("board");
 		if(board == null) board = "1"; // 기본값 자유게시판
 		
-		String category = req.getParameter("category"); //null 가능 -> 전체 주
+		String category = req.getParameter("category"); //null 가능 -> 전체 주제
+		
+		// 검색 기능을 위해 추가
+		String searchType = req.getParameter("searchType");
+		String keyword = req.getParameter("keyword");
 		
 		// 2. 목록조회
 
@@ -31,6 +35,8 @@ public class List extends HttpServlet {
 		
 		dto.setBoardType(board);
 		dto.setCategory(category);
+		dto.setSearchType(searchType);
+		dto.setKeyword(keyword);
 				
 		ArrayList<BoardDto> list = service.list(dto);
 		
@@ -38,6 +44,8 @@ public class List extends HttpServlet {
 		// 3. 첨부
 		req.setAttribute("list", list);
 		req.setAttribute("board", board);
+		req.setAttribute("param", dto);
+		req.setAttribute("category", category);
 		req.setAttribute("categoryMap", service.getCategoryMap());
 
 		req.getRequestDispatcher("/WEB-INF/views/list.jsp").forward(req, resp);

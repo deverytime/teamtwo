@@ -34,17 +34,25 @@
 							<h3 class="text-xl font-bold"></h3>
 							<p class="text-sm text-slate-500 mt-1"></p>
 						</div>
-
-						<div class="flex flex-col sm:flex-row gap-2">
-							<select class="select select-bordered bg-white">
-								<option>제목</option>
-								<option>내용</option>
-								<option>작성자</option>
-								<option>제목&내용</option>
-							</select> <input type="text" placeholder="검색어 입력"
-								class="input input-bordered bg-white" />
-							<button class="btn btn-brand">검색</button>
-						</div>
+						<form method="get">
+							<div class="flex flex-col sm:flex-row gap-2">
+								<select name="searchType"
+									class="select select-bordered bg-white">
+									<option value="title"
+										${param.searchType == 'title' ? 'selected' : ''}>제목</option>
+									<option value="content"
+										${param.searchType == 'content' ? 'selected' : ''}>내용</option>
+									<option value="nickname"
+										${param.searchType == 'nickname' ? 'selected' : ''}>작성자</option>
+									<option value="title_content"
+										${param.searchType == 'title_content' ? 'selected' : ''}>제목+내용</option>
+								</select> <input type="text" name="keyword" value="${param.keyword}"
+									placeholder="검색어 입력" class="input input-bordered bg-white" />
+									<input type="hidden" name="board" value="${board}">
+									<input type="hidden" name="category" value="${category}">
+								<button type="submit" class="btn btn-brand">검색</button>
+							</div>
+						</form>
 					</div>
 
 					<div class="flex flex-wrap gap-2 mb-6 p-2 bg-slate-50 rounded-xl">

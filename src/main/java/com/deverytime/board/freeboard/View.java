@@ -58,8 +58,6 @@ public class View extends HttpServlet {
 		
 		dto = service.view(dto);
 		
-		System.out.println(dto.getBoardType());
-		
 		req.setAttribute("dto", dto);
 		
 		req.getRequestDispatcher("/WEB-INF/views/board/freeboard/view.jsp").forward(req, resp);
