@@ -95,30 +95,23 @@
           <table class="table">
             <thead>
               <tr>
-                <th>ID</th>
-                <th>이름</th>
-                <th>이메일</th>
+                <th></th>
+                <th>할 일</th>
+                <th>내용</th>
                 <th></th>
                 <th></th>
-                <th>참여일</th>
+                <th></th>
               </tr>
             </thead>
             <tbody>
             <c:forEach items="${todolist}" var="todoDto">
               <tr>
+                <td><input type="checkbox"></td>
                 <td>${todoDto.title}</td>
                 <td>${todoDto.content}</td>
                 <td></td>
-                <td>
-                	<%-- <c:if test="${}">
-                		<button type="button" class="badge badge-warning badge-outline">권한위임</button>
-                	</c:if> --%>
-                	<button type="button" class="btn btn-warning btn-outline">권한위임</button>
-                </td>
-                <td>
-                	<button type="button" class="btn btn-error btn-outline">추방하기</button>
-                </td>
-                <td></td>
+                <td><button type="button" class="btn btn-warning btn-outline">수정하기</button></td>
+                <td><button type="button" class="btn btn-error btn-outline">삭제하기</button></td>
               </tr>
               </c:forEach>
             </tbody>
@@ -128,14 +121,9 @@
        <!-- 페이지 바 -->
        <div id="pagebar">${pagebar}</div>
 
-       <!--  <div class="card-pad border-t border-slate-200 flex justify-between items-center">
-          <p class="text-sm text-slate-500"></p>
-          <div class="join">
-            <button class="join-item btn btn-sm">1</button>
-            <button class="join-item btn btn-sm btn-active">2</button>
-            <button class="join-item btn btn-sm">3</button>
-          </div>
-        </div> -->
+       <div class="flex flex-wrap justify-between gap-2 btns">
+			<button class="btn btn-soft-brand" onclick="location.href='/teamtwo/study/todo-add.do?seq=${dto.seq}';">스터디 등록</button>
+       </div>
       </div>
     </section>
     </div>

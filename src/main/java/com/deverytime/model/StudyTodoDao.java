@@ -69,6 +69,27 @@ public class StudyTodoDao extends BasicDao{
 		
 	}
 
+	public int add(StudyTodoDto dto, String seq) {
+		
+		try {
+			
+			String sql = "insert into todo (seq, title, content, status, studyScheduleSeq) values (todoSeq.nextVal, ?, ?, default, ?)";
+			
+			pstat = conn.prepareStatement(sql);
+			pstat.setString(1, dto.getTitle());
+			pstat.setString(2, dto.getContent());
+			pstat.setString(3, seq);
+			
+			return pstat.executeUpdate();
+			
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+			
+		return 0;
+		
+	}
+
 	
 }
 

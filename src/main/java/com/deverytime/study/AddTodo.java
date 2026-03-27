@@ -9,16 +9,19 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
-import com.deverytime.model.MemberDto;
-import com.deverytime.model.StudyDto;
+import com.deverytime.model.StudyScheduleDto;
+import com.deverytime.model.StudyTodoDto;
 
-@WebServlet(value = "/study/study-add.do")
-public class AddStudy extends HttpServlet{
+@WebServlet(value = "/study/todo-add.do")
+public class AddTodo extends HttpServlet{
 
 	@Override
 	protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
 		
-		req.getRequestDispatcher("/WEB-INF/views/study/study-add.jsp").forward(req, resp);
+		String seq = req.getParameter("seq");
+		req.setAttribute("seq", seq);
+		
+		req.getRequestDispatcher("/WEB-INF/views/study/todo-add.jsp").forward(req, resp);
 		
 	}
 	
@@ -40,46 +43,25 @@ public class AddStudy extends HttpServlet{
 			return;
 		}
 		
-		String id = auth.toString();
+		String seq = req.getParameter("seq");
 		
-		String name = req.getParameter("name");
-		String description =  req.getParameter("description");
-		String capacity =  req.getParameter("capacity");
+		String title = req.getParameter("title");
+		String content =  req.getParameter("content");
 		
-		try {
-			
-		    int cap = Integer.parseInt(capacity);
-
-		    if (cap >= 5 && cap <= 20) {
-		    	
-		    } else {
-		    	resp.getWriter().print("<script>alert('failed');history.back();</script>");
-				resp.getWriter().close();
-		    }
-
-		} catch (NumberFormatException e) {
-			e.printStackTrace();
-		}
+		StudyTodoService service = new StudyTodoService();
 		
-		StudyService service = new StudyService();
+		StudyTodoDto dto = new StudyTodoDto();
+		dto.setTitle(title);
+		dto.setContent(content);
 		
-		MemberDto mdto = service.getMember(id);
-		
-		StudyDto dto = new StudyDto();
-		
-		dto.setName(name);
-		dto.setDescription(description);
-		dto.setCapacity(capacity);
-		
-		int result = service.add(dto, mdto);
+		int result = service.add(dto, seq);
 		
 		if(result > 0) {
-			resp.sendRedirect("/teamtwo/study/study-list.do");
+			resp.sendRedirect("/teamtwo/study/studyschedule-view.do?seq=" + seq);
 		} else {
 			resp.getWriter().print("<script>alert('failed');history.back();</script>");
 			resp.getWriter().close();
 		}
-		
 		
 	}
 	
