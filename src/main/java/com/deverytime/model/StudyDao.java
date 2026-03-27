@@ -418,6 +418,30 @@ public class StudyDao extends BasicDao{
 		return 0;
 	}
 
+	public int edit(StudyDto dto) {
+		
+		try {
+			
+			String sql = "update study set name = ?, description = ?, capacity = ? where seq = ?";
+			
+			pstat = conn.prepareStatement(sql);
+			pstat.setString(1, dto.getName());
+			pstat.setString(2, dto.getDescription());
+			pstat.setString(3, dto.getCapacity());
+			pstat.setString(4, dto.getSeq());
+			
+			return pstat.executeUpdate();
+			
+		} catch (Exception e) {
+			e.printStackTrace();
+		} finally {
+			closeAll();
+		}
+		
+		return 0;
+		
+	}
+
 	
 	
 }

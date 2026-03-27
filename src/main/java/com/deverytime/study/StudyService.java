@@ -203,5 +203,13 @@ public class StudyService {
 		
 	}
 
+	public int edit(StudyDto dto) {
+		
+		StudyDao dao = new StudyDao();
+		
+		return dao.edit(dto);
+		
+	}
+
 	
 }
