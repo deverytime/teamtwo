@@ -144,7 +144,6 @@ public class StudyDao extends BasicDao{
 				dto.setHeadCount(rs.getString("headCount"));
 				
 				return dto;
-				
 			}
 			
 		} catch (Exception e) {

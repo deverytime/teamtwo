@@ -1,4 +1,5 @@
-<%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
+<%@ page language="java" contentType="text/html; charset=UTF-8"
+	pageEncoding="UTF-8"%>
 <!DOCTYPE html>
 <html lang="ko">
 <head>
@@ -6,7 +7,10 @@
 <title>비밀번호 확인 - deverytime</title>
 <%@ include file="/WEB-INF/views/inc/asset.jsp"%>
 <style>
-	.find-wrap { max-width: 400px; margin: 0 auto; }
+.find-wrap {
+	max-width: 400px;
+	margin: 0 auto;
+}
 </style>
 </head>
 <body class="bg-slate-50 text-slate-800">
@@ -18,14 +22,16 @@
 		</div>
 
 		<div class="content-card card-pad bg-white shadow-xl rounded-2xl p-8">
-			
+
 			<div class="form-control w-full mb-6">
-				<input type="password" id="pw" placeholder="비밀번호 입력" class="input input-bordered w-full focus:input-primary" />
-				<input type="hidden" id="target" value="${target}" />
+				<input type="password" id="pw" placeholder="비밀번호 입력"
+					class="input input-bordered w-full focus:input-primary" /> <input
+					type="hidden" id="target" value="${target}" />
 			</div>
 
 			<div class="flex gap-2">
-				<button type="button" class="btn btn-outline flex-1" onclick="history.back();">돌아가기</button>
+				<button type="button" class="btn btn-outline flex-1"
+					onclick="history.back();">돌아가기</button>
 				<button type="button" id="btnVerify" class="btn btn-primary flex-1">확인</button>
 			</div>
 
@@ -33,7 +39,7 @@
 	</main>
 
 	<script>
-		// 엔터키 쳤을 때도 바로 확인 버튼 눌리게 하는 센스!
+		// 엔터키 쳤을 때도 바로 확인 버튼 눌리게
 		document.getElementById('pw').addEventListener('keyup', function(e) {
 			if(e.key === 'Enter') document.getElementById('btnVerify').click();
 		});
@@ -59,7 +65,16 @@
 					} 
 					// 2. 회원 탈퇴로 가기
 					else if (target === 'unregister') {
-						location.href = '/teamtwo/user/unregister.do';
+						// JSP의 EL을 사용해 현재 회원의 2차 인증 여부를 자바스크립트로 가져온다
+						const isTwoFactor = ${authDto.twoFactor == 1};
+						
+						if (isTwoFactor) {
+							// 2차 인증이 켜져있으면 모드를 달아서 2차 인증 화면으로
+							location.href = '/teamtwo/user/twofactor-setup.do?mode=unregister';
+						} else {
+							// 2차 인증이 안 켜져있으면 바로 탈퇴 화면으로
+							location.href = '/teamtwo/user/unregister.do';
+						}
 					}
 					// 3. 기타 (방어 코드)
 					else {
@@ -67,7 +82,7 @@
 					}
 				} else {
 					alert('비밀번호가 일치하지 않습니다.');
-					document.getElementById('pw').value = ''; // 틀리면 입력창 싹 비워주기
+					document.getElementById('pw').value = '';
 					document.getElementById('pw').focus();
 				}
 			});

@@ -45,14 +45,20 @@
         </div>
       
         <!-- 우측 (진행률) -->
-        <div class="shrink-0">
-          <div
-            class="radial-progress text-emerald-500 font-bold text-xl"
-            style="--value:35; --size:96px; --thickness:10px;"
-          >
-            35%
-          </div>
+        <div
+          class="radial-progress text-indigo-500 font-bold text-lg"
+          style="--value:${empty dto.records ? 0 : dto.records[0].progress}; --size:96px; --thickness:10px;">
+          ${empty dto.records ? 0 : dto.records[0].progress}%
         </div>
+        
+<!--         <div class="shrink-0"> -->
+<!--           <div -->
+<!--             class="radial-progress text-emerald-500 font-bold text-xl" -->
+<!--             style="--value:35; --size:96px; --thickness:10px;" -->
+<!--           > -->
+<!--             35% -->
+<!--           </div> -->
+<!--         </div> -->
       
       </div>
 
@@ -165,7 +171,7 @@
 
       <div class="rounded-xl bg-violet-50 p-4">
         <p class="text-sm text-violet-500 mb-1">학습기록 수</p>
-        <p class="text-2xl font-bold text-violet-700">5개</p>
+        <p class="text-2xl font-bold text-violet-700">${dto.recordCount}개</p>
       </div>
 
     </div>
@@ -184,50 +190,94 @@
     </div>
 
     <!-- 테이블 -->
+    <div class="p-6">
     <div class="overflow-x-auto">
-      <table class="min-w-full text-sm text-left">
+      <table class="table">
         <thead class="bg-slate-50 text-slate-500">
           <tr>
             <th class="px-6 py-3 font-medium">날짜</th>
-            <th class="px-6 py-3 font-medium">학습 내용</th>
             <th class="px-6 py-3 font-medium">진행률</th>
-            <th class="px-6 py-3 font-medium">비고</th>
+            <th class="px-6 py-3 font-medium">학습 내용</th>
+            <th class="px-6 py-3 font-medium">상태</th>
+            <th class="px-6 py-3 font-medium">메모</th>
           </tr>
         </thead>
 
         <tbody class="divide-y divide-slate-100">
-
-          <tr class="hover:bg-slate-50">
-            <td class="px-6 py-4">2026-03-21</td>
-            <td class="px-6 py-4">학습계획 등록 기능 구현</td>
-            <td class="px-6 py-4">10%</td>
-            <td class="px-6 py-4 text-slate-500">폼 구성 완료</td>
-          </tr>
-
-          <tr class="hover:bg-slate-50">
-            <td class="px-6 py-4">2026-03-23</td>
-            <td class="px-6 py-4">목록 조회 + 페이징</td>
-            <td class="px-6 py-4">25%</td>
-            <td class="px-6 py-4 text-slate-500">검색 기능 포함</td>
-          </tr>
-
-          <tr class="hover:bg-slate-50">
-            <td class="px-6 py-4">2026-03-25</td>
-            <td class="px-6 py-4">수정 기능 구현</td>
-            <td class="px-6 py-4">35%</td>
-            <td class="px-6 py-4 text-slate-500">세션 연동 완료</td>
-          </tr>
+          <c:choose>
+            <%-- records 없을 때 --%>
+            <c:when test="${empty dto.records}">
+              <tr>
+                <td colspan="5" class="text-center py-6 text-slate-400">
+                  등록된 학습 기록이 없습니다.
+                </td>
+              </tr>
+            </c:when>
+            <%-- records 있을 때 --%>
+            <c:otherwise>
+              <c:forEach items="${dto.records}" var="record">
+                <tr onclick="location.href='/teamtwo/record/view.do?seq=${record.seq}'" style="cursor:pointer;"
+                    class="hover:bg-slate-100 cursor-pointer"
+                    id="record-${record.seq}"
+                    >
+                  <td>${record.studyDate}</td>
+                  <td>${record.progress}%</td>
+          
+                  <td>
+                    <div class="max-w-[400px] truncate" title="${record.content}">
+                      ${record.content}
+                    </div>
+                  </td>
+          
+                  <td>
+                    <c:choose>
+                      <c:when test="${record.recordStatus eq '진행중'}">
+                        <span class="badge badge-outline badge-info">진행중</span>
+                      </c:when>
+                      <c:when test="${record.recordStatus eq '완료'}">
+                        <span class="badge badge-outline badge-success">완료</span>
+                      </c:when>
+                      <c:otherwise>
+                        <span class="badge badge-outline badge-error">미완료</span>
+                      </c:otherwise>
+                    </c:choose>
+                  </td>
+          
+                  <td>
+                    <div class="max-w-[180px] truncate" title="${record.memo}">
+                      ${record.memo}
+                    </div>
+                  </td>
+                </tr>
+              </c:forEach>
+            </c:otherwise>
+          </c:choose>
 
         </tbody>
       </table>
     </div>
+    </div>
+    
+    
+    
     <!-- 기록 추가 버튼 (고정) -->
     <button
       class="fixed bottom-6 right-12 z-50 px-5 py-3 rounded-full bg-sky-500 text-white font-semibold shadow-lg hover:bg-sky-600 active:scale-95 transition cursor-pointer"
+      onclick="location.href = '/teamtwo/record/add.do?seq=${dto.seq}';"
       >
       + 기록 추가
     </button>
   </div>
+  <c:if test="${cnt < dto.recordCount}">
+      <div class="flex justify-center mt-6">
+        <a href="/teamtwo/plan/view.do?seq=${dto.seq}&cnt=${cnt + 5}"
+          class="px-6 py-2 rounded-xl btn btn-wide border-2 border-indigo-200 hover:bg-indigo-50
+            text-slate-600"
+          onclick="saveScrollAndLastRecord()">
+          더보기
+        </a>
+      </div>
+    </c:if>
 
   </div>
 <!-- 모달 -->
@@ -279,7 +329,60 @@
           });
         
         });
+                
+        function saveLastRecord() {
+      	    const rows = document.querySelectorAll('[id^="record-"]');
+      	    if (rows.length > 0) {
+      	      const lastRowId = rows[rows.length - 1].id;
+      	      sessionStorage.setItem('lastRecordId', lastRowId);
+      	    }
+      	  }
+
+		function saveScrollAndLastRecord() {
+            sessionStorage.setItem('prevScrollY', String(window.scrollY));
+        
+            const rows = document.querySelectorAll('[id^="record-"]');
+            if (rows.length > 0) {
+              sessionStorage.setItem('lastRecordId', rows[rows.length - 1].id);
+            }
+          }
+        
+          // 브라우저 자동 스크롤 복원 끄기
+          if ('scrollRestoration' in history) {
+            history.scrollRestoration = 'manual';
+          }
+        
+          window.addEventListener('pageshow', function () {
+            const prevScrollY = sessionStorage.getItem('prevScrollY');
+            const lastRecordId = sessionStorage.getItem('lastRecordId');
+        
+            if (!prevScrollY || !lastRecordId) return;
+        
+            // 1차: 이전 위치로 즉시 이동
+            window.scrollTo(0, parseInt(prevScrollY, 10));
+        
+            // 2차: 렌더링 한 번 끝난 뒤 다시 보정
+            requestAnimationFrame(() => {
+              window.scrollTo(0, parseInt(prevScrollY, 10));
+        
+              // 3차: 마지막 항목 위치로 부드럽게
+              requestAnimationFrame(() => {
+                const target = document.getElementById(lastRecordId);
+        
+                if (target) {
+                  const y = target.getBoundingClientRect().top + window.scrollY - 80;
+        
+                  window.scrollTo({
+                    top: y,
+                    behavior: 'smooth'
+                  });
+                }
+        
+                sessionStorage.removeItem('prevScrollY');
+                sessionStorage.removeItem('lastRecordId');
+              });
+            });
+          });
   </script>
-</body>
 </body>
 </html>

@@ -41,7 +41,7 @@
 						<div class="info-label">비밀번호</div>
 						<div class="info-value flex justify-between items-center gap-2">
 							<span>********</span>
-							<button type="button" class="btn btn-sm btn-outline btn-primary shrink-0" onclick="location.href='/teamtwo/user/pw-find.do';">비밀번호 변경</button>
+							<button type="button" class="btn btn-sm btn-outline btn-primary shrink-0" onclick="location.href='/teamtwo/user/pw-edit.do';">비밀번호 변경</button>
 						</div>
 					</div>
 

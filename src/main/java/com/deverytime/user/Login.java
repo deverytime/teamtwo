@@ -46,7 +46,7 @@ public class Login extends HttpServlet {
 			session.setAttribute("authDto", dto); 
 			
 			
-			// --- [선택] 아이디 자동 저장 쿠키 굽기 ---
+			// 아이디 자동 저장 쿠키 생성
 			String id = req.getParameter("id");
 			String saveId = req.getParameter("saveId");
 			if (saveId != null) {
@@ -61,9 +61,10 @@ public class Login extends HttpServlet {
 				resp.addCookie(cookie);
 			}
 
-			// --- [선택] 2차 인증 활성화 여부에 따른 페이지 이동 ---
+			// 2차 인증 활성화 여부에 따른 페이지 이동
 			if (dto.getTwoFactor() == 1) {
-				resp.sendRedirect("/teamtwo/user/twofactor.do"); 
+				// 2차 인증 페이지에서의 분기 처리를 위해 mode=login 이라는 꼬리표를 달아서 보냄
+				resp.sendRedirect("/teamtwo/user/twofactor-setup.do?mode=login"); 
 			} else {
 				resp.sendRedirect("/teamtwo/index.do"); 
 			}

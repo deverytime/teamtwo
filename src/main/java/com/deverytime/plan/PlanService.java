@@ -4,9 +4,12 @@ import java.time.LocalDate;
 import java.time.temporal.ChronoUnit;
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 
 import com.deverytime.model.PlanDao;
 import com.deverytime.model.PlanDto;
+import com.deverytime.model.RecordDao;
+import com.deverytime.model.RecordDto;
 
 public class PlanService {
 	
@@ -141,8 +144,9 @@ public class PlanService {
 		return dao.get(seq, memberSeq);
 	}
 	
-	public PlanDto getDetailInfo(String seq, String memberSeq) {
+	public PlanDto getDetailInfo(String seq, String memberSeq, int cnt) {
 		PlanDao dao = new PlanDao();
+		RecordDao recordDao = new RecordDao();
 		
 		PlanDto planDto = dao.get(seq, memberSeq);
 		
@@ -169,6 +173,15 @@ public class PlanService {
 		    long daysToEnd = ChronoUnit.DAYS.between(today, endDate);
 		    planDto.setDaysToEnd(daysToEnd);
 		}
+		
+		// 하단 학습기록 목록 가져오기
+		List<RecordDto> records = recordDao.getRecordsByPlan(seq, cnt);
+		planDto.setRecords(records);
+		
+		RecordDao recordDao2 = new RecordDao();
+		// 학습기록 총 개수 가져오기
+		int recordCount = recordDao2.getRecordCountByPlan(seq);
+		planDto.setRecordCount(recordCount);
 		
 		return planDto;
 	}
