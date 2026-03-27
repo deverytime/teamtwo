@@ -1,5 +1,7 @@
 package com.deverytime.model;
 
+import java.util.ArrayList;
+
 import lombok.Getter;
 import lombok.Setter;
 import lombok.ToString;
@@ -36,5 +38,9 @@ public class BoardDto {
 	private String pageStr; //브라우저에서 넘어오는 ?page로 넘어오는 문자열을 저장
 	private int startRow;	// 페이징 시작위치
 	private int pageSize = 15; // 페이지당 개수
+	
+	// 댓글 관련
+	private ArrayList<CommentDto> comments;
+	
 
 }
