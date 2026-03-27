@@ -216,8 +216,10 @@
             <%-- records 있을 때 --%>
             <c:otherwise>
               <c:forEach items="${dto.records}" var="record">
-                <tr class="hover:bg-slate-100"
-                    id="record-${record.seq}">
+                <tr onclick="location.href='/teamtwo/record/view.do?seq=${record.seq}'" style="cursor:pointer;"
+                    class="hover:bg-slate-100 cursor-pointer"
+                    id="record-${record.seq}"
+                    >
                   <td>${record.studyDate}</td>
                   <td>${record.progress}%</td>
           

@@ -23,4 +23,18 @@ public class RecordService {
 		return dao.edit(dto);
 	}
 
+	public String del(RecordDto dto) {
+		RecordDao dao = new RecordDao();
+		
+		String planSeq = dao.getPlanSeq(dto.getSeq());
+		
+		int result = dao.del(dto);
+		
+		 if (result == 1) {
+	        return planSeq;
+	    }
+		
+		return null;
+	}
+
 }
