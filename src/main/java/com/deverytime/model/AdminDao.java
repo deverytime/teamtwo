@@ -309,6 +309,126 @@ public class AdminDao extends BasicDao {
 
 		return 0;
 	}
+
+	public List<StudyDto> getStudyList(int begin, int end, String type, String word) {
+
+		try {
+			StringBuilder sql = new StringBuilder();
+
+			sql.append("select * from (");
+			sql.append("    select rownum as rnum, t.* from (");
+			sql.append("        select ");
+			sql.append("            s.seq, s.name, s.description, ");
+			sql.append("            s.capacity, s.status, s.createDate ");
+			sql.append("        from study s ");
+
+			boolean hasWord = word != null && !word.trim().equals("");
+
+			if (hasWord) {
+				if ("name".equals(type)) {
+					sql.append("where s.name like ? ");
+				} else if ("description".equals(type)) {
+					sql.append("where s.description like ? ");
+				} else if ("all".equals(type)) {
+					sql.append("where s.name like ? ");
+					sql.append("   or s.description like ? ");
+				}
+			}
+
+			sql.append("        order by s.seq desc ");
+			sql.append("    ) t ");
+			sql.append(") where rnum between ? and ?");
+
+			pstat = conn.prepareStatement(sql.toString());
+
+			int index = 1;
+
+			if (hasWord) {
+				String searchWord = "%" + word + "%";
+
+				if ("all".equals(type)) {
+					pstat.setString(index++, searchWord);
+					pstat.setString(index++, searchWord);
+				} else if ("name".equals(type) || "description".equals(type)) {
+					pstat.setString(index++, searchWord);
+				}
+			}
+
+			pstat.setInt(index++, begin);
+			pstat.setInt(index++, end);
+
+			rs = pstat.executeQuery();
+
+			List<StudyDto> list = new ArrayList<>();
+
+			while (rs.next()) {
+				StudyDto dto = new StudyDto();
+
+				dto.setSeq(rs.getString("seq"));
+				dto.setName(rs.getString("name"));
+				dto.setDescription(rs.getString("description"));
+				dto.setCapacity(rs.getString("capacity"));
+				dto.setStatus(rs.getString("status"));
+				dto.setCreateDate(rs.getString("createDate"));
+
+				list.add(dto);
+			}
+
+			return list;
+
+		} catch (Exception e) {
+			e.printStackTrace();
+		} finally {
+			closeAll();
+		}
+
+		return new ArrayList<>();
+	}
 	
-	
+	public int getStudyCount(String type, String word) {
+
+		try {
+			StringBuilder sql = new StringBuilder();
+
+			sql.append("select count(*) as cnt ");
+			sql.append("from study s ");
+
+			boolean hasWord = word != null && !word.trim().equals("");
+
+			if (hasWord) {
+				if ("name".equals(type)) {
+					sql.append("where s.name like ? ");
+				} else if ("description".equals(type)) {
+					sql.append("where s.description like ? ");
+				} else if ("all".equals(type)) {
+					sql.append("where s.name like ? ");
+					sql.append("   or s.description like ? ");
+				}
+			}
+
+			pstat = conn.prepareStatement(sql.toString());
+
+			if (hasWord) {
+				String searchWord = "%" + word + "%";
+
+				if ("all".equals(type)) {
+					pstat.setString(1, searchWord);
+					pstat.setString(2, searchWord);
+				} else if ("name".equals(type) || "description".equals(type)) {
+					pstat.setString(1, searchWord);
+				}
+			}
+
+			rs = pstat.executeQuery();
+
+			if (rs.next()) {
+				return rs.getInt("cnt");
+			}
+
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+
+		return 0;
+	}
 }
