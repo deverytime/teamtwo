@@ -59,6 +59,37 @@ public class StudyDao extends BasicDao{
 		
 	}
 
+	public int getTotalCountSM(HashMap<String, String> map, MemberDto mdto) {
+		
+		try {
+			
+			String where = "";
+			
+			if(map.get("search").equals("y")) {
+				where = String.format("where name like '%%%s%%'", map.get("word"));
+			}
+			
+			String sql = "select count(*) as cnt from study_member where memberSeq = ?";
+			
+			pstat = conn.prepareStatement(sql);
+			pstat.setString(1, mdto.getSeq());
+			rs = pstat.executeQuery();
+			
+			if(rs.next()) {
+				
+				return rs.getInt("cnt"); 
+			}
+			
+		} catch (Exception e) {
+			e.printStackTrace();
+		} finally {
+			closeAll();
+		}
+		
+		return 0;
+		
+	}
+	
 	public int getTotalCount(HashMap<String, String> map) {
 		
 		try {
@@ -69,7 +100,7 @@ public class StudyDao extends BasicDao{
 				where = String.format("where name like '%%%s%%'", map.get("word"));
 			}
 			
-			String sql = "select count(*) as cnt from study " + where;
+			String sql = "select count(*) as cnt from study" + where;
 			
 			rs = stat.executeQuery(sql);
 			
@@ -112,9 +143,9 @@ public class StudyDao extends BasicDao{
 				dto.setScheduleCount(rs.getString("scheduleCount"));
 				dto.setHeadCount(rs.getString("headCount"));
 				
+				return dto;
+				
 			}
-			
-			return dto;
 			
 		} catch (Exception e) {
 			e.printStackTrace();

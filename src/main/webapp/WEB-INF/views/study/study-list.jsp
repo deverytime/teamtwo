@@ -5,7 +5,7 @@
 <html>
 <head>
 <meta charset="UTF-8">
-<title>Insert title here</title>
+<title>deverytime</title>
 <%@ include file="/WEB-INF/views/inc/asset.jsp" %>
 </head>
 <style>

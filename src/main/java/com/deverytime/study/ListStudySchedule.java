@@ -14,9 +14,10 @@ import javax.servlet.http.HttpSession;
 
 import com.deverytime.model.MemberDto;
 import com.deverytime.model.StudyDto;
+import com.deverytime.model.StudyScheduleDto;
 
-@WebServlet(value = "/study/mystudy-list.do")
-public class ListMyStudy extends HttpServlet{
+@WebServlet(value = "/study/studyschedule-list.do")
+public class ListStudySchedule extends HttpServlet{
 
 	@Override
 	protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
@@ -26,37 +27,27 @@ public class ListMyStudy extends HttpServlet{
 		
 		HttpSession session = req.getSession();
 		
-		Object auth = session.getAttribute("auth");
+		Object auth = session.getAttribute("authDto");
 		
 		//로그인 체크 로직
 		if(auth == null) {
-			resp.getWriter().print("<script>alert('로그인이 필요한 서비스입니다.');location.href='/teamtwo/index.do';</script>");
+			resp.getWriter().print("<script>alert('로그인이 필요한 서비스입니다.');history.back();</script>");
 			resp.getWriter().close();
 			return;
 		}
 		
-		String id = auth.toString();
-		
-		String word = req.getParameter("word");
-		String search = "n"; //목록보기(n), 검색하기(y)
-		
-		if(word == null || word.trim().equals("")) {
-			search = "n";
-		} else {
-			search = "y";
-		}
+		//로그인 상태라면 데이터 추출
+		MemberDto mdto = (MemberDto)auth;
+		String seq = req.getParameter("seq");
 		
 		
 		HashMap<String, String> map = new HashMap<String, String>();
-		map.put("word", word);
-		map.put("search", search);
-		
 		
 		String page = req.getParameter("page");
 		
 		int nowPage = 0;		//현재 페이지 번호
-		int totalCount = 0; 	//총 스터디 수
-		int pageSize = 4; 		//한페이지에서 보여줄 스터디 수
+		int totalCount = 0; 	//총 스터디 일정 수
+		int pageSize = 5; 		//한페이지에서 보여줄 스터디 일정 수
 		int totalPage = 0;      //총 페이지 수
 		int begin = 0;			//페이징 시작 위치
 		int end = 0;			//페이징 끝 위치
@@ -79,15 +70,13 @@ public class ListMyStudy extends HttpServlet{
 		map.put("nowPage", nowPage + "");
 		
 		
-		StudyService service = new StudyService();
+		StudyScheduleService service = new StudyScheduleService();
 		
-		ArrayList<StudyDto> list = new ArrayList<StudyDto>();
+		ArrayList<StudyScheduleDto> schlist = new ArrayList<StudyScheduleDto>();
 		
-		MemberDto mdto = service.getMember(id);
-		
-		list = service.mylist(map, mdto);
-		
-		totalCount = service.getTotalCountSM(map, mdto);
+		schlist = service.schlist(map, seq);
+	
+		totalCount = service.getTotalCountSCH(map, seq);
 		
 		totalPage = (int)Math.ceil((double)totalCount / pageSize); 
 		
@@ -103,7 +92,7 @@ public class ListMyStudy extends HttpServlet{
 		if(n == 1) {
 			pagebar += String.format("<a href='#!'>[이전 %d페이지]</a>", blockSize);
 		} else {
-			pagebar += String.format("<a href='/teamtwo/study/mystudy-list.do?page=%d'>[이전 %d페이지]</a>", n-1, blockSize);
+			pagebar += String.format("<a href='/teamtwo/study/studyschedule-list.do?page=%d'>[이전 %d페이지]</a>", n-1, blockSize);
 		}
 		
 		while(!(loop > blockSize || n > totalPage)) {
@@ -111,7 +100,7 @@ public class ListMyStudy extends HttpServlet{
 			if(n ==  nowPage) {
 				pagebar += String.format("<a href='#!' style='color: tomato;'>%d</a>", n);
 			} else {
-				pagebar += String.format("<a href='/teamtwo/study/mystudy-list.do?page=%d'>%d</a>", n, n);
+				pagebar += String.format("<a href='/teamtwo/study/studyschedule-list.do?page=%d&seq=" + seq + "'>%d</a>", n, n);
 			}
 			
 			loop++;
@@ -122,15 +111,14 @@ public class ListMyStudy extends HttpServlet{
 		if(n >= totalPage) {
 			pagebar += String.format("<a href='#!'>[다음 %d페이지]</a>", blockSize);
 		} else {
-			pagebar += String.format("<a href='/teamtwo/study/mystudy-list.do?page=%d'>[다음 %d페이지]</a>", n, blockSize);
-		}
-	
+			pagebar += String.format("<a href='/teamtwo/study/studyschedule-list.do?page=%d'>[다음 %d페이지]</a>", n, blockSize);
+		}	
 		
 		req.setAttribute("pagebar", pagebar);
-		req.setAttribute("list", list);
+		req.setAttribute("schlist", schlist);
 		req.setAttribute("map", map);
-	
-		req.getRequestDispatcher("/WEB-INF/views/study/mystudy-list.jsp").forward(req, resp);
+		
+		req.getRequestDispatcher("/WEB-INF/views/study/studyschedule-list.jsp").forward(req, resp);
 		
 	}
 	
