@@ -40,7 +40,7 @@
 		<!-- 게시판 이름 -->
 		<div class="mb-4">
 			<c:if test="${dto.boardType==1}">
-				<h1 class="section-title">자유게시판</h1>
+				<h1 class="section-title">자유게시판 ${auth}</h1>
 			</c:if>
 		</div>
 
@@ -138,73 +138,72 @@
 		<div class="content-card card-pad mb-4">
 
 			<!-- ① 댓글 입력 폼 (상단 고정) -->
-			<div class="border-b pb-4 mb-6">
-				<div class="flex items-start gap-3 opacity-60">
-					<div
-						class="w-10 h-10 bg-slate-200 rounded-full flex items-center justify-center">
-						<span class="text-xs font-semibold">U</span>
-					</div>
-					<div class="flex-1">
-						<textarea
-							class="textarea textarea-bordered w-full h-20 resize-none"
-							placeholder="댓글을 작성하세요... (연동 후 활성화)" disabled></textarea>
-						<div class="flex justify-end mt-2">
-							<button class="btn btn-brand btn-sm px-6" disabled>댓글 등록</button>
+			<form method="post" action="commentAdd.do">
+				<div class="border-b pb-4 mb-6 border-slate-200">
+					<div class="flex items-start gap-3 opacity-60">
+						<div
+							class="w-10 h-10 bg-slate-200 rounded-full flex items-center justify-center">
+							<span class="text-xs font-semibold">U</span>
 						</div>
+						<c:if test="${empty auth }">
+							<div class="flex-1">
+								<textarea
+									class="textarea textarea-bordered w-full h-20 resize-none"
+									placeholder="로그인 후 댓글 작성 가능합니다." disabled></textarea>
+								<div class="flex justify-end mt-2">
+									<button class="btn btn-brand btn-sm px-6" disabled>댓글
+										등록</button>
+								</div>
+							</div>
+						</c:if>
+						<c:if test="${not empty auth }">
+							<div class="flex-1">
+								<textarea
+									class="textarea textarea-bordered w-full h-20 resize-none"
+									placeholder="댓글을 작성하세요..." required></textarea>
+								<div class="flex justify-end mt-2">
+									<button class="btn btn-brand btn-sm px-6">댓글 등록</button>
+								</div>
+							</div>
+						</c:if>
 					</div>
 				</div>
-				<p class="text-xs text-slate-400 mt-2 text-center">서블릿 연동 후
-					활성화됩니다</p>
-			</div>
+			</form>
 
 			<!-- ② 댓글 통계 -->
 			<div
-				class="flex justify-between items-center mb-4 pb-2 border-b border-slate-200">
+				class="flex justify-between items-center mb-4 pb-2 border-b border-slate-100">
 				<h3 class="text-lg font-semibold">
-					댓글 <span class="text-brand">3</span>
+					댓글 <span class="text-brand">${dto.comments.size()}</span>
 				</h3>
-				<span class="text-xs text-slate-500">로그인 후 댓글 작성 가능</span>
+				<c:if test="${empty auth }">
+					<span class="text-xs text-slate-500">로그인 후 댓글 작성 가능</span>
+				</c:if>
 			</div>
 
 			<!-- ③ 댓글 리스트 (하단 스크롤) -->
 			<div class="space-y-3 max-h-80 overflow-y-auto">
 
 				<!-- 더미 댓글 1 -->
+				<c:forEach var="entry" items="${dto.comments}">
+				
 				<div class="comment-item border-l-4 border-brand pl-4 pb-3">
 					<div class="flex justify-between items-start mb-1">
 						<div class="flex items-center gap-2">
-							<span class="font-semibold text-sm">홍길동</span> <span
-								class="text-xs text-slate-500">2026.03.27 10:12</span>
+							<span class="font-semibold text-sm">${entry.nickname} </span> <span
+								class="text-xs text-slate-500">${entry.regDate}</span>
 						</div>
-						<div class="text-xs">
-							<a href="#" class="text-brand hover:underline">수정</a> <a href="#"
-								class="text-error hover:underline ml-2">삭제</a>
-						</div>
+						<!-- 댓글삭제 -->
+						<c:if test="${entry.id == auth}">
+							<div class="text-xs">
+								 <a href="#" class="text-error hover:underline ml-2">삭제</a>
+							</div>
+						</c:if>
 					</div>
-					<p class="text-sm leading-relaxed">좋은 글 잘 읽었습니다! 도움이 되네요~</p>
+					<p class="text-sm leading-relaxed">${entry.content}</p>
 				</div>
+				</c:forEach>
 
-				<!-- 더미 댓글 2 -->
-				<div class="comment-item border-l-4 border-brand pl-4 pb-3">
-					<div class="flex justify-between items-start mb-1">
-						<div class="flex items-center gap-2">
-							<span class="font-semibold text-sm">김철수</span> <span
-								class="text-xs text-slate-500">2026.03.27 11:03</span>
-						</div>
-					</div>
-					<p class="text-sm leading-relaxed">감사합니다. 배울 점이 많네요.</p>
-				</div>
-
-				<!-- 더미 댓글 3 -->
-				<div class="comment-item border-l-4 border-brand pl-4 pb-3">
-					<div class="flex justify-between items-start mb-1">
-						<div class="flex items-center gap-2">
-							<span class="font-semibold text-sm">이영희</span> <span
-								class="text-xs text-slate-500">2026.03.27 11:45</span>
-						</div>
-					</div>
-					<p class="text-sm leading-relaxed">정말 유익한 글이네요. 저장해둡니다!</p>
-				</div>
 			</div>
 		</div>
 

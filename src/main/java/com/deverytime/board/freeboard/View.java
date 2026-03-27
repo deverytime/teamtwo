@@ -54,7 +54,7 @@ public class View extends HttpServlet {
 		}
 		
 		
-		// 3. DB작업
+		// 3. DB작업 + 댓글도 가져와야함
 		
 		dto = service.view(dto);
 		

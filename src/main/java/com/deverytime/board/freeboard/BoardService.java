@@ -7,6 +7,8 @@ import java.util.Map;
 
 import com.deverytime.model.BoardDao;
 import com.deverytime.model.BoardDto;
+import com.deverytime.model.CommentDao;
+import com.deverytime.model.CommentDto;
 import com.deverytime.paging.PagingUtil;
 
 public class BoardService {
@@ -97,6 +99,12 @@ public class BoardService {
 
 		// 카테고리 한글 처리
 		dto.setCategory(getCategoryName(dto.getCategory()));
+		
+		// 댓글 처리
+		CommentDao cDao = new CommentDao();
+		// 글번호를 통해 댓글 가져오기
+		ArrayList<CommentDto> comments = cDao.listByPostSeq(dto.getSeq());
+		dto.setComments(comments);
 
 		return dto;
 	}
