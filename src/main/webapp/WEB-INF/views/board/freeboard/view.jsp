@@ -40,7 +40,7 @@
 		<!-- 게시판 이름 -->
 		<div class="mb-4">
 			<c:if test="${dto.boardType==1}">
-				<h1 class="section-title">자유게시판</h1>
+				<h1 class="section-title">자유게시판 ${auth}</h1>
 			</c:if>
 		</div>
 
@@ -107,9 +107,8 @@
 					<div class="modal-box">
 						<h3 class="font-bold text-lg mb-4">신고 사유 선택</h3>
 						<form method="get" action="report.do">
-							<input type="hidden" name="seq" value="${dto.seq}">
-							<input type="hidden" name="board" value="${dto.boardType}"> 
-							<select
+							<input type="hidden" name="seq" value="${dto.seq}"> <input
+								type="hidden" name="board" value="${dto.boardType}"> <select
 								name="reasonSeq" class="select select-bordered w-full mb-4">
 								<option value="1">스팸/광고</option>
 								<option value="2">욕설/혐오</option>
@@ -135,10 +134,80 @@
 			</div>
 		</div>
 
-		<!-- 댓글 영역 (BOARD-06) -->
+		<!-- 댓글 영역 (입력폼 상단) -->
 		<div class="content-card card-pad mb-4">
-			<p class="text-slate-400 text-center">댓글 영역 (BOARD-06)</p>
+
+			<!-- ① 댓글 입력 폼 (상단 고정) -->
+			<form method="get" action="/teamtwo/comment/add.do">
+				<div class="border-b pb-4 mb-6 border-slate-200">
+					<div class="flex items-start gap-3 opacity-60">
+						<div
+							class="w-10 h-10 bg-slate-200 rounded-full flex items-center justify-center">
+							<span class="text-xs font-semibold">U</span>
+						</div>
+						<c:if test="${empty auth }">
+							<div class="flex-1">
+								<textarea
+									class="textarea textarea-bordered w-full h-20 resize-none"
+									placeholder="로그인 후 댓글 작성 가능합니다." disabled></textarea>
+								<div class="flex justify-end mt-2">
+									<button class="btn btn-brand btn-sm px-6" disabled>댓글
+										등록</button>
+								</div>
+							</div>
+						</c:if>
+						<c:if test="${not empty auth }">
+							<div class="flex-1">
+								<textarea
+									class="textarea textarea-bordered w-full h-20 resize-none"
+									placeholder="댓글을 작성하세요..." required></textarea>
+								<div class="flex justify-end mt-2">
+									<button class="btn btn-brand btn-sm px-6">댓글 등록</button>
+								</div>
+							</div>
+						</c:if>
+					</div>
+				</div>
+			</form>
+
+			<!-- ② 댓글 통계 -->
+			<div
+				class="flex justify-between items-center mb-4 pb-2 border-b border-slate-100">
+				<h3 class="text-lg font-semibold">
+					댓글 <span class="text-brand">${dto.comments.size()}</span>
+				</h3>
+				<c:if test="${empty auth }">
+					<span class="text-xs text-slate-500">로그인 후 댓글 작성 가능</span>
+				</c:if>
+			</div>
+
+			<!-- ③ 댓글 리스트 (하단 스크롤) -->
+			<div class="space-y-3 max-h-80 overflow-y-auto">
+
+				<!-- 더미 댓글 1 -->
+				<c:forEach var="entry" items="${dto.comments}">
+				
+				<div class="comment-item border-l-4 border-brand pl-4 pb-3">
+					<div class="flex justify-between items-start mb-1">
+						<div class="flex items-center gap-2">
+							<span class="font-semibold text-sm">${entry.nickname} </span> <span
+								class="text-xs text-slate-500">${entry.regDate}</span>
+						</div>
+						<!-- 댓글삭제 -->
+						<c:if test="${entry.id == auth}">
+							<div class="text-xs">
+								 <a href="#" class="text-error hover:underline ml-2">삭제</a>
+							</div>
+						</c:if>
+					</div>
+					<p class="text-sm leading-relaxed">${entry.content}</p>
+				</div>
+				</c:forEach>
+
+			</div>
 		</div>
+
+
 
 		<!-- ⑥ 이전글 / 다음글 -->
 		<div class="flex justify-between">
