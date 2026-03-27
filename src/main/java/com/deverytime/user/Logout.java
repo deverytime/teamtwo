@@ -19,10 +19,10 @@ public class Logout extends HttpServlet {
 		HttpSession session = req.getSession();
 		session.invalidate();
 		
-		// 2. 브라우저가 몰래 알려주는 '방금 전까지 있던 주소(Referer)' 가져오기
+		// 2. '방금 전까지 있던 주소(Referer)' 가져오기
 		String referer = req.getHeader("Referer");
 		
-		// 3. 튕겨내야 하는 '로그인 필수 / 보안 페이지' 조건 검사!
+		// 3. 튕겨내야 하는 '로그인 필수 / 보안 페이지' 조건 검사
 		if (referer != null && (
 			referer.contains("/admin/") ||             // 관리자 메뉴 
 			referer.contains("/user/mypage.do") ||     // 마이페이지
