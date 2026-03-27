@@ -1,8 +1,10 @@
 package com.deverytime.model;
 
-import java.sql.ResultSet;
+import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
+
 import com.deverytime.library.BasicDao;
 
 public class AdminDao extends BasicDao {
@@ -48,4 +50,129 @@ public class AdminDao extends BasicDao {
 		}
 		return stats;
 	}
+
+	// 회원 목록 조회
+	public List<MemberDto> getMemberList(int begin, int end, String type, String word) {
+
+		try {
+			StringBuilder sql = new StringBuilder();
+
+			sql.append("select * from (");
+			sql.append("    select rownum as rnum, m.* from (");
+			sql.append("        select * from member ");
+
+			boolean hasWord = word != null && !word.trim().equals("");
+
+			if (hasWord) {
+				if ("id".equals(type)) {
+					sql.append("where id like ? ");
+				} else if ("name".equals(type)) {
+					sql.append("where name like ? ");
+				} else if ("nickname".equals(type)) {
+					sql.append("where nickname like ? ");
+				} else if ("all".equals(type)) {
+					sql.append("where id like ? or name like ? or nickname like ? ");
+				}
+			}
+
+			sql.append("        order by seq desc ");
+			sql.append("    m) ");
+			sql.append(") where rnum between ? and ?");
+
+			pstat = conn.prepareStatement(sql.toString());
+
+			int index = 1;
+
+			if (hasWord) {
+				String searchWord = "%" + word + "%";
+
+				if ("all".equals(type)) {
+					pstat.setString(index++, searchWord);
+					pstat.setString(index++, searchWord);
+					pstat.setString(index++, searchWord);
+				} else if ("id".equals(type) || "name".equals(type) || "nickname".equals(type)) {
+					pstat.setString(index++, searchWord);
+				}
+			}
+
+			pstat.setInt(index++, begin);
+			pstat.setInt(index++, end);
+
+			rs = pstat.executeQuery();
+
+			List<MemberDto> list = new ArrayList<>();
+
+			while (rs.next()) {
+				MemberDto dto = new MemberDto();
+				dto.setSeq(rs.getString("seq"));
+				dto.setId(rs.getString("id"));
+				dto.setName(rs.getString("name"));
+				dto.setNickname(rs.getString("nick"));
+				dto.setRegdate(rs.getString("regdate"));
+
+				list.add(dto);
+			}
+
+			return list;
+
+		} catch (Exception e) {
+			e.printStackTrace();
+		} finally {
+			closeAll();
+		}
+
+		return new ArrayList<>();
+	}
+	
+	public int getMemberCount(String type, String word) {
+
+		try {
+			StringBuilder sql = new StringBuilder();
+			sql.append("select count(*) as cnt ");
+			sql.append("from member ");
+
+			boolean hasWord = word != null && !word.trim().equals("");
+
+			if (hasWord) {
+				if ("id".equals(type)) {
+					sql.append("where id like ? ");
+				} else if ("name".equals(type)) {
+					sql.append("where name like ? ");
+				} else if ("nickname".equals(type)) {
+					sql.append("where nickname like ? ");
+				} else if ("all".equals(type)) {
+					sql.append("where id like ? or name like ? or nick like ? ");
+				}
+			}
+
+			pstat = conn.prepareStatement(sql.toString());
+
+			if (hasWord) {
+				String searchWord = "%" + word + "%";
+
+				if ("all".equals(type)) {
+					pstat.setString(1, searchWord);
+					pstat.setString(2, searchWord);
+					pstat.setString(3, searchWord);
+				} else if ("id".equals(type) || "name".equals(type) || "nickname".equals(type)) {
+					pstat.setString(1, searchWord);
+				}
+			}
+
+			rs = pstat.executeQuery();
+
+			if (rs.next()) {
+				return rs.getInt("cnt");
+			}
+
+		} catch (Exception e) {
+			e.printStackTrace();
+		} finally {
+			closeAll();
+		}
+
+		return 0;
+	}
+	
+	
 }
