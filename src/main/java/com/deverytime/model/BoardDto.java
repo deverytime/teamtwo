@@ -28,6 +28,5 @@ public class BoardDto {
 	
 	private String reasonSeq; //신고사유
 	
-	
 
 }

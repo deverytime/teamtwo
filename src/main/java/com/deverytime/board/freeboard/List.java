@@ -38,6 +38,7 @@ public class List extends HttpServlet {
 		// 3. 첨부
 		req.setAttribute("list", list);
 		req.setAttribute("board", board);
+		req.setAttribute("category", category);
 		req.setAttribute("categoryMap", service.getCategoryMap());
 
 		req.getRequestDispatcher("/WEB-INF/views/list.jsp").forward(req, resp);
