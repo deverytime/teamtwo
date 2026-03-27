@@ -15,7 +15,7 @@
 		<section class="mb-14">
 			<div class="flex justify-between items-end mb-4">
 				<h2 class="text-xl font-bold">📚 신규 모집 중인 스터디</h2>
-				<a href="/teamtwo/study/ListStudy.do" class="text-sm text-brand-600 hover:underline">더보기 &gt;</a>
+				<a href="/teamtwo/study/study-list.do" class="text-sm text-brand-600 hover:underline">더보기 &gt;</a>
 			</div>
 			
 			<div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
