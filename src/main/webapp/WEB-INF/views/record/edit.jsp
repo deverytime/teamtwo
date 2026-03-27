@@ -98,5 +98,17 @@
     
     </main>
   </div>
+  
+  <script src="https://code.jquery.com/jquery-4.0.0.js"></script>
+  <script>
+      const range = document.getElementById('progress');
+      const value = document.getElementById('progressValue');
+
+      value.textContent = range.value;
+
+      range.addEventListener('input', function () {
+        value.textContent = this.value;
+      });
+  </script>
 </body>
 </html>

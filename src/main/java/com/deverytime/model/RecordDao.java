@@ -163,5 +163,47 @@ public class RecordDao extends BasicDao {
 
 	    return 0;
 	}
+
+	public int del(RecordDto dto) {
+		
+		try {
+	        String sql = "delete from record "
+	                   + "where seq = ? "
+	                   + "and planSeq in (select seq from plan where memberSeq = ?)";
+
+	        pstat = conn.prepareStatement(sql);
+	        pstat.setString(1, dto.getSeq());
+	        pstat.setString(2, dto.getMemberSeq());
+
+	        return pstat.executeUpdate();
+
+	    } catch (Exception e) {
+	        e.printStackTrace();
+	    }
+		
+		return -1;
+	}
+	
+	// record 삭제 전 planSeq 반환 위한 메서드
+	public String getPlanSeq(String recordSeq) {
+
+	    try {
+	        String sql = "select planSeq from record where seq = ?";
+
+	        pstat = conn.prepareStatement(sql);
+	        pstat.setString(1, recordSeq);
+
+	        rs = pstat.executeQuery();
+
+	        if (rs.next()) {
+	            return rs.getString("planSeq");
+	        }
+
+	    } catch (Exception e) {
+	        e.printStackTrace();
+	    }
+
+	    return null;
+	}
 	
 }
