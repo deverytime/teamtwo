@@ -5,7 +5,7 @@ import java.util.List;
 
 import com.deverytime.library.BasicDao;
 
-public class RecordDao extends BasicDao{
+public class RecordDao extends BasicDao {
 
 	public List<RecordDto> getRecordsByPlan(String planSeq, int cnt) {
 		

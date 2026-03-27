@@ -204,7 +204,7 @@
 
         <tbody class="divide-y divide-slate-100">
           <c:choose>
-            <!-- records 없을 때 -->
+            <%-- records 없을 때 --%>
             <c:when test="${empty dto.records}">
               <tr>
                 <td colspan="5" class="text-center py-6 text-slate-400">
@@ -212,7 +212,7 @@
                 </td>
               </tr>
             </c:when>
-            <!-- records 있을 때 -->
+            <%-- records 있을 때 --%>
             <c:otherwise>
               <c:forEach items="${dto.records}" var="record">
                 <tr class="hover:bg-slate-100">
