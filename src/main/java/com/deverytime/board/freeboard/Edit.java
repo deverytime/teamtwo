@@ -15,40 +15,36 @@ import com.deverytime.model.BoardDto;
 import com.oreilly.servlet.MultipartRequest;
 import com.oreilly.servlet.multipart.DefaultFileRenamePolicy;
 
-@WebServlet(value = "/board/freeboard/add.do")
-public class Add extends HttpServlet {
+@WebServlet(value = "/board/freeboard/edit.do")
+public class Edit extends HttpServlet {
 
 	@Override
 	protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
 
-		// Add.java
+		// Edit.java
 
 		// 1.로그인 했나 안했나
 		HttpSession session = req.getSession();
 
-		//session.setAttribute("auth", "um1234"); // 로그인 기능 연결전 임시 세션 만들기 끝나면 삭제
-
-		if (session.getAttribute("auth") == null) {
-			resp.sendRedirect("/teamtwo/user/login.do");
-			return;
-		}
-
 		// 2. 어느 게시판에서 온건지 저장
 		String board = req.getParameter("board");
+		String seq = req.getParameter("seq");
 
-		// 3. 주제 보내주기
+		// 3. 입력된 정보 가져와서 뿌려주기
 		BoardService service = new BoardService();
+		BoardDto dto = new BoardDto();
+		dto.setSeq(seq);
+		dto = service.getPostBySeq(dto); // 글번호를 가지고 정보 가져와서 보여주기
+		dto.setBoardType(board);
 
-		req.setAttribute("board", board);
+		req.setAttribute("dto", dto);
 		req.setAttribute("categoryMap", service.getCategoryMap());
 
-		req.getRequestDispatcher("/WEB-INF/views/board/freeboard/add.jsp").forward(req, resp);
+		req.getRequestDispatcher("/WEB-INF/views/board/freeboard/edit.jsp").forward(req, resp);
 	}
 
 	@Override
 	protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
-
-		// AddOk.java
 
 		// 1. 보낸 정보 받기
 		String uploadPath = getServletContext().getRealPath("/uploads");
@@ -70,24 +66,26 @@ public class Add extends HttpServlet {
 		String category = mr.getParameter("category");
 		String title = mr.getParameter("title");
 		String content = mr.getParameter("content");
-
+		String seq = mr.getParameter("seq");
+		
 		BoardDto dto = new BoardDto();
 		dto.setId(id);
 		dto.setBoardType(board);
 		dto.setCategory(category);
 		dto.setTitle(title);
 		dto.setContent(content);
-
+		dto.setSeq(seq);
+		
 		BoardService service = new BoardService();
 
-		int result = service.add(dto);
-
+		int result = service.edit(dto);
+		
 		if (result == 1) {
-			// list.do로
-			resp.sendRedirect("list.do?board=" + dto.getBoardType());
+			// view.do로
+			resp.sendRedirect("view.do?board=" + dto.getBoardType() + "&seq=" + dto.getSeq());
 		} else {
 			// history.back();
-//			resp.sendRedirect("javascript:history.back()");
+//					resp.sendRedirect("javascript:history.back()");
 			PrintWriter out = resp.getWriter();
 			out.println("<script>history.back();</script>");
 		}

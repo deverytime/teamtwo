@@ -35,10 +35,10 @@ public class BoardService {
 		return CATEGORY_MAP;
 	}
 
-	public ArrayList<BoardDto> list() {
+	public ArrayList<BoardDto> list(BoardDto param) {
 
 		BoardDao dao = new BoardDao();
-		ArrayList<BoardDto> list = dao.list();
+		ArrayList<BoardDto> list = dao.list(param);
 
 		for (BoardDto dto : list) {
 
@@ -83,7 +83,6 @@ public class BoardService {
 		
 		BoardDao dao = new BoardDao();
 
-
 		dto = dao.view(dto);
 		
 		// 카테고리 한글 처리
@@ -99,5 +98,66 @@ public class BoardService {
 		dao.increaseReadCount(seq);
 		
 	}
+
+	public int recommend(BoardDto dto) {
+		
+		BoardDao dao = new BoardDao();
+		
+		// DB에 인서트하기전에 id로 memberSeq를 알아오기
+		String memberSeq = dao.getMemberSeqById(dto.getId());
+
+		dto.setMemberSeq(memberSeq);
+
+		int result = dao.recommend(dto);
+		
+		return result;
+	}
+
+	public int report(BoardDto dto) {
+		
+		BoardDao dao = new BoardDao();
+		
+		// DB에 인서트하기전에 id로 memberSeq를 알아오기
+		String memberSeq = dao.getMemberSeqById(dto.getId());
+
+		dto.setMemberSeq(memberSeq);
+
+		int result = dao.report(dto);
+		
+		return result;
+	}
+
+	// 수정을 위한 게시글 정보를 가져옴
+	public BoardDto getPostBySeq(BoardDto dto) {
+
+		BoardDao dao = new BoardDao();
+		
+		dto = dao.getPostBySeq(dto);
+		
+		return dto;
+	}
+
+	public int edit(BoardDto dto) {
+
+		BoardDao dao = new BoardDao();
+
+		int result = dao.edit(dto);
+
+		return result;
+	
+	}
+
+	public int del(String seq) {
+		
+		BoardDao dao = new BoardDao();
+		
+		int result = dao.del(seq); 
+		
+		return result;
+		
+	}
+
+		
+		
 
 }

@@ -1,10 +1,15 @@
 package com.deverytime.plan;
 
+import java.time.LocalDate;
+import java.time.temporal.ChronoUnit;
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 
 import com.deverytime.model.PlanDao;
 import com.deverytime.model.PlanDto;
+import com.deverytime.model.RecordDao;
+import com.deverytime.model.RecordDto;
 
 public class PlanService {
 	
@@ -131,6 +136,72 @@ public class PlanService {
 	    pagebar.append("</div>");
 
 	    return pagebar.toString();
+	}
+
+	public PlanDto get(String seq, String memberSeq) {
+		PlanDao dao = new PlanDao();
+		
+		return dao.get(seq, memberSeq);
+	}
+	
+	public PlanDto getDetailInfo(String seq, String memberSeq, int cnt) {
+		PlanDao dao = new PlanDao();
+		RecordDao recordDao = new RecordDao();
+		
+		PlanDto planDto = dao.get(seq, memberSeq);
+		
+		// 상세정보 용 변수 넣어주기
+		LocalDate today = LocalDate.now();
+
+		// 시작일 처리 (없으면 regDate 사용)
+		LocalDate startDate = null;
+		if (planDto.getStartDate() != null) {
+		    startDate = planDto.getStartDate().toLocalDate();
+		} else if (planDto.getRegDate() != null) {
+		    startDate = planDto.getRegDate().toLocalDate();
+		}
+
+		// 시작일 있을 때만 계산
+		if (startDate != null) {
+		    long daysFromStart = ChronoUnit.DAYS.between(startDate, today);
+		    planDto.setDaysFromStart(daysFromStart);
+		}
+
+		// 종료일 있을 때만 계산
+		if (planDto.getEndDate() != null) {
+		    LocalDate endDate = planDto.getEndDate().toLocalDate();
+		    long daysToEnd = ChronoUnit.DAYS.between(today, endDate);
+		    planDto.setDaysToEnd(daysToEnd);
+		}
+		
+		// 하단 학습기록 목록 가져오기
+		List<RecordDto> records = recordDao.getRecordsByPlan(seq, cnt);
+		planDto.setRecords(records);
+		
+		RecordDao recordDao2 = new RecordDao();
+		// 학습기록 총 개수 가져오기
+		int recordCount = recordDao2.getRecordCountByPlan(seq);
+		planDto.setRecordCount(recordCount);
+		
+		return planDto;
+	}
+
+	public int edit(PlanDto dto) {
+		PlanDao dao = new PlanDao();
+		
+		if (dto.getType().equals("기간기반")) {
+			return dao.editPeriod(dto);
+		} else if (dto.getType().equals("완료기반")) {
+			return dao.editCompletion(dto);
+		} 
+		
+		return -1;
+	}
+
+	public int del(PlanDto dto) {
+		PlanDao dao = new PlanDao();
+		
+		return dao.del(dto);
 	}
 
 }

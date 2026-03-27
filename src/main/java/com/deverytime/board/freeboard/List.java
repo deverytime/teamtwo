@@ -18,16 +18,27 @@ public class List extends HttpServlet {
 	protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
 
 		//List.java
-		// 1. 작성된 글 불러오기
-		// 2. 넘기기
+		// 1. 파라미터 받기
+		String board = req.getParameter("board");
+		if(board == null) board = "1"; // 기본값 자유게시판
+		
+		String category = req.getParameter("category"); //null 가능 -> 전체 주
+		
+		// 2. 목록조회
+
 		BoardService service = new BoardService();
+		BoardDto dto = new BoardDto();
 		
-		ArrayList<BoardDto> list = service.list();
+		dto.setBoardType(board);
+		dto.setCategory(category);
+				
+		ArrayList<BoardDto> list = service.list(dto);
 		
-		String board = "1";
 		
+		// 3. 첨부
 		req.setAttribute("list", list);
 		req.setAttribute("board", board);
+		req.setAttribute("categoryMap", service.getCategoryMap());
 
 		req.getRequestDispatcher("/WEB-INF/views/list.jsp").forward(req, resp);
 	}
