@@ -7,6 +7,7 @@ import java.util.Map;
 
 import com.deverytime.model.BoardDao;
 import com.deverytime.model.BoardDto;
+import com.deverytime.paging.PagingUtil;
 
 public class BoardService {
 
@@ -38,6 +39,15 @@ public class BoardService {
 	public ArrayList<BoardDto> list(BoardDto param) {
 
 		BoardDao dao = new BoardDao();
+		
+		// 페이징 자동 계산
+		String pageStr = param.getPageStr();
+		int nowPage = PagingUtil.parseNowPage(pageStr);
+		int pageSize = param.getPageSize(); // 15개씩 보여줌
+		int startRow = (nowPage - 1) * pageSize; // db결과에서 얼마나 가져올지
+		param.setStartRow(startRow);
+		
+		// 목록 조
 		ArrayList<BoardDto> list = dao.list(param);
 
 		for (BoardDto dto : list) {
