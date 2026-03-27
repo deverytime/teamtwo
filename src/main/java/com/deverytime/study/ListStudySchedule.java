@@ -117,6 +117,7 @@ public class ListStudySchedule extends HttpServlet{
 		req.setAttribute("pagebar", pagebar);
 		req.setAttribute("schlist", schlist);
 		req.setAttribute("map", map);
+		req.setAttribute("seq", seq);
 		
 		req.getRequestDispatcher("/WEB-INF/views/study/studyschedule-list.jsp").forward(req, resp);
 		

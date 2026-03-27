@@ -33,5 +33,13 @@ public class StudyScheduleService {
 		
 	}
 
+	public int add(StudyScheduleDto dto, String seq) {
+		
+		StudyScheduleDao dao = new StudyScheduleDao();
+		
+		return dao.add(dto, seq);
+		
+	}
+
 	
 }

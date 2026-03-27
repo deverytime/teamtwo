@@ -74,14 +74,17 @@
 			
 			    <%-- 현재 로그인 유저가 멤버인지 체크 --%>
 				<c:set var="isMember" value="false" />
-				<c:forEach items="${smlist}" var="mdto">
+				<c:forEach items="${mlist}" var="mdto">
 				    <c:if test="${mdto.seq == authDto.seq}">
 				        <c:set var="isMember" value="true" />
 				    </c:if>
 				</c:forEach>
-			
+				
 	          <div class="flex flex-wrap justify-between gap-2">
 	            <button class="btn btn-brand" onclick="location.href='/teamtwo/study/studyschedule-list.do?seq=${dto.seq}';">일정 보기</button>
+	            <c:if test="${isManager}">
+		            <button class="btn btn-brand" onclick="location.href='/teamtwo/study/study-edit.do?seq=${dto.seq}';">수정 하기</button>
+		        </c:if>
 	            <c:if test="${isMember}">
 		            <button class="btn btn-brand" onclick="location.href='/teamtwo/study/study-unreg.do?seq=${dto.seq}';">탈퇴 하기</button>
 		        </c:if>

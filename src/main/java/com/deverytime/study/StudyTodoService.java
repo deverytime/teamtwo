@@ -23,5 +23,12 @@ public class StudyTodoService {
 		return dao.getTotalCountTD(seq);
 		
 	}
+
+	public int add(StudyTodoDto dto, String seq) {
+		
+		StudyTodoDao dao = new StudyTodoDao();
+		
+		return dao.add(dto, seq);
+	}
 	
 }

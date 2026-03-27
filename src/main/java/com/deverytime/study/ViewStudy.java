@@ -58,7 +58,7 @@ public class ViewStudy extends HttpServlet{
 		map.put("end", end + "");
 		map.put("nowPage", nowPage + "");
 		
-		
+		//해당 스터디에 참가중인 회원들 리스트
 		mlist = service.memberList(seq, map);
 		
 		totalCount = service.getTotalCountM(seq);
@@ -99,13 +99,29 @@ public class ViewStudy extends HttpServlet{
 			pagebar += String.format("<a href='/teamtwo/study/study-view.do?seq=%s&page=%d'>[다음 %d페이지]</a>", seq, n, blockSize);
 		}
 		
-		//해당 스터디에 참여중인 회원들의 seq가 담긴 리스트
-		ArrayList<MemberDto> smlist = service.getStudyMember(dto);
+		HttpSession session = req.getSession();
+		
+		Object auth = session.getAttribute("authDto");
+		
+		int result = 0;
+		boolean isManager = false;
+		
+		if(auth != null) {
+			//이 회원이 이 스터디의 스터디장인지?
+			MemberDto mdto = (MemberDto)auth;
+			result = service.isManager(mdto, dto); //맞다면 1반환
+			
+			if(result > 0) {
+				isManager = true;
+			} else {
+				isManager = false;
+			}
+		}
 		
 		req.setAttribute("pagebar", pagebar);
 		req.setAttribute("dto", dto);
 		req.setAttribute("mlist", mlist);
-		req.setAttribute("smlist", smlist);
+		req.setAttribute("isManager", isManager);
 		
 		req.getRequestDispatcher("/WEB-INF/views/study/study-view.jsp").forward(req, resp);
 		

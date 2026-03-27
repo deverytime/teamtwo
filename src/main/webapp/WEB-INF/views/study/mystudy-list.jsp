@@ -91,7 +91,7 @@
           </div>        
 		
           <div class="flex flex-wrap justify-between gap-2">
-            <button class="btn btn-brand" onclick="location.href='/teamtwo/study/studyschedule-list.do?seq=${dto.seq}';">일정 보기</button>
+            <button class="btn btn-brand" onclick="location.href='/teamtwo/study/study-view.do?seq=${dto.seq}';">상세 보기</button>
 	        <button class="btn btn-brand" onclick="location.href='/teamtwo/study/study-unreg.do?seq=${dto.seq}';">탈퇴 하기</button>
           </div>
         </div>

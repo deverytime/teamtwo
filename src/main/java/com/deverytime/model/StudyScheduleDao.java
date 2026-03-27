@@ -142,6 +142,29 @@ public class StudyScheduleDao extends BasicDao{
 		return null;
 		
 	}
+
+	public int add(StudyScheduleDto dto, String seq) {
+		
+		try {
+			
+			String sql = "insert into study_schedule (seq, title, content, startdate, enddate, studySeq) values (studyScheduleSeq.nextVal, ?, ?, ?, ?, ?)";
+			
+			pstat = conn.prepareStatement(sql);
+			pstat.setString(1, dto.getTitle());
+			pstat.setString(2, dto.getContent());
+			pstat.setString(3, dto.getStartDate());
+			pstat.setString(4, dto.getEndDate());
+			pstat.setString(5, seq);
+			
+			return pstat.executeUpdate();
+			
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+			
+		return 0;
+		
+	}
 		
 
 }

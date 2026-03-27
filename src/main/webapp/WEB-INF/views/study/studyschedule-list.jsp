@@ -93,7 +93,7 @@
 	       <!-- 버튼 -->
 	       <div class="flex flex-wrap justify-between gap-2 btns">
 	       		<button class="btn btn-soft-brand" onclick="location.href='/teamtwo/study/studyschedule-delete.do';">스터디 일정 삭제</button>
-				<button class="btn btn-soft-brand" onclick="location.href='/teamtwo/study/studyschedule-add.do';">스터디 일정 등록</button>
+				<button class="btn btn-soft-brand" onclick="location.href='/teamtwo/study/studyschedule-add.do?seq=${seq}';">스터디 일정 등록</button>
 	       </div>
 	     
 	    </div> 

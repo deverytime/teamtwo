@@ -186,19 +186,28 @@ public class StudyService {
 		return dao.regStudy(dto, mdto);
 	}
 
-	public ArrayList<MemberDto> getStudyMember(StudyDto dto) {
-		
-		StudyDao dao = new StudyDao();
-		
-		return dao.getStudyMember(dto);
-		
-	}
 
 	public int unregStudy(MemberDto mdto, String seq) {
 		
 		StudyDao dao = new StudyDao();
 		
 		return dao.unregStudy(mdto, seq);
+		
+	}
+
+	public int isManager(MemberDto mdto, StudyDto dto) {
+		
+		StudyDao dao = new StudyDao();
+		
+		return dao.isManager(mdto, dto);
+		
+	}
+
+	public int edit(StudyDto dto) {
+		
+		StudyDao dao = new StudyDao();
+		
+		return dao.edit(dto);
 		
 	}
 

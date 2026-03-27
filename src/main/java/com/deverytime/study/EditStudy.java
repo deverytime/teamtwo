@@ -11,14 +11,22 @@ import javax.servlet.http.HttpSession;
 
 import com.deverytime.model.MemberDto;
 import com.deverytime.model.StudyDto;
+import com.deverytime.model.StudyTodoDto;
 
-@WebServlet(value = "/study/study-add.do")
-public class AddStudy extends HttpServlet{
+@WebServlet(value = "/study/study-edit.do")
+public class EditStudy extends HttpServlet{
 
 	@Override
 	protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
 		
-		req.getRequestDispatcher("/WEB-INF/views/study/study-add.jsp").forward(req, resp);
+		String seq = req.getParameter("seq");
+		
+		StudyService service = new StudyService();
+		StudyDto dto = service.get(seq);
+		
+		req.setAttribute("dto", dto);
+		
+		req.getRequestDispatcher("/WEB-INF/views/study/study-edit.jsp").forward(req, resp);
 		
 	}
 	
@@ -63,15 +71,13 @@ public class AddStudy extends HttpServlet{
 		
 		StudyService service = new StudyService();
 		
-		MemberDto mdto = service.getMember(id);
-		
 		StudyDto dto = new StudyDto();
 		
 		dto.setName(name);
 		dto.setDescription(description);
 		dto.setCapacity(capacity);
 		
-		int result = service.add(dto, mdto);
+		int result = service.edit(dto);
 		
 		if(result > 0) {
 			resp.sendRedirect("/teamtwo/study/study-list.do");
@@ -79,7 +85,6 @@ public class AddStudy extends HttpServlet{
 			resp.getWriter().print("<script>alert('failed');history.back();</script>");
 			resp.getWriter().close();
 		}
-		
 		
 	}
 	
