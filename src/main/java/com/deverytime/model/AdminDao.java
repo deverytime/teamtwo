@@ -108,6 +108,8 @@ public class AdminDao extends BasicDao {
 				dto.setId(rs.getString("id"));
 				dto.setName(rs.getString("name"));
 				dto.setNickname(rs.getString("nickname"));
+				dto.setEmail(rs.getString("email"));
+				dto.setStatus(rs.getInt("status"));
 				dto.setRegdate(rs.getString("regdate"));
 
 				list.add(dto);
@@ -141,7 +143,7 @@ public class AdminDao extends BasicDao {
 				} else if ("nickname".equals(type)) {
 					sql.append("where nickname like ? ");
 				} else if ("all".equals(type)) {
-					sql.append("where id like ? or name like ? or nick like ? ");
+					sql.append("where id like ? or name like ? or nickname like ? ");
 				}
 			}
 
