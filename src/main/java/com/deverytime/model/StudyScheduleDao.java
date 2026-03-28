@@ -7,43 +7,6 @@ import com.deverytime.library.BasicDao;
 
 public class StudyScheduleDao extends BasicDao{
 
-	public ArrayList<StudyScheduleDto> scheduleList(String seq) {
-		
-		try {
-			
-			String sql = "select * from study_schedule where studySeq = ?";
-			
-			pstat = conn.prepareStatement(sql);
-			pstat.setString(1, seq);
-			rs = pstat.executeQuery();
-			
-			ArrayList<StudyScheduleDto> list = new ArrayList<StudyScheduleDto>();
-			
-			while(rs.next()) {
-				
-				StudyScheduleDto dto = new StudyScheduleDto();
-				dto.setSeq(rs.getString("seq"));
-				dto.setTitle(rs.getString("title"));
-				dto.setContent(rs.getString("content"));
-				dto.setStartDate(rs.getString("startDate"));
-				dto.setEndDate(rs.getString("endDate"));
-				dto.setStudySeq(rs.getString("studySeq"));
-				
-				list.add(dto);
-			}
-			
-			return list;
-			
-		} catch (Exception e) {
-			e.printStackTrace();
-		} finally {
-			closeAll();
-		}
-		
-		return null;
-		
-	}
-
 	public ArrayList<StudyScheduleDto> list(HashMap<String, String> map, String seq) {
 		
 		try {
@@ -164,6 +127,53 @@ public class StudyScheduleDao extends BasicDao{
 			
 		return 0;
 		
+	}
+
+	public int edit(StudyScheduleDto dto) {
+		
+		try {
+			
+			String sql = "update study_schedule set title = ?, content = ?, startdate = ?, enddate = ? where seq = ?";
+			
+			pstat = conn.prepareStatement(sql);
+			pstat.setString(1, dto.getTitle());
+			pstat.setString(2, dto.getContent());
+			pstat.setString(3, dto.getStartDate());
+			pstat.setString(4, dto.getEndDate());
+			pstat.setString(5, dto.getSeq());
+			
+			int result = pstat.executeUpdate();
+			
+			return result;
+			
+		} catch (Exception e) {
+			e.printStackTrace();
+		} finally {
+			closeAll();
+		}
+		
+		return 0;
+		
+	}
+
+	public int del(String seq) {
+		
+		try {
+			
+			String sql = "delete from study_schedule where seq = ?";
+			
+			pstat = conn.prepareStatement(sql);
+			pstat.setString(1, seq);
+			
+			return pstat.executeUpdate();
+			
+		} catch (Exception e) {
+			e.printStackTrace();
+		} finally {
+			closeAll();
+		}
+		
+		return 0;
 	}
 		
 

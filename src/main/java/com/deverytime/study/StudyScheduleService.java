@@ -3,6 +3,7 @@ package com.deverytime.study;
 import java.util.ArrayList;
 import java.util.HashMap;
 
+import com.deverytime.model.StudyDto;
 import com.deverytime.model.StudyScheduleDao;
 import com.deverytime.model.StudyScheduleDto;
 import com.deverytime.model.StudyTodoDao;
@@ -14,7 +15,23 @@ public class StudyScheduleService {
 		
 		StudyScheduleDao dao = new StudyScheduleDao();
 		
-		return dao.list(map, seq);
+		ArrayList<StudyScheduleDto> list = dao.list(map, seq);
+		
+		for(StudyScheduleDto dto : list) {
+			
+			String startDate = dto.getStartDate();
+			String endDate = dto.getEndDate();
+			
+			startDate = startDate.substring(0, 10);
+			endDate = endDate.substring(0, 10);
+			
+			dto.setStartDate(startDate);
+			dto.setEndDate(endDate);
+		}
+		
+		return list;
+		
+	
 	}
 
 	public int getTotalCountSCH(HashMap<String, String> map, String seq) {
@@ -29,7 +46,18 @@ public class StudyScheduleService {
 		
 		StudyScheduleDao dao = new StudyScheduleDao();
 		
-		return dao.get(seq);
+		StudyScheduleDto dto =  dao.get(seq);
+		
+		String startDate = dto.getStartDate();
+		String endDate = dto.getEndDate();
+		
+		startDate = startDate.substring(0, 10);
+		endDate = endDate.substring(0, 10);
+		
+		dto.setStartDate(startDate);
+		dto.setEndDate(endDate);
+		
+		return dto;
 		
 	}
 
@@ -38,6 +66,22 @@ public class StudyScheduleService {
 		StudyScheduleDao dao = new StudyScheduleDao();
 		
 		return dao.add(dto, seq);
+		
+	}
+
+	public int edit(StudyScheduleDto dto) {
+	
+		StudyScheduleDao dao = new StudyScheduleDao();
+		
+		return dao.edit(dto);
+		
+	}
+
+	public int del(String seq) {
+		
+		StudyScheduleDao dao = new StudyScheduleDao();
+		
+		return dao.del(seq);
 		
 	}
 

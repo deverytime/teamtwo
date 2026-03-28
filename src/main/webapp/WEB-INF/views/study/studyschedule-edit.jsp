@@ -16,18 +16,18 @@
 	<main class="page-wrap">
 		
 		<div class="mb-8">
-			<h1 class="section-title">스터디 일정 등록</h1>
-			<p class="section-desc">스터디를 일정을 등록합니다.</p>
+			<h1 class="section-title">스터디 일정 수정</h1>
+			<p class="section-desc">스터디를 일정을 수정합니다.</p>
 		</div>
 
 	<div class="content-card card-pad">
 	
-	<!-- 스터디 일정 등록 폼 -->
+	<!-- 스터디 일정 수정 폼 -->
     <section class="demo-block">
 
       <div class="content-card card-pad max-w-3xl">
 
-        <form class="space-y-5" method="POST" action="/teamtwo/study/studyschedule-add.do?seq=${seq}">
+        <form class="space-y-5" method="POST" action="/teamtwo/study/studyschedule-edit.do?seq=${dto.seq}">
           <div>
             <label class="form-label">스터디 일정 명</label>
             <input
@@ -36,6 +36,7 @@
               placeholder="스터디 일정 명을 입력하세요."
               name="title"
               required="required"
+              value="${dto.title}"
             />
           </div>
           <div>
@@ -45,22 +46,22 @@
               placeholder="스터디 일정에 대한 설명을 입력하세요."
               name="content"
               required="required"
-            ></textarea>
+            >${dto.content}</textarea>
           </div>
           <div class="grid md:grid-cols-2 gap-5">
             <div>
               <label class="form-label">시작일</label>
-              <input type="date" class="input input-bordered w-full bg-white" required="required" name="startDate" />
+              <input type="date" class="input input-bordered w-full bg-white" required="required" name="startDate" value="${dto.startDate}" />
             </div>
             <div>
               <label class="form-label">종료일</label>
-              <input type="date" class="input input-bordered w-full bg-white" required="required" name="endDate" />
+              <input type="date" class="input input-bordered w-full bg-white" required="required" name="endDate" value="${dto.endDate}"/>
             </div>
           </div>
 
           <div class="flex justify-end gap-2 pt-2">
             <button type="button" class="btn btn-ghost" onclick="history.back();">취소</button>
-            <button type="submit" class="btn btn-brand">등록하기</button>
+            <button type="submit" class="btn btn-brand">수정하기</button>
           </div>
         </form>
       </div>

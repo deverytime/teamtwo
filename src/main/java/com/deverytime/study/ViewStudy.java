@@ -22,6 +22,16 @@ public class ViewStudy extends HttpServlet{
 	@Override
 	protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
 				
+		HttpSession session = req.getSession();
+		
+		Object auth = session.getAttribute("authDto");
+		
+		MemberDto mdto = null;
+		
+		if(auth != null) {
+			mdto = (MemberDto)auth;
+		}
+		
 		String seq = req.getParameter("seq");
 		
 		StudyService service = new StudyService();
@@ -99,16 +109,12 @@ public class ViewStudy extends HttpServlet{
 			pagebar += String.format("<a href='/teamtwo/study/study-view.do?seq=%s&page=%d'>[다음 %d페이지]</a>", seq, n, blockSize);
 		}
 		
-		HttpSession session = req.getSession();
-		
-		Object auth = session.getAttribute("authDto");
-		
 		int result = 0;
 		boolean isManager = false;
+		boolean isMember = false;
 		
 		if(auth != null) {
 			//이 회원이 이 스터디의 스터디장인지?
-			MemberDto mdto = (MemberDto)auth;
 			result = service.isManager(mdto, dto); //맞다면 1반환
 			
 			if(result > 0) {
@@ -116,12 +122,23 @@ public class ViewStudy extends HttpServlet{
 			} else {
 				isManager = false;
 			}
+			
+			//이 회원이 이 스터디의 멤버인지?(스터디장인 경우도 포함됨)
+			result = service.isMember(mdto, dto);
+
+			if(result > 0) {
+				isMember = true;
+			} else {
+				isMember = false;
+			}
+			
 		}
 		
 		req.setAttribute("pagebar", pagebar);
 		req.setAttribute("dto", dto);
 		req.setAttribute("mlist", mlist);
 		req.setAttribute("isManager", isManager);
+		req.setAttribute("isMember", isMember);
 		
 		req.getRequestDispatcher("/WEB-INF/views/study/study-view.jsp").forward(req, resp);
 		

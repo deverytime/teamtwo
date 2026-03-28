@@ -10,24 +10,22 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
-import com.deverytime.model.MemberDto;
-import com.deverytime.model.StudyDto;
-import com.deverytime.model.StudyTodoDto;
+import com.deverytime.model.StudyScheduleDto;
 
-@WebServlet(value = "/study/study-edit.do")
-public class EditStudy extends HttpServlet{
+@WebServlet(value = "/study/studyschedule-edit.do")
+public class EditStudySchedule extends HttpServlet{
 
 	@Override
 	protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
 		
 		String seq = req.getParameter("seq");
 		
-		StudyService service = new StudyService();
-		StudyDto dto = service.get(seq);
+		StudyScheduleService service = new StudyScheduleService();
+		StudyScheduleDto dto = service.get(seq);
 		
 		req.setAttribute("dto", dto);
 		
-		req.getRequestDispatcher("/WEB-INF/views/study/study-edit.jsp").forward(req, resp);
+		req.getRequestDispatcher("/WEB-INF/views/study/studyschedule-edit.jsp").forward(req, resp);
 		
 	}
 	
@@ -49,36 +47,21 @@ public class EditStudy extends HttpServlet{
 			return;
 		}
 		
-		String id = auth.toString();
-		
 		String seq = req.getParameter("seq");
-		String name = req.getParameter("name");
-		String description = req.getParameter("description");
-		String capacity = req.getParameter("capacity");
+		String title = req.getParameter("title");
+		String content = req.getParameter("content");
+		String startdate = req.getParameter("startDate");
+		String enddate = req.getParameter("endDate");
 		
-		try {
-			
-		    int cap = Integer.parseInt(capacity);
-
-		    if (cap >= 5 && cap <= 20) {
-		    	
-		    } else {
-		    	resp.getWriter().print("<script>alert('failed');history.back();</script>");
-				resp.getWriter().close();
-		    }
-
-		} catch (NumberFormatException e) {
-			e.printStackTrace();
-		}
+		StudyScheduleService service = new StudyScheduleService();
 		
-		StudyService service = new StudyService();
-		
-		StudyDto dto = new StudyDto();
+		StudyScheduleDto dto = new StudyScheduleDto();
 		
 		dto.setSeq(seq);
-		dto.setName(name);
-		dto.setDescription(description);
-		dto.setCapacity(capacity);
+		dto.setTitle(title);
+		dto.setContent(content);
+		dto.setStartDate(startdate);
+		dto.setEndDate(enddate);
 		
 		int result = service.edit(dto);
 		
@@ -87,7 +70,7 @@ public class EditStudy extends HttpServlet{
 		if(result > 0) {
 			writer.print("<script>");
 			writer.print("alert('수정 완료!');");
-			writer.print("location.href='/teamtwo/study/study-view.do?seq=" + seq + "';");
+			writer.print("location.href='/teamtwo/study/studyschedule-view.do?seq=" + seq + "';");
 			writer.print("</script>");
 		} else {
 			writer.print("<script>");

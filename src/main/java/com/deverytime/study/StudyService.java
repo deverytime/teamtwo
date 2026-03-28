@@ -88,13 +88,6 @@ public class StudyService {
 		
 	}
 
-	public ArrayList<StudyScheduleDto> scheduleList(String seq) {
-		
-		StudyScheduleDao dao = new StudyScheduleDao();
-		
-		return dao.scheduleList(seq);
-		
-	}
 
 	public ArrayList<MemberDto> memberList(String seq, HashMap<String, String> map) {
 		
@@ -208,6 +201,22 @@ public class StudyService {
 		StudyDao dao = new StudyDao();
 		
 		return dao.edit(dto);
+		
+	}
+
+	public int del(String seq) {
+		
+		StudyDao dao = new StudyDao();
+		
+		return dao.del(seq);
+		
+	}
+
+	public int isMember(MemberDto mdto, StudyDto dto) {
+		
+		StudyDao dao = new StudyDao();
+		
+		return dao.isMember(mdto, dto);
 		
 	}
 

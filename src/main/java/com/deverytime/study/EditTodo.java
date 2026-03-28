@@ -10,24 +10,23 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
-import com.deverytime.model.MemberDto;
-import com.deverytime.model.StudyDto;
+import com.deverytime.model.StudyScheduleDto;
 import com.deverytime.model.StudyTodoDto;
 
-@WebServlet(value = "/study/study-edit.do")
-public class EditStudy extends HttpServlet{
+@WebServlet(value = "/study/todo-edit.do")
+public class EditTodo extends HttpServlet{
 
 	@Override
 	protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
 		
 		String seq = req.getParameter("seq");
 		
-		StudyService service = new StudyService();
-		StudyDto dto = service.get(seq);
+		StudyTodoService service = new StudyTodoService();
+		StudyTodoDto dto = service.get(seq);
 		
 		req.setAttribute("dto", dto);
 		
-		req.getRequestDispatcher("/WEB-INF/views/study/study-edit.jsp").forward(req, resp);
+		req.getRequestDispatcher("/WEB-INF/views/study/todo-edit.jsp").forward(req, resp);
 		
 	}
 	
@@ -49,36 +48,26 @@ public class EditStudy extends HttpServlet{
 			return;
 		}
 		
-		String id = auth.toString();
+		String scheduleSeq = req.getParameter("scheduleSeq");
 		
 		String seq = req.getParameter("seq");
-		String name = req.getParameter("name");
-		String description = req.getParameter("description");
-		String capacity = req.getParameter("capacity");
+		String title = req.getParameter("title");
+		String content = req.getParameter("content");
+		String status= req.getParameter("status");
 		
-		try {
-			
-		    int cap = Integer.parseInt(capacity);
-
-		    if (cap >= 5 && cap <= 20) {
-		    	
-		    } else {
-		    	resp.getWriter().print("<script>alert('failed');history.back();</script>");
-				resp.getWriter().close();
-		    }
-
-		} catch (NumberFormatException e) {
-			e.printStackTrace();
+		//checkbox on이면 value값 1, off라서 안넘어오면 null
+		if(status == null) {
+			status = "0";
 		}
 		
-		StudyService service = new StudyService();
+		StudyTodoService service = new StudyTodoService();
 		
-		StudyDto dto = new StudyDto();
+		StudyTodoDto dto = new StudyTodoDto();
 		
 		dto.setSeq(seq);
-		dto.setName(name);
-		dto.setDescription(description);
-		dto.setCapacity(capacity);
+		dto.setTitle(title);
+		dto.setContent(content);
+		dto.setStatus(status);
 		
 		int result = service.edit(dto);
 		
@@ -87,7 +76,7 @@ public class EditStudy extends HttpServlet{
 		if(result > 0) {
 			writer.print("<script>");
 			writer.print("alert('수정 완료!');");
-			writer.print("location.href='/teamtwo/study/study-view.do?seq=" + seq + "';");
+			writer.print("location.href='/teamtwo/study/studyschedule-view.do?seq=" + scheduleSeq + "';");
 			writer.print("</script>");
 		} else {
 			writer.print("<script>");
