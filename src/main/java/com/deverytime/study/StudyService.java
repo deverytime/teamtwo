@@ -211,5 +211,21 @@ public class StudyService {
 		
 	}
 
+	public int del(String seq) {
+		
+		StudyDao dao = new StudyDao();
+		
+		return dao.del(seq);
+		
+	}
+
+	public int isMember(MemberDto mdto, StudyDto dto) {
+		
+		StudyDao dao = new StudyDao();
+		
+		return dao.isMember(mdto, dto);
+		
+	}
+
 	
 }

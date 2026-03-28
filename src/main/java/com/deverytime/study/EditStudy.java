@@ -1,6 +1,7 @@
 package com.deverytime.study;
 
 import java.io.IOException;
+import java.io.PrintWriter;
 
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
@@ -81,12 +82,21 @@ public class EditStudy extends HttpServlet{
 		
 		int result = service.edit(dto);
 		
+		PrintWriter writer = resp.getWriter();
+		
 		if(result > 0) {
-			resp.sendRedirect("/teamtwo/study/study-list.do");
+			writer.print("<script>");
+			writer.print("alert('수정 완료!');");
+			writer.print("location.href='/teamtwo/study/study-view.do?seq=" + seq + "';");
+			writer.print("</script>");
 		} else {
-			resp.getWriter().print("<script>alert('failed');history.back();</script>");
-			resp.getWriter().close();
+			writer.print("<script>");
+			writer.print("alert('수정 실패!');");
+			writer.print("history.back();");
+			writer.print("</script>");
 		}
+		
+		writer.close();
 		
 	}
 	
