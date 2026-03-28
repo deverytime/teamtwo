@@ -431,4 +431,169 @@ public class AdminDao extends BasicDao {
 
 		return 0;
 	}
+	
+	public List<AdminReqDto> getRequestList(int begin, int end, String type, String word, String subject, String status) {
+
+		try {
+			StringBuilder sql = new StringBuilder();
+
+			sql.append("select * from (");
+			sql.append("    select rownum as rnum, t.* from (");
+			sql.append("        select ");
+			sql.append("            rb.seq, rb.title, rb.subject, rb.content, ");
+			sql.append("            rb.regDate, rb.status, rb.memberSeq ");
+			sql.append("        from request_board rb ");
+			sql.append("        where 1=1 ");
+
+			boolean hasWord = word != null && !word.trim().equals("");
+			boolean hasSubject = subject != null && !subject.trim().equals("");
+			boolean hasStatus = status != null && !status.trim().equals("");
+
+			// 필터
+			if (hasSubject) {
+				sql.append("and rb.subject = ? ");
+			}
+
+			if (hasStatus) {
+				sql.append("and rb.status = ? ");
+			}
+
+			// 검색
+			if (hasWord) {
+			    if ("title".equals(type)) {
+			        sql.append("and rb.title like ? ");
+			    } else if ("content".equals(type)) {
+			        sql.append("and rb.content like ? ");
+			    } else {
+			        sql.append("and (rb.title like ? or rb.content like ?) ");
+			    }
+			}
+
+			sql.append("        order by rb.seq desc ");
+			sql.append("    ) t ");
+			sql.append(") where rnum between ? and ?");
+
+			pstat = conn.prepareStatement(sql.toString());
+
+			int index = 1;
+
+			if (hasSubject) {
+				pstat.setString(index++, subject);
+			}
+
+			if (hasStatus) {
+				pstat.setString(index++, status);
+			}
+
+			if (hasWord) {
+				String searchWord = "%" + word + "%";
+
+				if ("all".equals(type)) {
+					pstat.setString(index++, searchWord);
+					pstat.setString(index++, searchWord);
+				} else if ("title".equals(type) || "content".equals(type)) {
+					pstat.setString(index++, searchWord);
+				}
+			}
+
+			pstat.setInt(index++, begin);
+			pstat.setInt(index++, end);
+
+			rs = pstat.executeQuery();
+
+			List<AdminReqDto> list = new ArrayList<>();
+
+			while (rs.next()) {
+				AdminReqDto dto = new AdminReqDto();
+
+				dto.setSeq(rs.getString("seq"));
+				dto.setTitle(rs.getString("title"));
+				dto.setSubject(Integer.parseInt(rs.getString("subject")));
+				dto.setContent(rs.getString("content"));
+				dto.setRegDate(rs.getDate("regDate"));
+				dto.setStatus(rs.getInt("status"));
+				dto.setMemberSeq(rs.getString("memberSeq"));
+
+				list.add(dto);
+			}
+
+			return list;
+
+		} catch (Exception e) {
+			e.printStackTrace();
+		} finally {
+			closeAll();
+		}
+
+		return new ArrayList<>();
+	}
+
+	public int getRequestCount(String type, String word, String subject, String status) {
+
+		try {
+			StringBuilder sql = new StringBuilder();
+
+			sql.append("select count(*) as cnt ");
+			sql.append("from request_board rb ");
+			sql.append("where 1=1 ");
+
+			boolean hasWord = word != null && !word.trim().equals("");
+			boolean hasSubject = subject != null && !subject.trim().equals("");
+			boolean hasStatus = status != null && !status.trim().equals("");
+
+			// 필터
+			if (hasSubject) {
+				sql.append("and rb.subject = ? ");
+			}
+
+			if (hasStatus) {
+				sql.append("and rb.status = ? ");
+			}
+
+			// 검색
+			if (hasWord) {
+				if ("title".equals(type)) {
+					sql.append("and rb.title like ? ");
+				} else if ("content".equals(type)) {
+					sql.append("and rb.content like ? ");
+				} else if ("all".equals(type)) {
+					sql.append("and (rb.title like ? or rb.content like ?) ");
+				}
+			}
+
+			pstat = conn.prepareStatement(sql.toString());
+
+			int index = 1;
+
+			if (hasSubject) {
+				pstat.setString(index++, subject);
+			}
+
+			if (hasStatus) {
+				pstat.setString(index++, status);
+			}
+
+			if (hasWord) {
+				String searchWord = "%" + word + "%";
+
+				if ("all".equals(type)) {
+					pstat.setString(index++, searchWord);
+					pstat.setString(index++, searchWord);
+				} else if ("title".equals(type) || "content".equals(type)) {
+					pstat.setString(index++, searchWord);
+				}
+			}
+
+			rs = pstat.executeQuery();
+
+			if (rs.next()) {
+				return rs.getInt("cnt");
+			}
+
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+
+		return 0;
+	}	
 }
