@@ -230,4 +230,10 @@ public class AdminService {
 		
 		return dao.getMemberDetailInfo(seq);
 	}
+
+	public void updateMemberStatus(String seq, int status) {
+		AdminDao dao = new AdminDao();
+		
+		dao.updateMemberStatus(seq, status);
+	}
 }

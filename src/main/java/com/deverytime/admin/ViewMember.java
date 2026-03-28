@@ -43,4 +43,27 @@ public class ViewMember extends HttpServlet {
 
 		req.getRequestDispatcher("/WEB-INF/views/admin/member-view.jsp").forward(req, resp);
 	}
+	
+	@Override
+	protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
+	
+		AdminService service = new AdminService();
+
+		String seq = req.getParameter("seq");
+		String statusStr = req.getParameter("status");
+
+		// 방어코드
+		if (seq == null || statusStr == null) {
+			resp.sendError(HttpServletResponse.SC_BAD_REQUEST);
+			return;
+		}
+
+		int status = Integer.parseInt(statusStr);
+
+		// 상태 변경
+		service.updateMemberStatus(seq, status);
+
+		// 다시 상세 페이지로 이동
+		resp.sendRedirect("/teamtwo/admin/member-view.do?seq=" + seq);
+	}
 }

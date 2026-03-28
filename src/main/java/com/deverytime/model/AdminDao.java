@@ -644,5 +644,22 @@ public class AdminDao extends BasicDao {
 		}
 
 		return null;
-	}	
+	}
+	
+	public void updateMemberStatus(String seq, int status) {
+
+		try {
+			String sql = "update member set status = ? where seq = ?";
+
+			pstat = conn.prepareStatement(sql);
+			pstat.setInt(1, status);
+			pstat.setString(2, seq);
+
+			pstat.executeUpdate();
+
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+	}
+
 }
