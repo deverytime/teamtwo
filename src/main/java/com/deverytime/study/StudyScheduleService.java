@@ -77,5 +77,13 @@ public class StudyScheduleService {
 		
 	}
 
+	public int del(String seq) {
+		
+		StudyScheduleDao dao = new StudyScheduleDao();
+		
+		return dao.del(seq);
+		
+	}
+
 	
 }

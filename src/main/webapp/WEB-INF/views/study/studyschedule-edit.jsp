@@ -72,7 +72,18 @@
 	</main>
 	
 	<script>
+		const startDateInput = document.querySelector('input[name="startDate"]');
+		const endDateInput = document.querySelector('input[name="endDate"]');
 	
+		// 시작일을 선택하면 종료일의 최소값(min)을 시작일로 설정
+		startDateInput.addEventListener('change', function() {
+		    endDateInput.min = this.value;
+		});
+		
+		// 시작일을 선택하면 종료일의 최소값(min)을 시작일로 설정
+		endDateInput.addEventListener('change', function() {
+		    startDateInput.max = this.value;
+		});
 	</script>
 </body>
 </html>

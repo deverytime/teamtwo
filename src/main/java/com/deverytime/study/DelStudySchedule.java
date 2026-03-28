@@ -10,10 +10,8 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
-import com.deverytime.model.StudyDto;
-
-@WebServlet(value = "/study/study-del.do")
-public class DelStudy extends HttpServlet{
+@WebServlet(value = "/study/studyschedule-del.do")
+public class DelStudySchedule extends HttpServlet{
 
 	@Override
 	protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
@@ -34,8 +32,9 @@ public class DelStudy extends HttpServlet{
 		}
 		
 		String seq = req.getParameter("seq");
+		String studySeq = req.getParameter("studySeq");
 		
-		StudyService service = new StudyService();
+		StudyScheduleService service = new StudyScheduleService();
 		
 		int result = service.del(seq);
 		
@@ -44,7 +43,7 @@ public class DelStudy extends HttpServlet{
 		if(result > 0) {
 			writer.print("<script>");
 			writer.print("alert('삭제 완료!');");
-			writer.print("location.href='/teamtwo/study/studyschedule-list.do';");
+			writer.print("location.href='/teamtwo/study/studyschedule-list.do?seq=" + studySeq + "';");
 			writer.print("</script>");
 		} else {
 			writer.print("<script>");

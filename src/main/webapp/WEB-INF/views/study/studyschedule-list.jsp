@@ -95,7 +95,7 @@
                 <td>${dto.startDate }</td>
                 <td>${dto.endDate }</td>
                 <td><button class="btn btn-soft-brand" onclick="event.stopPropagation(); location.href='/teamtwo/study/studyschedule-edit.do?seq=${dto.seq}';">수정</button></td>
-                <td><button class="btn btn-soft-brand" onclick="event.stopPropagation(); location.href='/teamtwo/study/studyschedule-delete.do?seq=${dto.seq}';">삭제</button></td>
+                <td><button class="btn btn-soft-brand" onclick="event.stopPropagation(); location.href='/teamtwo/study/studyschedule-del.do?seq=${dto.seq}&studySeq=${seq}';">삭제</button></td>
               </tr>
             </c:forEach>
             </tbody>
