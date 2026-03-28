@@ -146,8 +146,8 @@
                </td>
                 <td class="label ${todoDto.status == 1 ? 'done-text' : ''}">${todoDto.title}</td>
                 <td class="label ${todoDto.status == 1 ? 'done-text' : ''}">${todoDto.content}</td>
-                <td><button type="button" class="btn btn-warning btn-outline">수정하기</button></td>
-                <td><button type="button" class="btn btn-error btn-outline">삭제하기</button></td>
+                <td><button type="button" class="btn btn-warning btn-outline" onclick="location.href='/teamtwo/study/todo-edit.do?seq=${todoDto.seq}&scheduleSeq=${dto.seq}';">수정하기</button></td>
+                <td><button type="button" class="btn btn-error btn-outline" onclick="location.href='/teamtwo/study/todo-del.do?seq=${todoDto.seq}&scheduleSeq=${dto.seq}';">삭제하기</button></td>
               </tr>
               </c:forEach>
             </tbody>

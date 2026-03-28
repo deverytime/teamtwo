@@ -53,8 +53,8 @@ public class EditStudy extends HttpServlet{
 		
 		String seq = req.getParameter("seq");
 		String name = req.getParameter("name");
-		String description =  req.getParameter("description");
-		String capacity =  req.getParameter("capacity");
+		String description = req.getParameter("description");
+		String capacity = req.getParameter("capacity");
 		
 		try {
 			

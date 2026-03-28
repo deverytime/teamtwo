@@ -16,51 +16,48 @@
 	<main class="page-wrap">
 		
 		<div class="mb-8">
-			<h1 class="section-title">스터디 수정</h1>
-			<p class="section-desc">스터디를 수정합니다.</p>
+			<h1 class="section-title">스터디 할 일 수정</h1>
+			<p class="section-desc">스터디를 할 일을 수정합니다.</p>
 		</div>
 
 	<div class="content-card card-pad">
 	
-	<!-- 스터디 수정 폼 -->
+	<!-- 스터디 할 일 수정 폼 -->
     <section class="demo-block">
 
       <div class="content-card card-pad max-w-3xl">
 
-        <form class="space-y-5" method="POST" action="/teamtwo/study/study-edit.do?seq=${dto.seq}">
+        <form class="space-y-5" method="POST" action="/teamtwo/study/todo-edit.do?seq=${dto.seq}&scheduleSeq=${dto.studyScheduleSeq}">
           <div>
-            <label class="form-label">스터디 명</label>
+            <label class="form-label">할 일 명</label>
             <input
               type="text"
               class="input input-bordered w-full bg-white"
-              name="name"
+              placeholder="할 일 명을 입력하세요."
+              name="title"
               required="required"
-              value="${dto.name}"
+              value="${dto.title}"
             />
           </div>
           <div>
-            <label class="form-label">스터디 설명</label>
+            <label class="form-label">할 일 내용</label>
             <textarea
               class="textarea textarea-bordered w-full bg-white min-h-28"
-              name="description"
+              placeholder="할 일 내용을 입력하세요."
+              name="content"
               required="required"
-            >${dto.description}</textarea>
+            >${dto.content}</textarea>
           </div>
           <div>
-          	<label class="form-label">최대 인원</label>
-          	<input 
-          		type="number" 
-          		class="input input-bordered w-full br-white"
-          		name="capacity"
-          		min="5" max="20"
-          		required="required"
-          		value="${dto.capacity}"
-         	/>
+          	 <input type="checkbox" class="checkbox" 
+		               ${dto.status == 1 ? 'checked' : ''}
+		               value="1"
+		               name="status">
           </div>
 
           <div class="flex justify-end gap-2 pt-2">
-            <button type="button" class="btn btn-ghost" onclick="location.href='/teamtwo/study/study-view.do?seq=${dto.seq}';">취소</button>
-            <button type="submit" class="btn btn-brand">수정하기</button>
+            <button type="button" class="btn btn-ghost" onclick="history.back();">취소</button>
+            <button type="submit" class="btn btn-brand">등록하기</button>
           </div>
         </form>
       </div>

@@ -110,6 +110,67 @@ public class StudyTodoDao extends BasicDao{
 		
 	}
 
+	public StudyTodoDto get(String seq) {
+		
+		try {
+			
+			String sql = "select * from todo where seq = ?";
+			
+			pstat = conn.prepareStatement(sql);
+			
+			pstat.setString(1, seq);
+			
+			rs = pstat.executeQuery();	
+			
+			if(rs.next()) {
+				StudyTodoDto dto = new StudyTodoDto();
+				
+				dto.setSeq(rs.getString("seq"));
+				dto.setTitle(rs.getString("title"));
+				dto.setContent(rs.getString("content"));
+				dto.setStatus(rs.getString("status"));
+				dto.setStudyScheduleSeq(rs.getString("studyScheduleSeq"));
+				
+				return dto;
+				
+			}
+			
+		} catch (Exception e) {
+			e.printStackTrace();
+		} finally {
+			closeAll();
+		}
+		
+		return null;
+		
+	}
+
+	public int edit(StudyTodoDto dto) {
+		
+		try {
+			
+			String sql = "update todo set title = ?, content = ?, status = ? where seq = ?";
+			
+			pstat = conn.prepareStatement(sql);
+			pstat.setString(1, dto.getTitle());
+			pstat.setString(2, dto.getContent());
+			pstat.setString(3, dto.getStatus());
+			pstat.setString(4, dto.getSeq());
+			
+			int result = pstat.executeUpdate();
+			
+			return result;
+			
+		} catch (Exception e) {
+			e.printStackTrace();
+		} finally {
+			closeAll();
+		}
+		
+		return 0;
+		
+	}
+
 	
 }
 

@@ -22,10 +22,11 @@ public class StatusTodo extends HttpServlet{
 	    
 	    //System.out.println("전달받은 seq: " + seq); // 콘솔 확인용
 	    //System.out.println("전달받은 status: " + status); // 콘솔 확인용
-
-	    StudyTodoDao dao = new StudyTodoDao();
+	    
+	    StudyTodoService service = new StudyTodoService();
+	    
 	    // update todo set status = ? where seq = ? 실행
-	    int result = dao.updateStatus(seq, status); 
+	    int result =  service.updateStatus(seq, status);
 
 	    // JSON 응답 보내기
 	    resp.setContentType("application/json");

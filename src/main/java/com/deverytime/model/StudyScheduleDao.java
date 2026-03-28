@@ -142,10 +142,8 @@ public class StudyScheduleDao extends BasicDao{
 			pstat.setString(4, dto.getEndDate());
 			pstat.setString(5, dto.getSeq());
 			
-			System.out.println(dto.toString());
-			
 			int result = pstat.executeUpdate();
-			System.out.println(result);
+			
 			return result;
 			
 		} catch (Exception e) {

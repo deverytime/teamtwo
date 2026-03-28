@@ -16,13 +16,13 @@
 	<main class="page-wrap">
 		
 		<div class="mb-8">
-			<h1 class="section-title">스터디 일정 등록</h1>
-			<p class="section-desc">스터디를 일정을 등록합니다.</p>
+			<h1 class="section-title">스터디 일정 수정</h1>
+			<p class="section-desc">스터디를 일정을 수정합니다.</p>
 		</div>
 
 	<div class="content-card card-pad">
 	
-	<!-- 스터디 일정 등록 폼 -->
+	<!-- 스터디 일정 수정 폼 -->
     <section class="demo-block">
 
       <div class="content-card card-pad max-w-3xl">
@@ -61,7 +61,7 @@
 
           <div class="flex justify-end gap-2 pt-2">
             <button type="button" class="btn btn-ghost" onclick="history.back();">취소</button>
-            <button type="submit" class="btn btn-brand">등록하기</button>
+            <button type="submit" class="btn btn-brand">수정하기</button>
           </div>
         </form>
       </div>
