@@ -163,11 +163,11 @@
 							<input type="hidden" name="searchType"
 								value="${param.searchType}">
 							<input type="hidden" name="keyword" value="${param.keyword}">
-							
+
 							<div class="flex-1">
 								<textarea
-									class="textarea textarea-bordered w-full h-20 resize-none" name="content"
-									placeholder="댓글을 작성하세요..." required></textarea>
+									class="textarea textarea-bordered w-full h-20 resize-none"
+									name="content" placeholder="댓글을 작성하세요..." required></textarea>
 								<div class="flex justify-end mt-2">
 									<button class="btn btn-brand btn-sm px-6">댓글 등록</button>
 								</div>
@@ -191,7 +191,6 @@
 			<!-- ③ 댓글 리스트 (하단 스크롤) -->
 			<div class="space-y-3 max-h-80 overflow-y-auto">
 
-				<!-- 더미 댓글 1 -->
 				<c:forEach var="entry" items="${dto.comments}">
 
 					<div class="comment-item border-l-4 border-brand pl-4 pb-3">
@@ -203,7 +202,9 @@
 							<!-- 댓글삭제 -->
 							<c:if test="${entry.id == auth}">
 								<div class="text-xs">
-									<a href="#" class="text-error hover:underline ml-2">삭제</a>
+									<a href="#"
+										onclick="deleteComment(${entry.seq}, ${dto.seq},${dto.boardType},'${param.category}', '${param.searchType}', '${param.keyword}', '${param.page}')"
+										class="text-error hover:underline ml-2">삭제</a>
 								</div>
 							</c:if>
 						</div>
@@ -237,7 +238,20 @@
 				<button class="btn">다음글이 없습니다</button>
 			</c:if>
 		</div>
-
 	</main>
+	<script>
+	function deleteComment(seq, postSeq, boardType, category, searchType, keyword, page) {
+	    if(confirm('댓글을 삭제하시겠습니까?')) {
+	        location.href = `/teamtwo/comment/del.do?seq=` + seq + 
+	                       `&postSeq=` + postSeq +
+	                       `&board=` + boardType + 
+	                       `&category=` + category + 
+	                       `&searchType=` + searchType + 
+	                       `&keyword=` + keyword + 
+	                       `&page=` + page;
+	    }
+	}
+	</script>
 </body>
+
 </html>
