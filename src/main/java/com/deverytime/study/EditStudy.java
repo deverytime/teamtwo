@@ -50,6 +50,7 @@ public class EditStudy extends HttpServlet{
 		
 		String id = auth.toString();
 		
+		String seq = req.getParameter("seq");
 		String name = req.getParameter("name");
 		String description =  req.getParameter("description");
 		String capacity =  req.getParameter("capacity");
@@ -73,6 +74,7 @@ public class EditStudy extends HttpServlet{
 		
 		StudyDto dto = new StudyDto();
 		
+		dto.setSeq(seq);
 		dto.setName(name);
 		dto.setDescription(description);
 		dto.setCapacity(capacity);
