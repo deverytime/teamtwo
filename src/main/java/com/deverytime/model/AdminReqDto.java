@@ -1,6 +1,8 @@
 package com.deverytime.model;
 
 import java.sql.Date;
+import java.util.ArrayList;
+import java.util.List;
 
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -30,9 +32,9 @@ public class AdminReqDto {
 	private int status;			// 미완료(0) / 완료(1)
 	
 	// 요청게시판 요청 상세조회에 추가로 필요한 변수
-	private String nickname;		// 요청한 회원 닉네임
-	private String commentsContent;	// 요청상세에 달리는 답글내용
-	private String requestBoardSeq;	// 요청게시글 번호
+	private String nickname;										// 요청한 회원 닉네임
+	@Builder.Default
+	private List<AdminCommentsDto> comments = new ArrayList<>();	// 요청상세에 달리는 답글내용
 	private int readCount;
 
 }

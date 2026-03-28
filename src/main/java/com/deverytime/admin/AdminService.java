@@ -236,4 +236,28 @@ public class AdminService {
 		
 		dao.updateMemberStatus(seq, status);
 	}
+	
+	public AdminReqDto getRequestDetailInfo(String seq) {
+		AdminDao dao = new AdminDao();
+
+		AdminReqDto dto = dao.getRequestDetailInfo(seq);
+		
+		if (dto != null) {
+			dto.setComments(dao.getRequestComments(seq));
+		}
+		
+		return dto;
+	}
+	
+	public void updateRequestStatus(String seq, String status) {
+		AdminDao dao = new AdminDao();
+
+		dao.updateRequestStatus(seq, status);
+	}
+	
+	public void addRequestComment(String requestBoardSeq, String content) {
+		AdminDao dao = new AdminDao();
+
+		dao.addRequestComment(requestBoardSeq, content);
+	}
 }
