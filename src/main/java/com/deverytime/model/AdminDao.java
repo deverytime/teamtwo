@@ -595,5 +595,71 @@ public class AdminDao extends BasicDao {
 		}
 
 		return 0;
-	}	
+	}
+
+	public AdminMemberDto getMemberDetailInfo(String seq) {
+
+		try {
+			String sql = ""
+					+ "select "
+					+ "    m.seq, "
+					+ "    m.name, "
+					+ "    m.id, "
+					+ "    m.nickname, "
+					+ "    m.email, "
+					+ "    m.regDate, "
+					+ "    m.status, "
+					+ "    m.failCount, "
+					+ "    (select count(*) from post p where p.memberSeq = m.seq) as totalPosts, "
+					+ "    (select count(*) from comments c where c.memberSeq = m.seq) as totalComments, "
+					+ "    (select count(distinct sm.studySeq) "
+					+ "        from study_member sm "
+					+ "        where sm.memberSeq = m.seq) as totalStudies "
+					+ "from member m "
+					+ "where m.seq = ?";
+
+			pstat = conn.prepareStatement(sql);
+			pstat.setString(1, seq);
+
+			rs = pstat.executeQuery();
+
+			if (rs.next()) {
+				return AdminMemberDto.builder()
+						.seq(rs.getString("seq"))
+						.name(rs.getString("name"))
+						.id(rs.getString("id"))
+						.nickname(rs.getString("nickname"))
+						.email(rs.getString("email"))
+						.regDate(rs.getDate("regDate"))
+						.status(rs.getInt("status"))
+						.failCount(rs.getInt("failCount"))
+						.totalPosts(rs.getInt("totalPosts"))
+						.totalComments(rs.getInt("totalComments"))
+						.totalStudies(rs.getInt("totalStudies"))
+						.build();
+			}
+
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+
+		return null;
+	}
+	
+	public void updateMemberStatus(String seq, int status) {
+
+		try {
+			String sql = "update member set status = ? where seq = ?";
+
+			pstat = conn.prepareStatement(sql);
+			pstat.setInt(1, status);
+			pstat.setString(2, seq);
+
+			pstat.executeUpdate();
+
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+	}
+
 }

@@ -7,6 +7,7 @@ import java.util.Map;
 import javax.servlet.http.HttpServletRequest;
 
 import com.deverytime.model.AdminDao;
+import com.deverytime.model.AdminMemberDto;
 import com.deverytime.model.AdminReqDto;
 import com.deverytime.model.BoardDto;
 import com.deverytime.model.MemberDto;
@@ -221,5 +222,18 @@ public class AdminService {
 		result.put("totalCount", totalCount);
 
 		return result;
+	}
+
+	public AdminMemberDto getMemberDetailInfo(String seq) {
+		AdminDao dao = new AdminDao();
+		
+		
+		return dao.getMemberDetailInfo(seq);
+	}
+
+	public void updateMemberStatus(String seq, int status) {
+		AdminDao dao = new AdminDao();
+		
+		dao.updateMemberStatus(seq, status);
 	}
 }
