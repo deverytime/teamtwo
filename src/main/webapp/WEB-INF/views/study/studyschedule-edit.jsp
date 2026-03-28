@@ -27,7 +27,7 @@
 
       <div class="content-card card-pad max-w-3xl">
 
-        <form class="space-y-5" method="POST" action="/teamtwo/study/studyschedule-add.do?seq=${seq}">
+        <form class="space-y-5" method="POST" action="/teamtwo/study/studyschedule-edit.do?seq=${seq}">
           <div>
             <label class="form-label">스터디 일정 명</label>
             <input
@@ -36,6 +36,7 @@
               placeholder="스터디 일정 명을 입력하세요."
               name="title"
               required="required"
+              value="${dto.title}"
             />
           </div>
           <div>
@@ -45,16 +46,16 @@
               placeholder="스터디 일정에 대한 설명을 입력하세요."
               name="content"
               required="required"
-            ></textarea>
+            >${dto.content}</textarea>
           </div>
           <div class="grid md:grid-cols-2 gap-5">
             <div>
               <label class="form-label">시작일</label>
-              <input type="date" class="input input-bordered w-full bg-white" required="required" name="startDate" />
+              <input type="date" class="input input-bordered w-full bg-white" required="required" name="startDate" value="${dto.startDate}" />
             </div>
             <div>
               <label class="form-label">종료일</label>
-              <input type="date" class="input input-bordered w-full bg-white" required="required" name="endDate" />
+              <input type="date" class="input input-bordered w-full bg-white" required="required" name="endDate" value="${dto.endDate}"/>
             </div>
           </div>
 
@@ -71,18 +72,7 @@
 	</main>
 	
 	<script>
-		const startDateInput = document.querySelector('input[name="startDate"]');
-		const endDateInput = document.querySelector('input[name="endDate"]');
 	
-		// 시작일을 선택하면 종료일의 최소값(min)을 시작일로 설정
-		startDateInput.addEventListener('change', function() {
-		    endDateInput.min = this.value;
-		});
-		
-		// 시작일을 선택하면 종료일의 최소값(min)을 시작일로 설정
-		endDateInput.addEventListener('change', function() {
-		    startDateInput.max = this.value;
-		});
 	</script>
 </body>
 </html>

@@ -88,13 +88,6 @@ public class StudyService {
 		
 	}
 
-	public ArrayList<StudyScheduleDto> scheduleList(String seq) {
-		
-		StudyScheduleDao dao = new StudyScheduleDao();
-		
-		return dao.scheduleList(seq);
-		
-	}
 
 	public ArrayList<MemberDto> memberList(String seq, HashMap<String, String> map) {
 		
