@@ -90,6 +90,26 @@ public class StudyTodoDao extends BasicDao{
 		
 	}
 
+	public int updateStatus(String seq, String status) {
+		
+		try {
+			
+			String sql = "update todo set status = ? where seq = ?";
+			
+			pstat = conn.prepareStatement(sql);
+			pstat.setString(1, status);
+			pstat.setString(2, seq);
+			
+			return pstat.executeUpdate();
+			
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+			
+		return 0;
+		
+	}
+
 	
 }
 
