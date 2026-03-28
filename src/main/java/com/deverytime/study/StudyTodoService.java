@@ -51,5 +51,13 @@ public class StudyTodoService {
 		
 		return dao.edit(dto);
 	}
+
+	public int del(String seq) {
+		
+		StudyTodoDao dao = new StudyTodoDao();
+		
+		return dao.del(seq);
+		
+	}
 	
 }
