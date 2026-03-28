@@ -442,7 +442,7 @@ public class AdminDao extends BasicDao {
 			sql.append("        select ");
 			sql.append("            rb.seq, rb.title, rb.subject, rb.content, ");
 			sql.append("            rb.regDate, rb.status, rb.memberSeq ");
-			sql.append("        from requestBoard rb ");
+			sql.append("        from request_board rb ");
 			sql.append("        where 1=1 ");
 
 			boolean hasWord = word != null && !word.trim().equals("");
@@ -510,7 +510,7 @@ public class AdminDao extends BasicDao {
 				dto.setTitle(rs.getString("title"));
 				dto.setSubject(Integer.parseInt(rs.getString("subject")));
 				dto.setContent(rs.getString("content"));
-				dto.setRegDate(rs.getDate(rs.getString("subject")));
+				dto.setRegDate(rs.getDate("regDate"));
 				dto.setStatus(rs.getInt("status"));
 				dto.setMemberSeq(rs.getString("memberSeq"));
 
@@ -534,7 +534,7 @@ public class AdminDao extends BasicDao {
 			StringBuilder sql = new StringBuilder();
 
 			sql.append("select count(*) as cnt ");
-			sql.append("from requestBoard rb ");
+			sql.append("from request_board rb ");
 			sql.append("where 1=1 ");
 
 			boolean hasWord = word != null && !word.trim().equals("");
