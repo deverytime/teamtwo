@@ -661,5 +661,118 @@ public class AdminDao extends BasicDao {
 			e.printStackTrace();
 		}
 	}
+	
+	public AdminReqDto getRequestDetailInfo(String seq) {
 
+		try {
+			String sql = ""
+					+ "select "
+					+ "    rb.seq, "
+					+ "    rb.title, "
+					+ "    rb.content, "
+					+ "    rb.subject, "
+					+ "    rb.status, "
+					+ "    rb.regDate, "
+					+ "    rb.memberSeq, "
+					+ "    rb.readCount, "
+					+ "    m.nickname "
+					+ "from request_board rb "
+					+ "    inner join member m on rb.memberSeq = m.seq "
+					+ "where rb.seq = ?";
+
+			pstat = conn.prepareStatement(sql);
+			pstat.setString(1, seq);
+
+			rs = pstat.executeQuery();
+
+			if (rs.next()) {
+				return AdminReqDto.builder()
+						.seq(rs.getString("seq"))
+						.title(rs.getString("title"))
+						.content(rs.getString("content"))
+						.subject(rs.getInt("subject"))
+						.status(rs.getInt("status"))
+						.regDate(rs.getDate("regDate"))
+						.memberSeq(rs.getString("memberSeq"))
+						.readCount(rs.getInt("readCount"))
+						.nickname(rs.getString("nickname"))
+						.build();
+			}
+
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+
+		return null;
+	}
+	
+	public List<AdminCommentsDto> getRequestComments(String requestBoardSeq) {
+
+		List<AdminCommentsDto> list = new ArrayList<>();
+
+		try {
+			String sql = ""
+					+ "select "
+					+ "    seq, "
+					+ "    content, "
+					+ "    requestBoardSeq "
+					+ "from request_comments "
+					+ "where requestBoardSeq = ? "
+					+ "order by seq asc";
+
+			pstat = conn.prepareStatement(sql);
+			pstat.setString(1, requestBoardSeq);
+
+			rs = pstat.executeQuery();
+
+			while (rs.next()) {
+				AdminCommentsDto dto = AdminCommentsDto.builder()
+						.seq(rs.getString("seq"))
+						.content(rs.getString("content"))
+						.requestBoardSeq(rs.getString("requestBoardSeq"))
+						.build();
+
+				list.add(dto);
+			}
+
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+
+		return list;
+	}
+	
+	public void updateRequestStatus(String seq, String status) {
+
+		try {
+			String sql = "update request_board set status = ? where seq = ?";
+
+			pstat = conn.prepareStatement(sql);
+			pstat.setString(1, status);
+			pstat.setString(2, seq);
+
+			pstat.executeUpdate();
+
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+	}
+
+	public void addRequestComment(String requestBoardSeq, String content) {
+
+		try {
+			String sql = ""
+					+ "insert into request_comments (seq, content, requestBoardSeq) "
+					+ "values (request_comments_seq.nextval, ?, ?)";
+
+			pstat = conn.prepareStatement(sql);
+			pstat.setString(1, content);
+			pstat.setString(2, requestBoardSeq);
+
+			pstat.executeUpdate();
+
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+	}
 }
