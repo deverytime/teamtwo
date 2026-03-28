@@ -20,4 +20,13 @@ public class CommentService {
 		
 	}
 
+	public int del(String seq) {
+		
+		CommentDao dao = new CommentDao();
+		
+		int result = dao.del(seq);
+		
+		return result;
+	}
+
 }

@@ -59,7 +59,7 @@ public class Add extends HttpServlet {
 		String keywordEnc = java.net.URLEncoder.encode(keyword, "UTF-8");
 		String redirectUrl = "/teamtwo/board/freeboard/view.do?seq=" + postSeq + 
 		    "&board=" + board + 
-		    "&category=" + java.net.URLEncoder.encode(category, "UTF-8") +
+		    "&category=" + category +
 		    "&searchType=" + searchType + 
 		    "&keyword=" + keywordEnc; 
 		    //"&page=" + page;
