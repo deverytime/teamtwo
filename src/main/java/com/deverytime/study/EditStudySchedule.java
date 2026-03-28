@@ -10,7 +10,6 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
-import com.deverytime.model.StudyDto;
 import com.deverytime.model.StudyScheduleDto;
 
 @WebServlet(value = "/study/studyschedule-edit.do")
@@ -48,13 +47,11 @@ public class EditStudySchedule extends HttpServlet{
 			return;
 		}
 		
-		String id = auth.toString();
-		
 		String seq = req.getParameter("seq");
 		String title = req.getParameter("title");
 		String content =  req.getParameter("content");
-		String startdate =  req.getParameter("startdate");
-		String enddate =  req.getParameter("enddate");
+		String startdate =  req.getParameter("startDate");
+		String enddate =  req.getParameter("endDate");
 		
 		StudyScheduleService service = new StudyScheduleService();
 		
@@ -73,7 +70,7 @@ public class EditStudySchedule extends HttpServlet{
 		if(result > 0) {
 			writer.print("<script>");
 			writer.print("alert('수정 완료!');");
-			writer.print("location.href='/teamtwo/study/studyschdule-view.do?seq=" + seq + "';");
+			writer.print("location.href='/teamtwo/study/studyschedule-view.do?seq=" + seq + "';");
 			writer.print("</script>");
 		} else {
 			writer.print("<script>");
