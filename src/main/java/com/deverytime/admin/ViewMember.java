@@ -28,7 +28,6 @@ public class ViewMember extends HttpServlet {
 		System.out.println("id            : " + dto.getId());
 		System.out.println("nickname      : " + dto.getNickname());
 		System.out.println("email         : " + dto.getEmail());
-		System.out.println("regDate       : " + dto.getRegDate());
 		System.out.println("status        : " + dto.getStatus());
 		System.out.println("failCount     : " + dto.getFailCount());
 
