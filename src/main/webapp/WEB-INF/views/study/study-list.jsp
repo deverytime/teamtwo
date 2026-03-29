@@ -43,9 +43,14 @@
                 <div class="content-card card-pad hover:border-brand-500 transition-all hover:shadow-md">
                     <div class="flex items-start justify-between gap-4 mb-4">
                         <h3 class="text-xl font-bold text-slate-800 line-clamp-1">${dto.name}</h3>
-                        <span class="badge ${dto.status == '0' ? 'badge-primary' : 'badge-ghost'} badge-outline shrink-0">
-                            ${dto.status == '0' ? '모집중' : '모집완료'}
-                        </span>
+                        <div class="flex gap-1">
+	                        <c:if test="${dto.isMember == 'y'}">
+					            <span class="badge border-emerald-200 bg-emerald-50 text-emerald-600 font-bold">참여중</span>
+					        </c:if>
+	                        <span class="badge ${dto.status == '0' ? 'badge-primary' : 'badge-ghost'} badge-outline shrink-0">
+	                            ${dto.status == '0' ? '모집중' : '모집완료'}
+	                        </span>
+                        </div>
                     </div>
 
                     <p class="text-slate-600 leading-relaxed mb-6 line-clamp-2 h-12">

@@ -8,13 +8,13 @@ import com.deverytime.library.BasicDao;
 
 public class StudyDao extends BasicDao{
 
-	public ArrayList<StudyDto> list(HashMap<String, String> map) {
+	public ArrayList<StudyDto> list(HashMap<String, String> map, MemberDto mdto) {
 	    
 	    ArrayList<StudyDto> list = new ArrayList<StudyDto>();
 	    String where = "";
 	    
 	    // 1. 조건절 구성
-	    if(map.get("search").equals("y")) {
+	    if("y".equals(map.get("search"))) {
 	        String status = map.get("status");
 	        String word = map.get("word");
 	        
@@ -32,20 +32,18 @@ public class StudyDao extends BasicDao{
 	        }
 	    }
 	    
-	    String sort = "ORDER BY seq DESC";
+	    // 2. 페이징 쿼리
+	    // FROM study 대신 FROM vwStudy를 사용합니다.
+	    String sql = "select * from (select s.*, (select count(*) from study_member where studySeq = s.seq and memberSeq = ?) as isMember, "
+	            + "rownum as rnum from (select * from vwStudy " + where + " order by seq desc) s) where rnum between ? and ?";
 	    
-	    // 2. 페이징 쿼리 (정렬 기준이 있다면 vwStudy 내부에 있거나 여기에 추가해야 함)
-	    String sql = String.format(
-	    	    "SELECT * FROM (SELECT a.*, rownum as rnum FROM (SELECT * FROM vwStudy %s %s) a) WHERE rnum BETWEEN ? AND ?", 
-	    	    where, 
-	    	    sort
-	    	);
 
 	    try {
 	        // PreparedStatement 사용
 	        pstat = conn.prepareStatement(sql);
-	        pstat.setString(1, map.get("begin"));
-	        pstat.setString(2, map.get("end"));
+	        pstat.setString(1, mdto != null ? mdto.getSeq() : "0");
+	        pstat.setString(2, map.get("begin"));
+	        pstat.setString(3, map.get("end"));
 	        
 	        rs = pstat.executeQuery();
 	        
@@ -59,6 +57,7 @@ public class StudyDao extends BasicDao{
 	            dto.setCreateDate(rs.getString("createDate"));
 	            dto.setScheduleCount(rs.getString("scheduleCount"));
 	            dto.setHeadCount(rs.getString("headCount"));
+	            dto.setIsMember(rs.getInt("isMember") > 0 ? "y" : "n");
 	            
 	            list.add(dto);
 	        }

@@ -13,11 +13,13 @@ import com.deverytime.model.StudyScheduleDto;
 
 public class StudyService {
 	
-	public ArrayList<StudyDto> list(HashMap<String, String> map){
+	public ArrayList<StudyDto> list(HashMap<String, String> map, MemberDto mdto){
 		
 		StudyDao dao = new StudyDao();
 		
-		ArrayList<StudyDto> list = dao.list(map);
+		ArrayList<StudyDto> list = dao.list(map, mdto);
+		
+		if(list == null) return null;
 		
 		for(StudyDto dto : list) {
 			

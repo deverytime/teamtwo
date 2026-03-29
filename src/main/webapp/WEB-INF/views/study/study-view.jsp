@@ -15,9 +15,26 @@
                 <h1 class="section-title">스터디 정보</h1>
                 <p class="section-desc">스터디 상세 내용과 멤버를 관리합니다.</p>
             </div>
-            <span class="badge badge-lg ${dto.status == '0' ? 'badge-primary' : 'badge-ghost'} badge-outline h-10 px-6">
-                ${dto.status == '0' ? '모집중' : '모집완료'}
-            </span>
+           <div class="flex gap-2">
+			    <c:if test="${isMember}">
+			        <span class="badge h-10 px-6 border-emerald-200 bg-emerald-50 text-emerald-600 font-bold">
+			            참여중
+			        </span>
+			    </c:if>
+			
+			    <c:choose>
+			        <c:when test="${dto.status == '0'}">
+			            <span class="badge h-10 px-6 border-sky-200 bg-sky-50 text-sky-600 font-bold">
+			                모집중
+			            </span>
+			        </c:when>
+			        <c:otherwise>
+			            <span class="badge h-10 px-6 border-slate-300 bg-slate-50 text-slate-500 font-bold">
+			                모집완료
+			            </span>
+			        </c:otherwise>
+			    </c:choose>
+			</div>
         </div>
 
         <div class="content-card card-pad mb-10 border-brand-100">

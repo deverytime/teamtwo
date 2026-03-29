@@ -21,16 +21,29 @@ public class ListStudy extends HttpServlet{
 
 	@Override
 	protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
+		
+		HttpSession session = req.getSession();
+		
+		Object auth = session.getAttribute("authDto");
+		
+		MemberDto mdto = null;
+		
+		if(auth != null) {
+			mdto = (MemberDto)auth;
+		}
 					
 		String word = req.getParameter("word");
 		String status = req.getParameter("status");
 		String search = "n"; //목록보기(n), 검색하기(y)
 		
+		//페이지 변경시 넘기는 값이 없는 경우 빈문자열로 바꿔줌
+		word = (word == null || word.equals("null")) ? "" : word;
+		status = (status == null || status.equals("null")) ? "" : status;
+		
 		// 검색어나 상태값 중 하나라도 있다면 검색 모드(y)로 전환
 		if ((word != null && !word.trim().equals("")) || (status != null && !status.trim().equals(""))) {
 		    search = "y";
 		}
-		
 		
 		HashMap<String, String> map = new HashMap<String, String>();
 		map.put("word", word);
@@ -69,7 +82,7 @@ public class ListStudy extends HttpServlet{
 		
 		ArrayList<StudyDto> list = new ArrayList<StudyDto>();
 		
-		list = service.list(map);
+		list = service.list(map, mdto);
 	
 		
 		totalCount = service.getTotalCount(map);
@@ -84,11 +97,13 @@ public class ListStudy extends HttpServlet{
 		loop = 1; //루프 변수
 		n = ((nowPage - 1) / blockSize) * blockSize + 1; //시작 페이지 번호
 		
+		String query = String.format("&word=%s&status=%s", map.get("word"), map.get("status"));
+		
 		//이전 10페이지
 		if(n == 1) {
 			pagebar += String.format("<a href='#!'>[이전 %d페이지]</a>", blockSize);
 		} else {
-			pagebar += String.format("<a href='/teamtwo/study/study-list.do?page=%d'>[이전 %d페이지]</a>", n-1, blockSize);
+			pagebar += String.format("<a href='/teamtwo/study/study-list.do?page=%d%s'>[이전 %d페이지]</a>", n-1, query, blockSize);
 		}
 		
 		while(!(loop > blockSize || n > totalPage)) {
@@ -96,7 +111,7 @@ public class ListStudy extends HttpServlet{
 			if(n ==  nowPage) {
 				pagebar += String.format("<a href='#!' style='color: tomato;'>%d</a>", n);
 			} else {
-				pagebar += String.format("<a href='/teamtwo/study/study-list.do?page=%d'>%d</a>", n, n);
+				pagebar += String.format("<a href='/teamtwo/study/study-list.do?page=%d%s'>%d</a>", n, query, n);
 			}
 			
 			loop++;
@@ -107,7 +122,7 @@ public class ListStudy extends HttpServlet{
 		if(n >= totalPage) {
 			pagebar += String.format("<a href='#!'>[다음 %d페이지]</a>", blockSize);
 		} else {
-			pagebar += String.format("<a href='/teamtwo/study/study-list.do?page=%d'>[다음 %d페이지]</a>", n, blockSize);
+			pagebar += String.format("<a href='/teamtwo/study/study-list.do?page=%d%s'>[다음 %d페이지]</a>", n, query, blockSize);
 		}	
 		
 		req.setAttribute("pagebar", pagebar);
