@@ -26,12 +26,14 @@ public class Del extends HttpServlet {
 		String keyword = req.getParameter("keyword");
 		
 		
+		
+		// 삭제
 		CommentService service = new CommentService();
 		
 		int result = service.del(seq);
 		
 		
-		// 한글 오류 방
+		// 한글 오류 방지
 		String keywordEnc = URLEncoder.encode(req.getParameter("keyword"), StandardCharsets.UTF_8);
 
 		String redirectUrl = "/teamtwo/board/freeboard/view.do?seq=" + postSeq +

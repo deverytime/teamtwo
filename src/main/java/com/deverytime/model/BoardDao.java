@@ -111,19 +111,37 @@ public class BoardDao extends BasicDao {
 
 		try {
 
-			String sql = "insert into POST (SEQ, TITLE, CONTENT, READCOUNT, REGDATE, RECOMMEND, REPORT, MEMBERSEQ, BOARDSEQ, POSTCATEGORYSEQ) values (POSTSEQ.nextval, ?, ?, default, default, default, default, ?, ?, ?)";
+			// 1. 먼저 글번호 구하기
+	        String seqSql = "select POSTSEQ.nextval as seq from dual";
+	        stat = conn.createStatement();
+	        rs = stat.executeQuery(seqSql);
 
-			pstat = conn.prepareStatement(sql);
+	        String seq = null;
+	        if (rs.next()) {
+	            seq = rs.getString("seq");
+	        }
 
-			pstat.setString(1, dto.getTitle());
-			pstat.setString(2, dto.getContent());
-			pstat.setString(3, dto.getMemberSeq());
-			pstat.setString(4, dto.getBoardType());
-			pstat.setString(5, dto.getCategory());
+	        // 2. insert
+	        String sql = "insert into POST (SEQ, TITLE, CONTENT, READCOUNT, REGDATE, RECOMMEND, REPORT, MEMBERSEQ, BOARDSEQ, POSTCATEGORYSEQ) "
+	                   + "values (?, ?, ?, default, default, default, default, ?, ?, ?)";
 
-			int result = pstat.executeUpdate();
+	        pstat = conn.prepareStatement(sql);
 
-			return result;
+	        pstat.setString(1, seq);
+	        pstat.setString(2, dto.getTitle());
+	        pstat.setString(3, dto.getContent());
+	        pstat.setString(4, dto.getMemberSeq());
+	        pstat.setString(5, dto.getBoardType());
+	        pstat.setString(6, dto.getCategory());
+
+	        int result = pstat.executeUpdate();
+
+	        // 3. 성공하면 dto에 글번호 저장
+	        if (result == 1) {
+	        		result = Integer.parseInt(seq);
+	        }
+
+	        return result;
 
 		} catch (Exception e) {
 			e.printStackTrace();
@@ -439,6 +457,35 @@ public class BoardDao extends BasicDao {
 	        closeAll();
 	    }
 	    return 0;
+	}
+
+	public void addFile(FileDto fileDto) {
+		
+		try {
+			
+			String sql = "insert into UPLOAD_FILE (SEQ, ORIGINNAME, NAME, PATH, FILESIZE, POSTSEQ) "
+	                   + "values (uploadFileSeq.nextval, ?, ?, ?, ?, ?)";
+
+	        pstat = conn.prepareStatement(sql);
+
+	        pstat.setString(1, fileDto.getOriginName());
+	        pstat.setString(2, fileDto.getName());
+	        pstat.setString(3, fileDto.getPath());
+	        pstat.setLong(4, fileDto.getFileSize());
+	        pstat.setString(5, fileDto.getPostSeq());
+
+	        pstat.executeUpdate();
+			
+	        return;
+			
+		} catch (Exception e) {
+			e.printStackTrace();
+		} finally {
+			closeAll();
+		}
+		
+		return;
+			
 	}
 
 }
