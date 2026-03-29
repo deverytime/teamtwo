@@ -607,7 +607,6 @@ public class AdminDao extends BasicDao {
 					+ "    m.id, "
 					+ "    m.nickname, "
 					+ "    m.email, "
-					+ "    m.regDate, "
 					+ "    m.status, "
 					+ "    m.failCount, "
 					+ "    (select count(*) from post p where p.memberSeq = m.seq) as totalPosts, "
@@ -630,7 +629,6 @@ public class AdminDao extends BasicDao {
 						.id(rs.getString("id"))
 						.nickname(rs.getString("nickname"))
 						.email(rs.getString("email"))
-						.regDate(rs.getDate("regDate"))
 						.status(rs.getInt("status"))
 						.failCount(rs.getInt("failCount"))
 						.totalPosts(rs.getInt("totalPosts"))
