@@ -41,6 +41,11 @@
 		         	/>
 		          </div>
                 </div>
+                <div class="flex items-center gap-4 p-4 bg-brand-50 rounded-xl border border-brand-100">
+                        <input type="checkbox" name="status" class="checkbox checkbox-primary" 
+                               value="1" ${dto.status == 1 ? 'checked' : ''} />
+                        <span class="text-sm font-bold text-brand-700">체크시 모집완료 상태로 변경합니다.</span>
+                </div>
                 <div class="flex justify-end gap-3 pt-6 border-t">
                     <button type="button" class="btn btn-ghost px-8" onclick="history.back();">취소</button>
                     <button type="submit" class="btn btn-brand px-12">저장하기</button>

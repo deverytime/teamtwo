@@ -57,6 +57,12 @@ public class EditStudy extends HttpServlet{
 		String name = req.getParameter("name");
 		String description = req.getParameter("description");
 		String capacity = req.getParameter("capacity");
+		String status = req.getParameter("status");
+		
+		//checkbox on이면 value값 1, off라서 안넘어오면 null
+		if(status == null) {
+			status = "0";
+		}
 		
 		StudyService service = new StudyService();
 		
@@ -90,6 +96,7 @@ public class EditStudy extends HttpServlet{
 		dto.setName(name);
 		dto.setDescription(description);
 		dto.setCapacity(capacity);
+		dto.setStatus(status);
 		
 		int result = service.edit(dto);
 		
