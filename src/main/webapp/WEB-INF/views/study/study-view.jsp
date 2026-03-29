@@ -39,19 +39,38 @@
                 </div>
             </div>
 
-            <div class="flex flex-wrap gap-2 pt-6 border-t">
-                <button class="btn btn-brand px-8" onclick="location.href='/teamtwo/study/studyschedule-list.do?seq=${dto.seq}';">일정 보기</button>
-                <c:if test="${isManager}">
-                    <button class="btn btn-soft-brand" onclick="location.href='/teamtwo/study/study-edit.do?seq=${dto.seq}';">정보 수정</button>
-                    <button class="btn btn-ghost text-error" onclick="if(confirm('정말 삭제하시겠습니까?')) location.href='/teamtwo/study/study-del.do?seq=${dto.seq}';">삭제 하기</button>
-                </c:if>
-                <c:if test="${isMember && !isManager}">
-                    <button class="btn btn-ghost text-error" onclick="location.href='/teamtwo/study/study-unreg.do?seq=${dto.seq}';">탈퇴 하기</button>
-                </c:if>
-                <c:if test="${!isMember}">
-                    <button class="btn btn-brand btn-outline" onclick="location.href='/teamtwo/study/study-reg.do?seq=${dto.seq}';">참여 하기</button>
-                </c:if>
-            </div>
+            <div class="flex pt-6 border-t justify-between items-center">
+    
+			    <div class="flex">
+			        <button class="btn btn-brand px-8" onclick="location.href='/teamtwo/study/studyschedule-list.do?seq=${dto.seq}';">
+			            일정 보기
+			        </button>
+			    </div>
+			
+			    <div class="flex gap-2">
+			        <c:if test="${!isMember}">
+			            <button class="btn btn-brand btn-outline px-8" onclick="location.href='/teamtwo/study/study-reg.do?seq=${dto.seq}';">
+			                참여 하기
+			            </button>
+			        </c:if>
+			        
+			        <c:if test="${isMember && !isManager}">
+			            <button class="btn btn-ghost text-error" onclick="location.href='/teamtwo/study/study-unreg.do?seq=${dto.seq}';">
+			                탈퇴 하기
+			            </button>
+			        </c:if>
+			        
+			        <c:if test="${isManager}">
+			            <button class="btn btn-soft-brand" onclick="location.href='/teamtwo/study/study-edit.do?seq=${dto.seq}';">
+			                정보 수정
+			            </button>
+			            <button class="btn btn-outline btn-error" onclick="if(confirm('정말 스터디를 삭제하시겠습니까?')) location.href='/teamtwo/study/study-del.do?seq=${dto.seq}';">
+			                삭제 하기
+			            </button>
+			        </c:if>
+			    </div>
+			</div>
+			
         </div>
 
         <section class="demo-block">
@@ -78,22 +97,26 @@
                                     <div class="text-xs text-slate-400">${memberDto.email}</div>
                                 </td>
                                 <td class="text-center">
-                                	<c:if test="${memberDto.seq == managerSeq}">
-                                   		 <span class="badge badge-lg badge-primary badge-outline h-6 px-2">
-							                 Manager
-							             </span>
-                                   	</c:if>
-                                    <c:if test="${isManager}">
-                                    	<c:if test="${memberDto.seq != managerSeq}">
-		                                    <div class="join">
-		                                        <button class="btn btn-xs btn-outline btn-warning join-item" 
-		                                        	onclick="location.href='/teamtwo/study/studymanager-delegate.do?seq=${dto.seq}&mseq=${memberDto.seq}&managerSeq=${managerSeq}';">위임</button>
-		                                        <button class="btn btn-xs btn-outline btn-error join-item" 
-		                                        	onclick="location.href='/teamtwo/study/study-deport.do?seq=${dto.seq}&mseq=${memberDto.seq}';">추방</button>
-		                                    </div>
-	                                    </c:if>
-                                    </c:if>
-                                </td>
+								    <c:if test="${memberDto.seq == managerSeq}">
+								        <span class="badge badge-lg badge-primary badge-outline h-6 px-2">Manager</span>
+								    </c:if>
+								    
+								    <c:if test="${isManager}">
+								        <c:if test="${memberDto.seq != managerSeq}">
+								            <div class="join">
+								                <button class="btn btn-xs btn-outline btn-warning join-item" 
+								                    onclick="if(confirm('${memberDto.name}님에게 방장 권한을 위임하시겠습니까?')) location.href='/teamtwo/study/studymanager-delegate.do?seq=${dto.seq}&mseq=${memberDto.seq}&managerSeq=${managerSeq}';">
+								                    위임
+								                </button>
+								                
+								                <button class="btn btn-xs btn-outline btn-error join-item" 
+								                    onclick="if(confirm('${memberDto.name}님을 정말로 추방하시겠습니까?')) location.href='/teamtwo/study/study-deport.do?seq=${dto.seq}&mseq=${memberDto.seq}';">
+								                    추방
+								                </button>
+								            </div>
+								        </c:if>
+								    </c:if>
+								</td>
                                 <td class="text-right text-slate-500 text-sm pr-6">${memberDto.regdate}</td>
                             </tr>
                         </c:forEach>
