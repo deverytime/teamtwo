@@ -87,7 +87,7 @@
                                     	<c:if test="${memberDto.seq != managerSeq}">
 		                                    <div class="join">
 		                                        <button class="btn btn-xs btn-outline btn-warning join-item" 
-		                                        	onclick="location.href='/teamtwo/study/studyManager-delegate.do?seq=${dto.seq}&mseq=${memberDto.seq}';">위임</button>
+		                                        	onclick="location.href='/teamtwo/study/studymanager-delegate.do?seq=${dto.seq}&mseq=${memberDto.seq}&managerSeq=${managerSeq}';">위임</button>
 		                                        <button class="btn btn-xs btn-outline btn-error join-item" 
 		                                        	onclick="location.href='/teamtwo/study/study-deport.do?seq=${dto.seq}&mseq=${memberDto.seq}';">추방</button>
 		                                    </div>

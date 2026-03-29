@@ -236,5 +236,12 @@ public class StudyService {
 		
 	}
 
+	public int delegateManager(String seq, String mseq, String managerSeq) {
+		
+		StudyDao dao = new StudyDao();
+		
+		return dao.delegateManager(seq, mseq, managerSeq);
+	}
+
 	
 }

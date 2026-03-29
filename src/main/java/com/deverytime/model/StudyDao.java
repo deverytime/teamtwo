@@ -493,7 +493,7 @@ public class StudyDao extends BasicDao{
 		
 		try {
 			
-			String sql = "delete from study_member where studySeq = ? and memberSeq = ?";
+			String sql = "delete from study_member where studySeq = ? and memberSeq = ? and type = 0";
 			
 			pstat = conn.prepareStatement(sql);
 			pstat.setString(1, seq);
@@ -533,6 +533,57 @@ public class StudyDao extends BasicDao{
 		}
 		
 		return null;
+		
+	}
+
+	public int delegateManager(String seq, String mseq, String managerSeq) {
+		
+		int result = 0;
+		
+		try {
+			
+			conn.setAutoCommit(false);
+			
+			String sql = "update study_member set type = 1 where studySeq = ? and memberSeq = ?";
+			
+			pstat = conn.prepareStatement(sql);
+			pstat.setString(1, seq);
+			pstat.setString(2, mseq);
+			int result1 = pstat.executeUpdate();
+			
+			sql = "update study_member set type = 0 where studySeq = ? and memberSeq = ?";
+			pstat = conn.prepareStatement(sql);
+			pstat.setString(1, seq);
+			pstat.setString(2, managerSeq);
+			int result2 = pstat.executeUpdate();
+			
+			if (result1 == 1 && result2 == 1) {
+	            conn.commit();
+	            result = 1;
+	        } else {
+	            conn.rollback();
+	            result = 0;
+	        }
+			
+			return result;
+			
+			
+		} catch (Exception e) {
+			try {
+	            if (conn != null) conn.rollback();
+	        } catch (Exception ex) {
+	            ex.printStackTrace();
+	        }
+	        e.printStackTrace();
+	    } finally {
+	        try {
+	            conn.setAutoCommit(true);
+	        } catch (Exception e) {}
+	        closeAll();
+	    }
+		
+		return result;
+		
 		
 	}
 
