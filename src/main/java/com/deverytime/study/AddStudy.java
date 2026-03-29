@@ -55,10 +55,12 @@ public class AddStudy extends HttpServlet{
 		    } else {
 		    	resp.getWriter().print("<script>alert('failed');history.back();</script>");
 				resp.getWriter().close();
+				return;
 		    }
 
 		} catch (NumberFormatException e) {
 			e.printStackTrace();
+			return;
 		}
 		
 		StudyService service = new StudyService();

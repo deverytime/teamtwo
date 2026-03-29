@@ -45,6 +45,7 @@ public class UnregStudy extends HttpServlet{
 		if(result >= 1) {
 			resp.getWriter().print("<script>alert('스터디장은 탈퇴할 수 없습니다.');history.back();</script>");
 			resp.getWriter().close();
+			return;
 		}
 		
 		result = service.unregStudy(mdto, seq);

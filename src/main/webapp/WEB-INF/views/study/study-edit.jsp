@@ -34,7 +34,8 @@
 		          		type="number" 
 		          		class="input input-bordered w-full br-white"
 		          		name="capacity"
-		          		min="5" max="20"
+		          		min="${totalCountM}"
+		          		max="20"
 		          		required="required"
 		          		value="${dto.capacity}"
 		         	/>

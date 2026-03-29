@@ -214,6 +214,31 @@ public class StudyScheduleDao extends BasicDao{
 		
 		return null;
 	}
+
+	public int isMember(MemberDto mdto, String seq) {
+		
+		try {
+			
+			String sql = "select count(*) as cnt from study_member where memberSeq = ? and studySeq = ?";
+			
+			pstat = conn.prepareStatement(sql);
+			pstat.setString(1, mdto.getSeq());
+			pstat.setString(2, seq);
+			
+			rs = pstat.executeQuery();
+			
+			if(rs.next()) {
+				return rs.getInt("cnt");
+			}
+			
+		} catch (Exception e) {
+			e.printStackTrace();
+		} finally {
+			closeAll();
+		}
+		
+		return 0;
+	}
 		
 
 }

@@ -3,6 +3,7 @@ package com.deverytime.study;
 import java.util.ArrayList;
 import java.util.HashMap;
 
+import com.deverytime.model.MemberDto;
 import com.deverytime.model.StudyDto;
 import com.deverytime.model.StudyScheduleDao;
 import com.deverytime.model.StudyScheduleDto;
@@ -90,6 +91,13 @@ public class StudyScheduleService {
 		StudyScheduleDao dao = new StudyScheduleDao();
 		
 		return dao.clist(seq);
+	}
+
+	public int isMember(MemberDto mdto, String seq) {
+		
+		StudyScheduleDao dao = new StudyScheduleDao();
+		
+		return dao.isMember(mdto, seq);
 	}
 
 	

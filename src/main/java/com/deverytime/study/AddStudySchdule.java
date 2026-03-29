@@ -59,6 +59,7 @@ public class AddStudySchdule extends HttpServlet{
 		if(startDate.isAfter(endDate)) {
 			resp.getWriter().print("<script>alert('시작일은 종료일보다 빨라야 합니다.');history.back();</script>");
 			resp.getWriter().close();
+			return;
 		}
 		
 		StudyScheduleService service = new StudyScheduleService();
