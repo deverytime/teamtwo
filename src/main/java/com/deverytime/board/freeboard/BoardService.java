@@ -1,6 +1,7 @@
 package com.deverytime.board.freeboard;
 
 import java.time.LocalDate;
+import java.util.List;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
@@ -187,6 +188,13 @@ public class BoardService {
 		BoardDao dao = new BoardDao();
 		dao.addFile(fileDto);
 		
+	}
+
+	public List<FileDto> getFileList(String seq) {
+		
+		BoardDao dao = new BoardDao();
+	    return dao.getFileList(seq);
+
 	}
 
 }

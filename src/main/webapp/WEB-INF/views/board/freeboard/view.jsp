@@ -87,12 +87,13 @@
 				<!-- ③ 첨부파일 -->
 				<div class="card-pad">
 					<p class="text-sm font-semibold text-slate-600 mb-1">첨부파일</p>
-					<%-- 파일 기능 연결 후 해제
-        <c:forEach var="file" items="${fileList}">
-          <a href="download.do?file=${file}" class="text-blue-500 hover:underline text-sm block">${file}</a>
-        </c:forEach>
-        --%>
-					<p class="text-sm text-slate-400">없음</p>
+
+					<c:forEach var="file" items="${fileList}">
+						<a href="download.do?file=${file}"
+							class="text-blue-500 hover:underline text-sm block">${file.name}</a>
+					</c:forEach>
+
+
 				</div>
 
 				<!-- ④ 추천 / 신고 -->

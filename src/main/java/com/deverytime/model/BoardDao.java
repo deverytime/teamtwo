@@ -1,6 +1,7 @@
 package com.deverytime.model;
 
 import java.sql.PreparedStatement;
+import java.util.List;
 import java.sql.ResultSet;
 import java.util.ArrayList;
 
@@ -59,22 +60,21 @@ public class BoardDao extends BasicDao {
 			}
 
 			// 정렬 및 페이
-			sql.append(" order by seq desc")
-				.append(" offset ? rows fetch next ? rows only");
-			
-			// OFFSET ? ROWS      → "이만큼 건너뛰어!" (30개 스킵)
+			sql.append(" order by seq desc").append(" offset ? rows fetch next ? rows only");
+
+			// OFFSET ? ROWS → "이만큼 건너뛰어!" (30개 스킵)
 			// FETCH NEXT ? ROWS → "이만큼만 가져와!" (15개 가져오기)
 			// 검색어 쿼리 구간 끝
-			
+
 			pstat = conn.prepareStatement(sql.toString());
 			for (int i = 0; i < params.size(); i++) {
 				pstat.setString(i + 1, params.get(i));
 			}
-			
+
 			// 페이징 파라미터 추가
 			pstat.setInt(params.size() + 1, param.getStartRow());
 			pstat.setInt(params.size() + 2, param.getPageSize());
-			
+
 			rs = pstat.executeQuery();
 
 			ArrayList<BoardDto> list = new ArrayList<>();
@@ -112,36 +112,36 @@ public class BoardDao extends BasicDao {
 		try {
 
 			// 1. 먼저 글번호 구하기
-	        String seqSql = "select POSTSEQ.nextval as seq from dual";
-	        stat = conn.createStatement();
-	        rs = stat.executeQuery(seqSql);
+			String seqSql = "select POSTSEQ.nextval as seq from dual";
+			stat = conn.createStatement();
+			rs = stat.executeQuery(seqSql);
 
-	        String seq = null;
-	        if (rs.next()) {
-	            seq = rs.getString("seq");
-	        }
+			String seq = null;
+			if (rs.next()) {
+				seq = rs.getString("seq");
+			}
 
-	        // 2. insert
-	        String sql = "insert into POST (SEQ, TITLE, CONTENT, READCOUNT, REGDATE, RECOMMEND, REPORT, MEMBERSEQ, BOARDSEQ, POSTCATEGORYSEQ) "
-	                   + "values (?, ?, ?, default, default, default, default, ?, ?, ?)";
+			// 2. insert
+			String sql = "insert into POST (SEQ, TITLE, CONTENT, READCOUNT, REGDATE, RECOMMEND, REPORT, MEMBERSEQ, BOARDSEQ, POSTCATEGORYSEQ) "
+					+ "values (?, ?, ?, default, default, default, default, ?, ?, ?)";
 
-	        pstat = conn.prepareStatement(sql);
+			pstat = conn.prepareStatement(sql);
 
-	        pstat.setString(1, seq);
-	        pstat.setString(2, dto.getTitle());
-	        pstat.setString(3, dto.getContent());
-	        pstat.setString(4, dto.getMemberSeq());
-	        pstat.setString(5, dto.getBoardType());
-	        pstat.setString(6, dto.getCategory());
+			pstat.setString(1, seq);
+			pstat.setString(2, dto.getTitle());
+			pstat.setString(3, dto.getContent());
+			pstat.setString(4, dto.getMemberSeq());
+			pstat.setString(5, dto.getBoardType());
+			pstat.setString(6, dto.getCategory());
 
-	        int result = pstat.executeUpdate();
+			int result = pstat.executeUpdate();
 
-	        // 3. 성공하면 dto에 글번호 저장
-	        if (result == 1) {
-	        		result = Integer.parseInt(seq);
-	        }
+			// 3. 성공하면 dto에 글번호 저장
+			if (result == 1) {
+				result = Integer.parseInt(seq);
+			}
 
-	        return result;
+			return result;
 
 		} catch (Exception e) {
 			e.printStackTrace();
@@ -402,90 +402,124 @@ public class BoardDao extends BasicDao {
 	// list와 비슷하지만 성능을 위해 분리 // 하는일도 다름
 	public int getTotalCount(BoardDto param) {
 		try {
-	        // 1. 검색 조건 동일하게 설정
-	        String board = param.getBoardType();
-	        String category = param.getCategory();
-	        String searchType = param.getSearchType();
-	        String keyword = param.getKeyword();
+			// 1. 검색 조건 동일하게 설정
+			String board = param.getBoardType();
+			String category = param.getCategory();
+			String searchType = param.getSearchType();
+			String keyword = param.getKeyword();
 
-	        // 2. COUNT(*)
-	        StringBuilder sql = new StringBuilder("SELECT COUNT(*) FROM vwPost WHERE boardType = ?");
-	        ArrayList<String> params = new ArrayList<>();
-	        params.add(board);
+			// 2. COUNT(*)
+			StringBuilder sql = new StringBuilder("SELECT COUNT(*) FROM vwPost WHERE boardType = ?");
+			ArrayList<String> params = new ArrayList<>();
+			params.add(board);
 
-	        // 3. list()와 **똑같은** 조건 적용!
-	        if (category != null && !category.trim().equals("")) {
-	            sql.append(" AND category = ?");
-	            params.add(category);
-	        }
+			// 3. list()와 **똑같은** 조건 적용!
+			if (category != null && !category.trim().equals("")) {
+				sql.append(" AND category = ?");
+				params.add(category);
+			}
 
-	        if (searchType != null && keyword != null && !keyword.trim().isEmpty()) {
-	            switch (searchType) {
-	                case "title" -> {
-	                    sql.append(" AND title LIKE '%' || ? || '%'");
-	                    params.add(keyword);
-	                }
-	                case "content" -> {
-	                    sql.append(" AND content LIKE '%' || ? || '%'");
-	                    params.add(keyword);
-	                }
-	                case "nickname" -> {
-	                    sql.append(" AND nickname LIKE '%' || ? || '%'");
-	                    params.add(keyword);
-	                }
-	                case "title_content" -> {
-	                    sql.append(" AND (title LIKE '%' || ? || '%' OR content LIKE '%' || ? || '%')");
-	                    params.add(keyword);
-	                    params.add(keyword);
-	                }
-	            }
-	        }
+			if (searchType != null && keyword != null && !keyword.trim().isEmpty()) {
+				switch (searchType) {
+				case "title" -> {
+					sql.append(" AND title LIKE '%' || ? || '%'");
+					params.add(keyword);
+				}
+				case "content" -> {
+					sql.append(" AND content LIKE '%' || ? || '%'");
+					params.add(keyword);
+				}
+				case "nickname" -> {
+					sql.append(" AND nickname LIKE '%' || ? || '%'");
+					params.add(keyword);
+				}
+				case "title_content" -> {
+					sql.append(" AND (title LIKE '%' || ? || '%' OR content LIKE '%' || ? || '%')");
+					params.add(keyword);
+					params.add(keyword);
+				}
+				}
+			}
 
-	        pstat = conn.prepareStatement(sql.toString());
-	        for (int i = 0; i < params.size(); i++) {
-	            pstat.setString(i + 1, params.get(i));
-	        }
+			pstat = conn.prepareStatement(sql.toString());
+			for (int i = 0; i < params.size(); i++) {
+				pstat.setString(i + 1, params.get(i));
+			}
 
-	        rs = pstat.executeQuery();
-	        if (rs.next()) {
-	            return rs.getInt(1);  // 총 개수만 반환
-	        }
+			rs = pstat.executeQuery();
+			if (rs.next()) {
+				return rs.getInt(1); // 총 개수만 반환
+			}
 
-	    } catch (Exception e) {
-	        e.printStackTrace();
-	    } finally {
-	        closeAll();
-	    }
-	    return 0;
-	}
-
-	public void addFile(FileDto fileDto) {
-		
-		try {
-			
-			String sql = "insert into UPLOAD_FILE (SEQ, ORIGINNAME, NAME, PATH, FILESIZE, POSTSEQ) "
-	                   + "values (uploadFileSeq.nextval, ?, ?, ?, ?, ?)";
-
-	        pstat = conn.prepareStatement(sql);
-
-	        pstat.setString(1, fileDto.getOriginName());
-	        pstat.setString(2, fileDto.getName());
-	        pstat.setString(3, fileDto.getPath());
-	        pstat.setLong(4, fileDto.getFileSize());
-	        pstat.setString(5, fileDto.getPostSeq());
-
-	        pstat.executeUpdate();
-			
-	        return;
-			
 		} catch (Exception e) {
 			e.printStackTrace();
 		} finally {
 			closeAll();
 		}
-		
+		return 0;
+	}
+
+	public void addFile(FileDto fileDto) {
+
+		try {
+
+			String sql = "insert into UPLOAD_FILE (SEQ, ORIGINNAME, NAME, PATH, FILESIZE, POSTSEQ) "
+					+ "values (uploadFileSeq.nextval, ?, ?, ?, ?, ?)";
+
+			pstat = conn.prepareStatement(sql);
+
+			pstat.setString(1, fileDto.getOriginName());
+			pstat.setString(2, fileDto.getName());
+			pstat.setString(3, fileDto.getPath());
+			pstat.setLong(4, fileDto.getFileSize());
+			pstat.setString(5, fileDto.getPostSeq());
+
+			pstat.executeUpdate();
+
+			return;
+
+		} catch (Exception e) {
+			e.printStackTrace();
+		} finally {
+			closeAll();
+		}
+
 		return;
-			
+
+	}
+
+	public List getFileList(String seq) {
+		List<FileDto> list = new ArrayList<FileDto>();
+
+		try {
+			String sql = "select * from UPLOAD_FILE where POSTSEQ = ?";
+
+			pstat = conn.prepareStatement(sql);
+			pstat.setString(1, seq);
+
+			rs = pstat.executeQuery();
+
+			while (rs.next()) {
+				FileDto dto = new FileDto();
+				dto.setSeq(rs.getString("seq"));
+				dto.setOriginName(rs.getString("ORIGINNAME"));
+				dto.setName(rs.getString("NAME"));
+				dto.setPath(rs.getString("PATH"));
+				dto.setFileSize(rs.getLong("FILESIZE"));
+				dto.setPostSeq(rs.getString("POSTSEQ"));
+
+				list.add(dto);
+			}
+
+			return list;
+
+		} catch (Exception e) {
+			e.printStackTrace();
+		} finally {
+			closeAll();
+		}
+
+		return list;
 	}
 
 }
