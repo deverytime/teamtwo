@@ -76,11 +76,12 @@ public class Add extends HttpServlet {
 
 		String id = (String) session.getAttribute("auth");
 		String board = mr.getParameter("board");
-		String category = mr.getParameter("category");
+		String category = mr.getParameter("subject");
 		String title = mr.getParameter("title");
 		String content = mr.getParameter("content");
 		String searchType = mr.getParameter("searchType");
 		String keyword = mr.getParameter("keyword");
+		String paramCategory = mr.getParameter("category");
 
 		BoardDto dto = new BoardDto();
 		dto.setId(id);
@@ -122,8 +123,7 @@ public class Add extends HttpServlet {
 		    // 한글오류
 		    String encodedKeyword = URLEncoder.encode(keyword, "UTF-8");
 
-
-		    resp.sendRedirect("list.do?board=" + dto.getBoardType() + "&category=" + category + "&searchType=" + searchType + "&keyword=" + encodedKeyword);
+		    resp.sendRedirect("list.do?board=" + dto.getBoardType() + "&category=" + paramCategory + "&searchType=" + searchType + "&keyword=" + encodedKeyword);
 		} else {
 			// history.back();
 //			resp.sendRedirect("javascript:history.back()");
