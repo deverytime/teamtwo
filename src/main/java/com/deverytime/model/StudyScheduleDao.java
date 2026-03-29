@@ -13,7 +13,7 @@ public class StudyScheduleDao extends BasicDao{
 		
 		try {
 			
-			String sort = "ORDER BY startDate ASC, seq ASC";
+			String sort = "ORDER BY startDate DESC, seq DESC";
 			
 			String sql = String.format("select * from (select a.*, rownum as rnum from (select * from study_schedule where studySeq = ? %s) a) where rnum between %s and %s"
 					,sort
