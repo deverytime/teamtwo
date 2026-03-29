@@ -11,45 +11,44 @@
     <%@ include file="/WEB-INF/views/inc/header.jsp" %>
     
     <main class="page-wrap">
-        <div class="mb-10 text-center">
-            <h1 class="section-title text-3xl font-black">스터디 정보 수정</h1>
-            <p class="section-desc">변경된 내용을 반영하여 스터디 정보를 업데이트하세요.</p>
-        </div>
+    <div class="mb-10 text-center">
+        <h1 class="section-title text-3xl">${empty dto ? '스터디 일정 등록' : '스터디 일정 수정'}</h1>
+        <p class="section-desc">팀원들과 공유할 학습 계획을 설정하세요.</p>
+    </div>
 
-        <div class="max-w-2xl mx-auto">
-            <div class="content-card card-pad shadow-lg border-brand-100">
-                <form class="space-y-6" method="POST" action="/teamtwo/study/study-edit.do?seq=${dto.seq}">
+    <div class="max-w-3xl mx-auto">
+        <div class="content-card card-pad shadow-lg">
+            <form class="space-y-6" method="POST" action="/teamtwo/study/${empty dto ? 'studyschedule-add.do?seq='.concat(seq) : 'studyschedule-edit.do?seq='.concat(dto.seq)}">
+                <div>
+                    <label class="form-label">일정 제목</label>
+                    <input type="text" name="title" class="input input-bordered w-full bg-white" value="${dto.title}" required />
+                </div>
+                <div>
+                    <label class="form-label">일정 상세 설명</label>
+                    <textarea name="content" class="textarea textarea-bordered w-full bg-white min-h-32" required>${dto.content}</textarea>
+                </div>
+                <div class="grid md:grid-cols-2 gap-6">
                     <div>
-                        <label class="form-label">스터디 이름</label>
-                        <input type="text" name="name" class="input input-bordered w-full bg-white" 
-                               value="${dto.name}" required />
+                        <label class="form-label">학습 시작일</label>
+                        <input type="date" name="startDate" id="start" class="input input-bordered w-full" value="${dto.startDate}" required />
                     </div>
-
-                    <div class="grid md:grid-cols-2 gap-5">
-                        <div>
-                            <label class="form-label">최대 모집 인원</label>
-                            <input type="number" name="capacity" class="input input-bordered w-full bg-white" 
-                                   min="5" max="20" value="${dto.capacity}" required />
-                        </div>
-                        <div class="flex items-end pb-1 text-xs text-slate-400 italic font-medium">
-                            * 기존 인원보다 적게 수정할 경우 주의하세요.
-                        </div>
-                    </div>
-
                     <div>
-                        <label class="form-label">스터디 상세 설명</label>
-                        <textarea name="description" class="textarea textarea-bordered w-full bg-white min-h-40" 
-                                  required>${dto.description}</textarea>
+                        <label class="form-label">학습 종료일</label>
+                        <input type="date" name="endDate" id="end" class="input input-bordered w-full" value="${dto.endDate}" required />
                     </div>
-
-                    <div class="flex justify-end gap-3 pt-6 border-t border-slate-100">
-                        <button type="button" class="btn btn-ghost px-8" 
-                                onclick="location.href='/teamtwo/study/study-view.do?seq=${dto.seq}';">취소</button>
-                        <button type="submit" class="btn btn-brand px-12 font-bold">수정 완료</button>
-                    </div>
-                </form>
-            </div>
+                </div>
+                <div class="flex justify-end gap-3 pt-6 border-t">
+                    <button type="button" class="btn btn-ghost px-8" onclick="history.back();">취소</button>
+                    <button type="submit" class="btn btn-brand px-12">저장하기</button>
+                </div>
+            </form>
         </div>
-    </main>
+    </div>
+</main>
+<script>
+    const s = document.getElementById('start'), e = document.getElementById('end');
+    s.addEventListener('change', () => e.min = s.value);
+    e.addEventListener('change', () => s.max = e.value);
+</script>
 </body>
 </html>

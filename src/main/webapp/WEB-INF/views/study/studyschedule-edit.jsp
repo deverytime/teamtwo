@@ -1,40 +1,89 @@
-<main class="page-wrap">
-    <div class="mb-10 text-center">
-        <h1 class="section-title text-3xl">${empty dto ? '스터디 일정 등록' : '스터디 일정 수정'}</h1>
-        <p class="section-desc">팀원들과 공유할 학습 계획을 설정하세요.</p>
-    </div>
+<%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
+<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+	<meta charset="UTF-8">
+	<title>deverytime</title>
+	<%@ include file="/WEB-INF/views/inc/asset.jsp" %>
+	<style>
+		/* 현재 페이지 전용 CSS가 필요하면 여기에 작성 */
+	</style>
+</head>
+<body class="bg-slate-50 text-slate-800">
+	<%@ include file="/WEB-INF/views/inc/header.jsp" %>
+	
+	<main class="page-wrap">
+		
+		<div class="mb-8">
+			<h1 class="section-title">스터디 일정 수정</h1>
+			<p class="section-desc">스터디를 일정을 수정합니다.</p>
+		</div>
 
-    <div class="max-w-3xl mx-auto">
-        <div class="content-card card-pad shadow-lg">
-            <form class="space-y-6" method="POST" action="/teamtwo/study/${empty dto ? 'studyschedule-add.do?seq='.concat(seq) : 'studyschedule-edit.do?seq='.concat(dto.seq)}">
-                <div>
-                    <label class="form-label">일정 제목</label>
-                    <input type="text" name="title" class="input input-bordered w-full bg-white" value="${dto.title}" required />
-                </div>
-                <div>
-                    <label class="form-label">일정 상세 설명</label>
-                    <textarea name="content" class="textarea textarea-bordered w-full bg-white min-h-32" required>${dto.content}</textarea>
-                </div>
-                <div class="grid md:grid-cols-2 gap-6">
-                    <div>
-                        <label class="form-label">학습 시작일</label>
-                        <input type="date" name="startDate" id="start" class="input input-bordered w-full" value="${dto.startDate}" required />
-                    </div>
-                    <div>
-                        <label class="form-label">학습 종료일</label>
-                        <input type="date" name="endDate" id="end" class="input input-bordered w-full" value="${dto.endDate}" required />
-                    </div>
-                </div>
-                <div class="flex justify-end gap-3 pt-6 border-t">
-                    <button type="button" class="btn btn-ghost px-8" onclick="history.back();">취소</button>
-                    <button type="submit" class="btn btn-brand px-12">저장하기</button>
-                </div>
-            </form>
-        </div>
-    </div>
-</main>
-<script>
-    const s = document.getElementById('start'), e = document.getElementById('end');
-    s.addEventListener('change', () => e.min = s.value);
-    e.addEventListener('change', () => s.max = e.value);
-</script>
+	<div class="content-card card-pad">
+	
+	<!-- 스터디 일정 수정 폼 -->
+    <section class="demo-block">
+
+      <div class="content-card card-pad max-w-3xl">
+
+        <form class="space-y-5" method="POST" action="/teamtwo/study/studyschedule-edit.do?seq=${dto.seq}">
+          <div>
+            <label class="form-label">스터디 일정 명</label>
+            <input
+              type="text"
+              class="input input-bordered w-full bg-white"
+              placeholder="스터디 일정 명을 입력하세요."
+              name="title"
+              required="required"
+              value="${dto.title}"
+            />
+          </div>
+          <div>
+            <label class="form-label">스터디 일정 설명</label>
+            <textarea
+              class="textarea textarea-bordered w-full bg-white min-h-28"
+              placeholder="스터디 일정에 대한 설명을 입력하세요."
+              name="content"
+              required="required"
+            >${dto.content}</textarea>
+          </div>
+          <div class="grid md:grid-cols-2 gap-5">
+            <div>
+              <label class="form-label">시작일</label>
+              <input type="date" class="input input-bordered w-full bg-white" required="required" name="startDate" value="${dto.startDate}" />
+            </div>
+            <div>
+              <label class="form-label">종료일</label>
+              <input type="date" class="input input-bordered w-full bg-white" required="required" name="endDate" value="${dto.endDate}"/>
+            </div>
+          </div>
+
+          <div class="flex justify-end gap-2 pt-2">
+            <button type="button" class="btn btn-ghost" onclick="history.back();">취소</button>
+            <button type="submit" class="btn btn-brand">수정하기</button>
+          </div>
+        </form>
+      </div>
+    </section>
+    
+	</div>
+
+	</main>
+	
+	<script>
+		const startDateInput = document.querySelector('input[name="startDate"]');
+		const endDateInput = document.querySelector('input[name="endDate"]');
+	
+		// 시작일을 선택하면 종료일의 최소값(min)을 시작일로 설정
+		startDateInput.addEventListener('change', function() {
+		    endDateInput.min = this.value;
+		});
+		
+		// 시작일을 선택하면 종료일의 최소값(min)을 시작일로 설정
+		endDateInput.addEventListener('change', function() {
+		    startDateInput.max = this.value;
+		});
+	</script>
+</body>
+</html>

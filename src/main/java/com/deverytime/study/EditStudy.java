@@ -27,7 +27,7 @@ public class EditStudy extends HttpServlet{
 		
 		req.setAttribute("dto", dto);
 		
-		req.getRequestDispatcher("/WEB-INF/views/study/study-edit2.jsp").forward(req, resp);
+		req.getRequestDispatcher("/WEB-INF/views/study/study-edit.jsp").forward(req, resp);
 		
 	}
 	
