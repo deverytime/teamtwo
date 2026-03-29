@@ -3,14 +3,17 @@
 <!DOCTYPE html>
 <html lang="ko">
 <head>
-    <meta charset="UTF-8">
-    <title>deverytime - 스터디 수정</title>
-    <%@ include file="/WEB-INF/views/inc/asset.jsp" %>
+	<meta charset="UTF-8">
+	<title>deverytime</title>
+	<%@ include file="/WEB-INF/views/inc/asset.jsp" %>
+	<style>
+		/* 현재 페이지 전용 CSS가 필요하면 여기에 작성 */
+	</style>
 </head>
-<body>
-    <%@ include file="/WEB-INF/views/inc/header.jsp" %>
-    
-    <main class="page-wrap">
+<body class="bg-slate-50 text-slate-800">
+	<%@ include file="/WEB-INF/views/inc/header.jsp" %>
+	
+	<main class="page-wrap">
     <div class="mb-10 text-center">
         <h1 class="section-title text-3xl">${empty dto ? '스터디 일정 등록' : '스터디 일정 수정'}</h1>
         <p class="section-desc">팀원들과 공유할 학습 계획을 설정하세요.</p>

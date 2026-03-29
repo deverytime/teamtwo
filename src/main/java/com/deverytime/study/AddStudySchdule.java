@@ -60,8 +60,6 @@ public class AddStudySchdule extends HttpServlet{
 		dto.setStartDate(startDate);
 		dto.setEndDate(endDate);
 		
-		System.out.println(seq);
-		
 		int result = service.add(dto, seq);
 		
 		if(result > 0) {

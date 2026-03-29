@@ -1,162 +1,96 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <!DOCTYPE html>
-<html lang="ko">
+<html>
 <head>
-	<meta charset="UTF-8">
-	<title>deverytime</title>
-	<%@ include file="/WEB-INF/views/inc/asset.jsp" %>
-	<style>
-		
-		#scheduleDiv {
-			margin: 50px 120px;
-		}
-		
-		#pagebar {
-			display: flex;
-			justify-content: center;
-		}
-		
-	</style>
+    <meta charset="UTF-8">
+    <title>deverytime - 스터디 상세</title>
+    <%@ include file="/WEB-INF/views/inc/asset.jsp" %>
 </head>
-<body class="bg-slate-50 text-slate-800">
-	<%@ include file="/WEB-INF/views/inc/header.jsp" %>
-	
-	<main class="page-wrap">
-		
-		<div class="mb-8">
-			<div>
-				<h1 class="section-title">스터디 상세</h1>
-				<!-- 참가 여부 및 스터디장 여부 -->
-				<%-- <c:if test="${}">
-                	<span class="badge badge-success badge-outline">참가중</span>
+<body>
+    <%@ include file="/WEB-INF/views/inc/header.jsp" %>
+    <main class="page-wrap">
+        <div class="mb-8 flex justify-between items-end">
+            <div>
+                <h1 class="section-title">스터디 정보</h1>
+                <p class="section-desc">스터디 상세 내용과 멤버를 관리합니다.</p>
+            </div>
+            <span class="badge badge-lg ${dto.status == '0' ? 'badge-primary' : 'badge-ghost'} badge-outline h-10 px-6">
+                ${dto.status == '0' ? '모집중' : '모집완료'}
+            </span>
+        </div>
+
+        <div class="content-card card-pad mb-10 border-brand-100">
+            <h3 class="text-2xl font-bold mb-4">${dto.name}</h3>
+            <p class="text-slate-600 leading-relaxed mb-8 text-lg">${dto.description}</p>
+            
+            <div class="grid grid-cols-1 sm:grid-cols-3 gap-6 mb-8">
+                <div class="stats-box flex flex-col items-center justify-center py-6">
+                    <p class="text-slate-500 text-sm mb-1">참여 인원</p>
+                    <p class="text-3xl font-black text-brand-600">${dto.headCount} / ${dto.capacity}</p>
+                </div>
+                <div class="stats-box flex flex-col items-center justify-center py-6">
+                    <p class="text-slate-500 text-sm mb-1">등록된 일정</p>
+                    <p class="text-3xl font-black text-slate-700">${dto.scheduleCount}개</p>
+                </div>
+                <div class="stats-box flex flex-col items-center justify-center py-6">
+                    <p class="text-slate-500 text-sm mb-1">스터디 생성일</p>
+                    <p class="text-xl font-bold text-slate-700 mt-2">${dto.createDate}</p>
+                </div>
+            </div>
+
+            <div class="flex flex-wrap gap-2 pt-6 border-t">
+                <button class="btn btn-brand px-8" onclick="location.href='/teamtwo/study/studyschedule-list.do?seq=${dto.seq}';">일정 보기</button>
+                <c:if test="${isManager}">
+                    <button class="btn btn-soft-brand" onclick="location.href='/teamtwo/study/study-edit.do?seq=${dto.seq}';">정보 수정</button>
+                    <button class="btn btn-ghost text-error" onclick="if(confirm('정말 삭제하시겠습니까?')) location.href='/teamtwo/study/study-del.do?seq=${dto.seq}';">삭제 하기</button>
                 </c:if>
-                <c:if test="${}">
-                	<span class="badge badge-success badge-outline">스터디장</span>
-                </c:if> --%>
-			</div>
-			<p class="section-desc">스터디 상세화면 입니다.</p>
-		</div>
-
-		<div class="content-card card-pad">
-		
-		<!-- 스터디 상세 대시보드 -->	
-		<div id="main-layout">
-		
-		  <div id="main">
-	        <div class="content-card card-pad">
-	          <div class="flex items-start justify-between gap-4 mb-4">
-	            <div>
-	              <p class="text-sm text-slate-500"></p>
-	              <h3 class="text-xl font-bold mt-1">${dto.name}</h3>
-	            </div>
-	            <span class="badge badge-outline badge-primary">${dto.status == '0' ? '모집중' : '모집완료'}</span>
-	          </div>
-	
-	          <p class="text-slate-600 leading-7 mb-6">
-	            ${dto.description}
-	          </p>
-	
-	          <div class="grid sm:grid-cols-3 gap-4 mb-6">
-	            <div class="stats-box">
-	              <p class="text-sm text-slate-500">인원수</p>
-	              <p class="mt-2">${dto.headCount} / ${dto.capacity}</p>
-	            </div>
-	            <div class="stats-box">
-	              <p class="text-sm text-slate-500">일정</p>
-	              <p class="mt-2 text-2xl font-bold">${dto.scheduleCount}개</p>
-	            </div>
-	            <div class="stats-box">
-	              <p class="text-sm text-slate-500">생성일</p>
-	              <p class="mt-2 text-2xl font-bold">${dto.createDate}</p>
-	            </div>
-	          </div>
-					
-	          <div class="flex flex-wrap justify-between gap-2">
-	            <button class="btn btn-brand" onclick="location.href='/teamtwo/study/studyschedule-list.do?seq=${dto.seq}';">일정 보기</button>
-	            <c:if test="${isManager}">
-		            <button class="btn btn-brand" onclick="location.href='/teamtwo/study/study-edit.do?seq=${dto.seq}';">수정 하기</button>
-		            <button class="btn btn-brand" onclick="location.href='/teamtwo/study/study-del.do?seq=${dto.seq}';">삭제 하기</button>
-		        </c:if>
-	            <c:if test="${isMember}">
-		            <button class="btn btn-brand" onclick="location.href='/teamtwo/study/study-unreg.do?seq=${dto.seq}';">탈퇴 하기</button>
-		        </c:if>
-		        <c:if test="${!isMember}">
-		        <button class="btn btn-brand" onclick="location.href='/teamtwo/study/study-reg.do?seq=${dto.seq}';">참여 하기</button>
-		         </c:if>
-	          </div>
-	        </div>
-	      </div>
-			
-		</div>
-
-	</main>
-	
-    <!-- 스터디 참가중인 멤버 목록 -->
-    <div id="scheduleDiv">
-    <section class="demo-block">
-      <h2 class="section-title">스터디 멤버 목록</h2>
-      <p class="section-desc">스터디에 참가중인 멤버 목록입니다.</p>
-
-      <div class="content-card overflow-hidden">
-        <div class="card-pad border-b border-slate-200 flex flex-col gap-4 md:flex-row md:items-center md:justify-between">
-          <div>
-            <h3 class="text-xl font-bold">멤버 목록</h3>
-            <p class="text-sm text-slate-500 mt-1"></p>
-          </div>
+                <c:if test="${isMember && !isManager}">
+                    <button class="btn btn-ghost text-error" onclick="location.href='/teamtwo/study/study-unreg.do?seq=${dto.seq}';">탈퇴 하기</button>
+                </c:if>
+                <c:if test="${!isMember}">
+                    <button class="btn btn-brand btn-outline" onclick="location.href='/teamtwo/study/study-reg.do?seq=${dto.seq}';">참여 하기</button>
+                </c:if>
+            </div>
         </div>
 
-        <div class="overflow-x-auto">
-          <table class="table">
-            <thead>
-              <tr>
-                <th>ID</th>
-                <th>이름</th>
-                <th>이메일</th>
-                <th></th>
-                <th></th>
-                <th>참여일</th>
-              </tr>
-            </thead>
-            <tbody>
-            <c:forEach items="${mlist}" var="memberDto">
-              <tr>
-                <td>${memberDto.id}</td>
-                <td>${memberDto.name}</td>
-                <td>${memberDto.email}</td>
-                <td>
-                	<%-- <c:if test="${}">
-                		<button type="button" class="badge badge-warning badge-outline">권한위임</button>
-                	</c:if> --%>
-                	<button type="button" class="btn btn-warning btn-outline">권한위임</button>
-                </td>
-                <td>
-                	<button type="button" class="btn btn-error btn-outline">추방하기</button>
-                </td>
-                <td>${memberDto.regdate}</td>
-              </tr>
-              </c:forEach>
-            </tbody>
-          </table>
-        </div>
-        
-       <!-- 페이지 바 -->
-       <div id="pagebar">${pagebar}</div>
-
-       <!--  <div class="card-pad border-t border-slate-200 flex justify-between items-center">
-          <p class="text-sm text-slate-500"></p>
-          <div class="join">
-            <button class="join-item btn btn-sm">1</button>
-            <button class="join-item btn btn-sm btn-active">2</button>
-            <button class="join-item btn btn-sm">3</button>
-          </div>
-        </div> -->
-      </div>
-    </section>
-    </div>
-	
-	<script>
-		// 현재 페이지 전용 JavaScript가 필요하면 여기에 작성
-	</script>
+        <section class="demo-block">
+            <div class="flex items-center gap-2 mb-4">
+                <h2 class="section-title mb-0">스터디 멤버</h2>
+                <span class="badge badge-sm badge-ghost font-normal">Total ${totalCount}</span>
+            </div>
+            <div class="content-card overflow-hidden">
+                <table class="table w-full">
+                    <thead class="bg-slate-50 text-slate-500">
+                        <tr>
+                            <th class="w-24">ID</th>
+                            <th>이름 / 이메일</th>
+                            <th class="text-center">권한 관리</th>
+                            <th class="text-right pr-6">참여일</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <c:forEach items="${mlist}" var="memberDto">
+                            <tr class="hover:bg-slate-50/50">
+                                <td class="text-slate-400 font-mono text-sm">${memberDto.id}</td>
+                                <td>
+                                    <div class="font-bold">${memberDto.name}</div>
+                                    <div class="text-xs text-slate-400">${memberDto.email}</div>
+                                </td>
+                                <td class="text-center">
+                                    <div class="join">
+                                        <button class="btn btn-xs btn-outline btn-warning join-item">위임</button>
+                                        <button class="btn btn-xs btn-outline btn-error join-item">추방</button>
+                                    </div>
+                                </td>
+                                <td class="text-right text-slate-500 text-sm pr-6">${memberDto.regdate}</td>
+                            </tr>
+                        </c:forEach>
+                    </tbody>
+                </table>
+                <div class="flex justify-center p-6 border-t bg-slate-50/30">${pagebar}</div>
+            </div>
+        </section>
+    </main>
 </body>
 </html>
