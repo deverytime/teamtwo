@@ -78,10 +78,21 @@
                                     <div class="text-xs text-slate-400">${memberDto.email}</div>
                                 </td>
                                 <td class="text-center">
-                                    <div class="join">
-                                        <button class="btn btn-xs btn-outline btn-warning join-item">위임</button>
-                                        <button class="btn btn-xs btn-outline btn-error join-item">추방</button>
-                                    </div>
+                                	<c:if test="${memberDto.seq == managerSeq}">
+                                   		 <span class="badge badge-lg badge-primary badge-outline h-6 px-2">
+							                 Manager
+							             </span>
+                                   	</c:if>
+                                    <c:if test="${isManager}">
+                                    	<c:if test="${memberDto.seq != managerSeq}">
+		                                    <div class="join">
+		                                        <button class="btn btn-xs btn-outline btn-warning join-item" 
+		                                        	onclick="location.href='/teamtwo/study/studyManager-delegate.do?seq=${dto.seq}&mseq=${memberDto.seq}';">위임</button>
+		                                        <button class="btn btn-xs btn-outline btn-error join-item" 
+		                                        	onclick="location.href='/teamtwo/study/study-deport.do?seq=${dto.seq}&mseq=${memberDto.seq}';">추방</button>
+		                                    </div>
+	                                    </c:if>
+                                    </c:if>
                                 </td>
                                 <td class="text-right text-slate-500 text-sm pr-6">${memberDto.regdate}</td>
                             </tr>

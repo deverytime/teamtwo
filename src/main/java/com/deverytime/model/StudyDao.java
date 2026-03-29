@@ -489,6 +489,53 @@ public class StudyDao extends BasicDao{
 		
 	}
 
+	public int deport(String mseq, String seq) {
+		
+		try {
+			
+			String sql = "delete from study_member where studySeq = ? and memberSeq = ?";
+			
+			pstat = conn.prepareStatement(sql);
+			pstat.setString(1, seq);
+			pstat.setString(2, mseq);
+			
+			return pstat.executeUpdate();
+			
+		} catch (Exception e) {
+			e.printStackTrace();
+		} finally {
+			closeAll();
+		}
+		
+		return 0;
+		
+	}
+
+	public String getManagerSeq(String seq) {
+		
+		try {
+			
+			String sql = "select * from study_member where studySeq = ? and type = 1";
+			
+			pstat = conn.prepareStatement(sql);
+			pstat.setString(1, seq);
+			
+			rs = pstat.executeQuery();
+			
+			if(rs.next()) {
+				return rs.getString("memberSeq");
+			}
+			
+		} catch (Exception e) {
+			e.printStackTrace();
+		} finally {
+			closeAll();
+		}
+		
+		return null;
+		
+	}
+
 	
 	
 }
