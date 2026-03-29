@@ -1,6 +1,7 @@
 package com.deverytime.board.freeboard;
 
 import java.time.LocalDate;
+import java.util.List;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
@@ -9,6 +10,7 @@ import com.deverytime.model.BoardDao;
 import com.deverytime.model.BoardDto;
 import com.deverytime.model.CommentDao;
 import com.deverytime.model.CommentDto;
+import com.deverytime.model.FileDto;
 import com.deverytime.paging.PagingUtil;
 
 public class BoardService {
@@ -179,6 +181,27 @@ public class BoardService {
 	public int getTotalCount(BoardDto param) {
 		BoardDao dao = new BoardDao();
 		return dao.getTotalCount(param);
+	}
+
+	public void addFile(FileDto fileDto) {
+
+		BoardDao dao = new BoardDao();
+		dao.addFile(fileDto);
+		
+	}
+
+	public List<FileDto> getFileList(String seq) {
+		
+		BoardDao dao = new BoardDao();
+	    return dao.getFileList(seq);
+
+	}
+
+	public FileDto getFile(String fileSeq) {
+
+		BoardDao dao = new BoardDao();
+		
+		return dao.getFile(fileSeq);
 	}
 
 }

@@ -1,9 +1,11 @@
 package com.deverytime.board.freeboard;
 
 import java.io.IOException;
+
 import java.util.HashSet;
 import java.util.Set;
 
+import java.util.List;
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
@@ -12,6 +14,7 @@ import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
 import com.deverytime.model.BoardDto;
+import com.deverytime.model.FileDto;
 
 @WebServlet(value = "/board/freeboard/view.do")
 public class View extends HttpServlet {
@@ -67,7 +70,12 @@ public class View extends HttpServlet {
 		
 		dto = service.view(dto);
 		
+		
+		// 4. 파일 처리
+		List<FileDto> fileList = service.getFileList(seq);
+		
 		req.setAttribute("dto", dto);
+		req.setAttribute("fileList", fileList);
 		
 		req.getRequestDispatcher("/WEB-INF/views/board/freeboard/view.jsp").forward(req, resp);
 	}

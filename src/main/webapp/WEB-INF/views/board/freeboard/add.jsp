@@ -41,7 +41,7 @@
 							</div>
 
 							<div class="flexshirink-0">
-								<select name="category" class="select select-boarderd white">
+								<select name="subject" class="select select-boarderd white">
 									<c:forEach var="entry" items="${categoryMap}">
 										<option value="${entry.key}">${entry.value}</option>
 									</c:forEach>
@@ -62,9 +62,17 @@
 							<div>
 								<div class="card-pad border-b border-slate-200">
 									<div id="fileList" class="flex flex-col gap-2">
-										<input type="file" name="file"
+										<input type="file" name="file1"
 											class="file-input file-input-bordered w-full bg-white">
 									</div>
+
+									<input type="hidden" name="board" value="${param.board}">
+									<!-- 검색 조건 유지 (list에서 온 경우) -->
+									<input type="hidden" name="category" value="${param.category}">
+									<input type="hidden" name="searchType"
+										value="${param.searchType}"> <input type="hidden"
+										name="keyword" value="${param.keyword}"> <input
+										type="hidden" name="page" value="${param.page}">
 									<button type="button" class="btn btn-soft-brand mt-2"
 										onclick="addFile()">+ 파일 추가</button>
 								</div>
@@ -84,6 +92,8 @@
 
 	<script>
 		// 현재 페이지 전용 JavaScript가 필요하면 여기에 작성
+		let fileIndex = 2;
+
 		function addFile() {
 		  const fileList = document.getElementById('fileList');
 		
@@ -95,25 +105,16 @@
 		  const div = document.createElement('div');
 		  div.className = 'flex gap-2 items-center';
 		  div.innerHTML = `
-		    <input type="file" name="file" class="file-input file-input-bordered w-full bg-white">
+		    <input type="file" name="file${fileIndex}" class="file-input file-input-bordered w-full bg-white">
 		    <button type="button" class="btn btn-error btn-sm" onclick="removeFile(this)">✕</button>
 		  `;
 		
 		  fileList.appendChild(div);
+		  fileIndex++;
 		
 		  if (fileList.children.length >= 5) {
 		    document.querySelector('[onclick="addFile()"]').style.display = 'none';
 		  }
-		}
-		
-		function removeFile(btn) {
-		  const fileList = document.getElementById('fileList');
-		  
-		  // 첫 번째 줄(기본 1개)은 삭제 안 되게 하려면 아래 조건 추가
-		  // if (fileList.children.length <= 1) return;
-		  
-		  btn.parentElement.remove();
-		  document.querySelector('[onclick="addFile()"]').style.display = '';
 		}
 	</script>
 </body>
