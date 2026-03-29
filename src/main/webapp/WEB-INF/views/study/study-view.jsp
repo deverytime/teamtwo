@@ -99,7 +99,11 @@
                         </c:forEach>
                     </tbody>
                 </table>
-                <div class="flex justify-center p-6 border-t bg-slate-50/30">${pagebar}</div>
+                <div class="flex justify-center p-6 border-t bg-slate-50/30">
+                	<div class="pagination-wrap">
+                		${pagebar}
+                	</div>
+                </div>
             </div>
         </section>
     </main>

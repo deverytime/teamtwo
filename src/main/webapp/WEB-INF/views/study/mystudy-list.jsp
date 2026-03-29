@@ -54,7 +54,11 @@
                 </div>
             </c:forEach>
         </div>
-        <div class="flex justify-center mb-20">${pagebar}</div>
+        <div class="flex justify-center mb-20">
+        	<div class="pagination-wrap">
+        		${pagebar}
+        	</div>
+        </div>
     </main>
 </body>
 </html>

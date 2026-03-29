@@ -75,8 +75,14 @@
             </c:forEach>
         </div>
 
-        <div class="flex justify-center mt-12 mb-20">
+        <%-- <div class="flex justify-center mt-12 mb-20">
             <div class="join shadow-sm border border-slate-200">
+                ${pagebar}
+            </div>
+        </div> --%>
+        
+        <div class="flex justify-center mt-12 mb-20">
+            <div class="pagination-wrap">
                 ${pagebar}
             </div>
         </div>
