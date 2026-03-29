@@ -89,8 +89,9 @@
 					<p class="text-sm font-semibold text-slate-600 mb-1">첨부파일</p>
 
 					<c:forEach var="file" items="${fileList}">
-						<a href="download.do?file=${file}"
-							class="text-blue-500 hover:underline text-sm block">${file.name}</a>
+						<a href="download.do?file=${file.seq}"
+							class="text-blue-500 hover:underline text-sm block">
+							${file.originName} </a>
 					</c:forEach>
 
 

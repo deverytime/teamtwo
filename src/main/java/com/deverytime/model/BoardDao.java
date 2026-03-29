@@ -522,4 +522,35 @@ public class BoardDao extends BasicDao {
 		return list;
 	}
 
+	public FileDto getFile(String fileSeq) {
+
+		try {
+			
+			String sql = "select * from upload_file where seq = ?";
+			
+			pstat = conn.prepareStatement(sql);
+			pstat.setString(1, fileSeq);
+			
+			rs = pstat.executeQuery();
+			
+			if(rs.next()) {
+				FileDto dto = new FileDto();
+				dto.setSeq(rs.getString("seq"));
+				dto.setName(rs.getString("name"));  // 저장명
+	            dto.setOriginName(rs.getString("originName"));  // 원본명
+	            dto.setFileSize(rs.getLong("fileSize"));
+	            dto.setPostSeq(rs.getString("postSeq"));
+	            
+	            return dto;
+			}
+			
+		} catch (Exception e) {
+			e.printStackTrace();
+		} finally {
+			closeAll();
+		}
+		
+		return null;
+	}
+
 }

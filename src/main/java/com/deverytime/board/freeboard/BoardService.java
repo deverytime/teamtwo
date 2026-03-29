@@ -197,4 +197,11 @@ public class BoardService {
 
 	}
 
+	public FileDto getFile(String fileSeq) {
+
+		BoardDao dao = new BoardDao();
+		
+		return dao.getFile(fileSeq);
+	}
+
 }
