@@ -114,8 +114,12 @@ public class ListStudySchedule extends HttpServlet{
 			pagebar += String.format("<a href='/teamtwo/study/studyschedule-list.do?page=%d'>[다음 %d페이지]</a>", n, blockSize);
 		}	
 		
+		//달력을 위한 페이징 처리가 안된 list
+		ArrayList<StudyScheduleDto> calendarList = service.clist(seq);
+		
 		req.setAttribute("pagebar", pagebar);
 		req.setAttribute("schlist", schlist);
+		req.setAttribute("calendarList", calendarList);
 		req.setAttribute("map", map);
 		req.setAttribute("seq", seq);
 		

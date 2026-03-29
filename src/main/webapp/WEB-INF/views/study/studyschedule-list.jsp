@@ -11,6 +11,33 @@
         .fc-event { cursor: pointer; padding: 2px 4px; border: none !important; }
         .fc-daygrid-day-frame { min-height: 120px !important; }
         #calendar { max-height: 800px; margin-bottom: 20px; }
+        /* 1. 일정 띠를 얇게 설정 (한 칸에 더 많이 보이게) */
+		.fc-daygrid-event {
+		    margin-top: 1px !important;     /* 일정 간의 간격 축소 */
+		    margin-bottom: 1px !important;
+		    padding: 0 4px 0 8px !important;      /* 상하 패딩 제거, 좌우만 남김 */
+		    height: 20px !important;        /* 막대기 높이 조절 (기본은 약 24~26px) */
+		    font-size: 0.75rem !important;  /* 글자 크기를 살짝 줄여서 띠에 맞춤 */
+		    line-height: 20px !important;   /* 글자가 수직 중앙에 오도록 높이와 맞춤 */
+		    border-radius: 3px !important;  /* 모서리를 살짝 둥글게 (선택사항) */
+		    transition: all 0.2s ease;      /* 부드러운 변화 효과 */
+		}
+		
+		/* 2. 호버 시 색상을 진하게 + 살짝 강조 */
+		.fc-event:hover {
+		    filter: brightness(0.8) saturate(1.3); /* 밝기는 낮추고 채도는 높여서 진하게 만듦 */
+		    transform: scaleX(1.02);               /* 가로로 아주 살짝 커지는 효과 */
+		    z-index: 10 !important;                /* 다른 일정보다 위에 보이게 설정 */
+		    box-shadow: 0 2px 4px rgba(0,0,0,0.1);  /* 살짝 그림자 추가 */
+		}
+		
+		/* 3. 내부 텍스트 정렬 */
+		.fc-event-title {
+		    font-weight: 500 !important;
+		    overflow: hidden;
+		    text-overflow: ellipsis; /* 글자가 길면 ... 처리 */
+		    white-space: nowrap;
+		}
     </style>
 </head>
 <body>
@@ -66,7 +93,15 @@
     <script>
         document.addEventListener('DOMContentLoaded', function() {
             const calendarEl = document.getElementById('calendar');
-            const colors = ['#3b82f6', '#10b981', '#f59e0b', '#ef4444', '#8b5cf6', '#ec4899', '#06b6d4'];
+            const colors = [
+                'rgba(59, 130, 246, 0.6)', 
+                'rgba(16, 185, 129, 0.6)', 
+                'rgba(245, 158, 11, 0.6)', 
+                'rgba(239, 68, 68, 0.6)', 
+                'rgba(139, 92, 246, 0.6)', 
+                'rgba(236, 72, 153, 0.6)', 
+                'rgba(6, 182, 212, 0.6)'
+            ];
             
             const calendar = new FullCalendar.Calendar(calendarEl, {
                 initialView: 'dayGridMonth',
@@ -78,14 +113,15 @@
                     right: 'dayGridMonth,dayGridWeek'
                 },
                 events: [
-                    <c:forEach items="${schlist}" var="item" varStatus="status">
+                    <c:forEach items="${calendarList}" var="item" varStatus="status">
                     {
                         id: '${item.seq}',
                         title: '${item.title}',
                         start: '${item.startDate}',
                         end: '${item.endDate}',
                         url: '/teamtwo/study/studyschedule-view.do?seq=${item.seq}',
-                        color: colors[${status.index % 7}]
+                        color: colors[${status.index % 7}],
+                        textColor: '#1e293b'
                     }${!status.last ? ',' : ''}
                     </c:forEach>
                 ],

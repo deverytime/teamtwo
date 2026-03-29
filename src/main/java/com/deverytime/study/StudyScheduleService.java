@@ -85,5 +85,12 @@ public class StudyScheduleService {
 		
 	}
 
+	public ArrayList<StudyScheduleDto> clist(String seq) {
+		
+		StudyScheduleDao dao = new StudyScheduleDao();
+		
+		return dao.clist(seq);
+	}
+
 	
 }

@@ -32,7 +32,7 @@ public class StudyScheduleDao extends BasicDao{
 				dto.setContent(rs.getString("content"));
 				dto.setStartDate(rs.getString("startDate"));
 				dto.setEndDate(rs.getString("endDate"));
-				dto.setStudySeq(rs.getString("seq"));
+				dto.setStudySeq(rs.getString("studySeq"));
 				
 				list.add(dto);
 			}
@@ -177,6 +177,42 @@ public class StudyScheduleDao extends BasicDao{
 		}
 		
 		return 0;
+	}
+
+	public ArrayList<StudyScheduleDto> clist(String seq) {
+		
+		ArrayList<StudyScheduleDto> list = new ArrayList<StudyScheduleDto>();
+		
+		try {
+			
+			String sql = String.format("select * from study_schedule where studySeq = ?");
+			
+			pstat = conn.prepareStatement(sql);
+			pstat.setString(1, seq);
+			rs = pstat.executeQuery();
+			
+			while(rs.next()) {
+				StudyScheduleDto dto = new StudyScheduleDto();
+				
+				dto.setSeq(rs.getString("seq"));
+				dto.setTitle(rs.getString("title"));
+				dto.setContent(rs.getString("content"));
+				dto.setStartDate(rs.getString("startDate"));
+				dto.setEndDate(rs.getString("endDate"));
+				dto.setStudySeq(rs.getString("studySeq"));
+				
+				list.add(dto);
+			}
+			
+			return list;
+			
+		} catch (Exception e) {
+			e.printStackTrace();
+		} finally {
+			closeAll();
+		}
+		
+		return null;
 	}
 		
 
