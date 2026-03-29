@@ -40,7 +40,7 @@
 		<!-- 게시판 이름 -->
 		<div class="mb-4">
 			<c:if test="${dto.boardType==1}">
-				<h1 class="section-title">자유게시판 ${auth}</h1>
+				<h1 class="section-title">자유게시판</h1>
 			</c:if>
 		</div>
 
@@ -138,7 +138,7 @@
 		<div class="content-card card-pad mb-4">
 
 			<!-- ① 댓글 입력 폼 (상단 고정) -->
-			<form method="get" action="/teamtwo/comment/add.do">
+			<form method="post" action="/teamtwo/comment/add.do">
 				<div class="border-b pb-4 mb-6 border-slate-200">
 					<div class="flex items-start gap-3 opacity-60">
 						<div
@@ -157,10 +157,17 @@
 							</div>
 						</c:if>
 						<c:if test="${not empty auth }">
+							<input type="hidden" name="seq" value="${dto.seq}">
+							<input type="hidden" name="board" value="${dto.boardType}">
+							<input type="hidden" name="category" value="${param.category}">
+							<input type="hidden" name="searchType"
+								value="${param.searchType}">
+							<input type="hidden" name="keyword" value="${param.keyword}">
+
 							<div class="flex-1">
 								<textarea
 									class="textarea textarea-bordered w-full h-20 resize-none"
-									placeholder="댓글을 작성하세요..." required></textarea>
+									name="content" placeholder="댓글을 작성하세요..." required></textarea>
 								<div class="flex justify-end mt-2">
 									<button class="btn btn-brand btn-sm px-6">댓글 등록</button>
 								</div>
@@ -184,24 +191,25 @@
 			<!-- ③ 댓글 리스트 (하단 스크롤) -->
 			<div class="space-y-3 max-h-80 overflow-y-auto">
 
-				<!-- 더미 댓글 1 -->
 				<c:forEach var="entry" items="${dto.comments}">
-				
-				<div class="comment-item border-l-4 border-brand pl-4 pb-3">
-					<div class="flex justify-between items-start mb-1">
-						<div class="flex items-center gap-2">
-							<span class="font-semibold text-sm">${entry.nickname} </span> <span
-								class="text-xs text-slate-500">${entry.regDate}</span>
-						</div>
-						<!-- 댓글삭제 -->
-						<c:if test="${entry.id == auth}">
-							<div class="text-xs">
-								 <a href="#" class="text-error hover:underline ml-2">삭제</a>
+
+					<div class="comment-item border-l-4 border-brand pl-4 pb-3">
+						<div class="flex justify-between items-start mb-1">
+							<div class="flex items-center gap-2">
+								<span class="font-semibold text-sm">${entry.nickname} </span> <span
+									class="text-xs text-slate-500">${entry.regDate}</span>
 							</div>
-						</c:if>
+							<!-- 댓글삭제 -->
+							<c:if test="${entry.id == auth}">
+								<div class="text-xs">
+									<a href="#"
+										onclick="deleteComment(${entry.seq}, ${dto.seq},${dto.boardType},'${param.category}', '${param.searchType}', '${param.keyword}', '${param.page}')"
+										class="text-error hover:underline ml-2">삭제</a>
+								</div>
+							</c:if>
+						</div>
+						<p class="text-sm leading-relaxed">${entry.content}</p>
 					</div>
-					<p class="text-sm leading-relaxed">${entry.content}</p>
-				</div>
 				</c:forEach>
 
 			</div>
@@ -230,7 +238,20 @@
 				<button class="btn">다음글이 없습니다</button>
 			</c:if>
 		</div>
-
 	</main>
+	<script>
+	function deleteComment(seq, postSeq, boardType, category, searchType, keyword, page) {
+	    if(confirm('댓글을 삭제하시겠습니까?')) {
+	        location.href = `/teamtwo/comment/del.do?seq=` + seq + 
+	                       `&postSeq=` + postSeq +
+	                       `&board=` + boardType + 
+	                       `&category=` + category + 
+	                       `&searchType=` + searchType + 
+	                       `&keyword=` + keyword + 
+	                       `&page=` + page;
+	    }
+	}
+	</script>
 </body>
+
 </html>

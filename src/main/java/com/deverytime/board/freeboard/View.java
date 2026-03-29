@@ -30,6 +30,15 @@ public class View extends HttpServlet {
 		dto.setBoardType(board);
 		dto.setSeq(seq);
 		
+		// 검색 카테고리 추가
+		String category = req.getParameter("category");
+		String searchType = req.getParameter("searchType");
+		String keyword = req.getParameter("keyword");
+		
+		dto.setCategory(category);
+		dto.setSearchType(searchType);
+		dto.setKeyword(keyword);
+		
 		BoardService service = new BoardService();
 		
 		// 2. 새로 고침 중복 조회수 방지
