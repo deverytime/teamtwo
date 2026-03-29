@@ -134,6 +134,8 @@ public class ViewStudy extends HttpServlet{
 			
 		}
 		
+		
+		req.setAttribute("totalCount", totalCount);
 		req.setAttribute("pagebar", pagebar);
 		req.setAttribute("dto", dto);
 		req.setAttribute("mlist", mlist);
