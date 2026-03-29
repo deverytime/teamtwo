@@ -24,8 +24,10 @@ public class EditStudy extends HttpServlet{
 		
 		StudyService service = new StudyService();
 		StudyDto dto = service.get(seq);
+		int totalCountM = service.getTotalCountM(seq);
 		
 		req.setAttribute("dto", dto);
+		req.setAttribute("totalCountM", totalCountM);
 		
 		req.getRequestDispatcher("/WEB-INF/views/study/study-edit.jsp").forward(req, resp);
 		
@@ -55,23 +57,38 @@ public class EditStudy extends HttpServlet{
 		String name = req.getParameter("name");
 		String description = req.getParameter("description");
 		String capacity = req.getParameter("capacity");
+		String status = req.getParameter("status");
+		
+		//checkbox on이면 value값 1, off라서 안넘어오면 null
+		if(status == null) {
+			status = "0";
+		}
+		
+		StudyService service = new StudyService();
+		
+		int totalCountM = service.getTotalCountM(seq);
 		
 		try {
 			
 		    int cap = Integer.parseInt(capacity);
+		    
+		    if(totalCountM > cap) {
+				resp.getWriter().print("<script>alert('현재 인원수 보다 적게 설정할 수 없습니다.');history.back();</script>");
+				resp.getWriter().close();
+				return;
+			}
 
 		    if (cap >= 5 && cap <= 20) {
 		    	
 		    } else {
-		    	resp.getWriter().print("<script>alert('failed');history.back();</script>");
+		    	resp.getWriter().print("<script>alert('인원수는 5명에서 20명 사이여야 합니다.');history.back();</script>");
 				resp.getWriter().close();
+				return;
 		    }
 
 		} catch (NumberFormatException e) {
 			e.printStackTrace();
 		}
-		
-		StudyService service = new StudyService();
 		
 		StudyDto dto = new StudyDto();
 		
@@ -79,6 +96,7 @@ public class EditStudy extends HttpServlet{
 		dto.setName(name);
 		dto.setDescription(description);
 		dto.setCapacity(capacity);
+		dto.setStatus(status);
 		
 		int result = service.edit(dto);
 		

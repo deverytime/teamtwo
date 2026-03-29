@@ -40,6 +40,16 @@ public class ListStudySchedule extends HttpServlet{
 		MemberDto mdto = (MemberDto)auth;
 		String seq = req.getParameter("seq");
 		
+		StudyScheduleService service = new StudyScheduleService();
+		
+		int result = service.isMember(mdto, seq);
+		
+		if(result == 0) {
+			resp.getWriter().print("<script>alert('스터디 가입자만 볼 수 있습니다.');history.back();</script>");
+			resp.getWriter().close();
+			return;
+		}
+		
 		
 		HashMap<String, String> map = new HashMap<String, String>();
 		
@@ -68,9 +78,6 @@ public class ListStudySchedule extends HttpServlet{
 		map.put("begin", begin + "");
 		map.put("end", end + "");
 		map.put("nowPage", nowPage + "");
-		
-		
-		StudyScheduleService service = new StudyScheduleService();
 		
 		ArrayList<StudyScheduleDto> schlist = new ArrayList<StudyScheduleDto>();
 		
@@ -114,8 +121,12 @@ public class ListStudySchedule extends HttpServlet{
 			pagebar += String.format("<a href='/teamtwo/study/studyschedule-list.do?page=%d'>[다음 %d페이지]</a>", n, blockSize);
 		}	
 		
+		//달력을 위한 페이징 처리가 안된 list
+		ArrayList<StudyScheduleDto> calendarList = service.clist(seq);
+		
 		req.setAttribute("pagebar", pagebar);
 		req.setAttribute("schlist", schlist);
+		req.setAttribute("calendarList", calendarList);
 		req.setAttribute("map", map);
 		req.setAttribute("seq", seq);
 		

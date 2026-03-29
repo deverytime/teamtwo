@@ -35,17 +35,31 @@ public class RegStudy extends HttpServlet{
 		//로그인 상태라면 데이터 추출
 		String id = auth.toString();
 		String seq = req.getParameter("seq");
-		
 		//서비스 호출
 		StudyService service = new StudyService();
+		
 		StudyDto dto = service.get(seq);
+		
 		MemberDto mdto = service.getMember(id);
+		
+		int result = service.isMember(mdto, dto);
+		
+		if(result > 0) {
+			resp.getWriter().print("<script>alert('이미 참여하고 있는 스터디 입니다.');history.back();</script>");
+			resp.getWriter().close();
+			return;
+		}
+		
+		if(dto.getStatus().equals("1")) {
+			resp.getWriter().print("<script>alert('모집완료된 스터디 입니다.');history.back();</script>");
+			resp.getWriter().close();
+			return;
+		}
 		
 		req.setAttribute(seq, "seq");
 		
 		//스터디 등록
-		int result = service.regStudy(dto, mdto);
-		System.out.println(result);
+		result = service.regStudy(dto, mdto);
 		
 		if(result > 0) {
 			resp.getWriter().print("<script>alert('참여 성공!');location.href='/teamtwo/study/study-view.do?seq=" + seq + "';</script>");

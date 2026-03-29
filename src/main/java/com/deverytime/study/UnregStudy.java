@@ -10,6 +10,7 @@ import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
 import com.deverytime.model.MemberDto;
+import com.deverytime.model.StudyDto;
 
 @WebServlet(value = "/study/study-unreg.do")
 public class UnregStudy extends HttpServlet{
@@ -34,9 +35,20 @@ public class UnregStudy extends HttpServlet{
 		
 		StudyService service = new StudyService();
 		
+		StudyDto dto = new StudyDto();
+		dto.setSeq(seq);
+		
 		MemberDto mdto = (MemberDto)auth;
 		
-		int result = service.unregStudy(mdto, seq);
+		int result = service.isManager(mdto, dto);
+		
+		if(result >= 1) {
+			resp.getWriter().print("<script>alert('스터디장은 탈퇴할 수 없습니다.');history.back();</script>");
+			resp.getWriter().close();
+			return;
+		}
+		
+		result = service.unregStudy(mdto, seq);
 		
 		if(result > 0) {
 			resp.getWriter().print("<script>alert('스터디 탈퇴 완료');location.href='/teamtwo/study/study-list.do';</script>");

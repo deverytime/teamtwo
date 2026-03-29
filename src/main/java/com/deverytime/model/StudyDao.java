@@ -8,14 +8,13 @@ import com.deverytime.library.BasicDao;
 
 public class StudyDao extends BasicDao{
 
-	public ArrayList<StudyDto> list(HashMap<String, String> map) {
+	public ArrayList<StudyDto> list(HashMap<String, String> map, MemberDto mdto) {
 	    
 	    ArrayList<StudyDto> list = new ArrayList<StudyDto>();
-	    String sql = "";
 	    String where = "";
 	    
 	    // 1. 조건절 구성
-	    if(map.get("search").equals("y")) {
+	    if("y".equals(map.get("search"))) {
 	        String status = map.get("status");
 	        String word = map.get("word");
 	        
@@ -33,14 +32,18 @@ public class StudyDao extends BasicDao{
 	        }
 	    }
 	    
-	    // 2. 페이징 쿼리 (정렬 기준이 있다면 vwStudy 내부에 있거나 여기에 추가해야 함)
-	    sql = String.format("select * from (select a.*, rownum as rnum from vwStudy a %s) where rnum between ? and ?", where);
+	    // 2. 페이징 쿼리
+	    // FROM study 대신 FROM vwStudy를 사용합니다.
+	    String sql = "select * from (select s.*, (select count(*) from study_member where studySeq = s.seq and memberSeq = ?) as isMember, "
+	            + "rownum as rnum from (select * from vwStudy " + where + " order by seq desc) s) where rnum between ? and ?";
+	    
 
 	    try {
 	        // PreparedStatement 사용
 	        pstat = conn.prepareStatement(sql);
-	        pstat.setString(1, map.get("begin"));
-	        pstat.setString(2, map.get("end"));
+	        pstat.setString(1, mdto != null ? mdto.getSeq() : "0");
+	        pstat.setString(2, map.get("begin"));
+	        pstat.setString(3, map.get("end"));
 	        
 	        rs = pstat.executeQuery();
 	        
@@ -54,6 +57,7 @@ public class StudyDao extends BasicDao{
 	            dto.setCreateDate(rs.getString("createDate"));
 	            dto.setScheduleCount(rs.getString("scheduleCount"));
 	            dto.setHeadCount(rs.getString("headCount"));
+	            dto.setIsMember(rs.getInt("isMember") > 0 ? "y" : "n");
 	            
 	            list.add(dto);
 	        }
@@ -166,41 +170,61 @@ public class StudyDao extends BasicDao{
 
 	public ArrayList<MemberDto> memberlist(String seq, HashMap<String, String> map) {
 		
+		//에러시 list가 없는 것을 방지하기 위해 밖에서 선언
+		ArrayList<MemberDto> list = new ArrayList<MemberDto>();
+		
 		try {
 			
-			String sql = String.format("select * from (select a.*, rownum as rnum from vwStudyMember a where studySeq = ?) where rnum between %s and %s"
-					,map.get("begin")
-					,map.get("end"));
+			String sort = "ORDER BY regdate DESC, seq DESC";
 			
+			String sql = String.format("select * from (select a.*, rownum as rnum from (select * from vwStudyMember where studySeq = ? %s) a) where rnum between %s and %s"
+									,sort
+									,map.get("begin")
+									,map.get("end"));
+
 			pstat = conn.prepareStatement(sql);
+
 			pstat.setString(1, seq);
+
 			rs = pstat.executeQuery();
-			
-			ArrayList<MemberDto> list = new ArrayList<MemberDto>();
-			
-			while(rs.next()) {
+
+			while (rs.next()) {
+
 				MemberDto dto = new MemberDto();
-				
+
 				dto.setSeq(rs.getString("seq"));
+
 				dto.setId(rs.getString("id"));
+
 				dto.setName(rs.getString("name"));
+
 				dto.setEmail(rs.getString("email"));
+
 				dto.setRegdate(rs.getString("regdate"));
-				
+
 				list.add(dto);
+
 			}
-			
-			return list;
-			
+
+
+		return list;
+
+
 		} catch (Exception e) {
-			e.printStackTrace();
+
+		e.printStackTrace();
+
 		} finally {
-			closeAll();
+
+		closeAll();
+
 		}
-		
+
+
 		return null;
-		
-	}
+
+
+		} 
 
 	public int getTotalCountM(String seq) {
 		
@@ -384,7 +408,7 @@ public class StudyDao extends BasicDao{
 		
 		try {
 			
-			String sql = "delete from study_member where memberseq = ? and studySeq = ?";
+			String sql = "delete from study_member where memberseq = ? and studySeq = ? and type = 0";
 			
 			pstat = conn.prepareStatement(sql);
 			pstat.setString(1, dto.getSeq());
@@ -430,13 +454,14 @@ public class StudyDao extends BasicDao{
 		
 		try {
 			
-			String sql = "update study set name = ?, description = ?, capacity = ? where seq = ?";
+			String sql = "update study set name = ?, description = ?, capacity = ?, status = ? where seq = ?";
 			
 			pstat = conn.prepareStatement(sql);
 			pstat.setString(1, dto.getName());
 			pstat.setString(2, dto.getDescription());
 			pstat.setString(3, dto.getCapacity());
-			pstat.setString(4, dto.getSeq());
+			pstat.setString(4, dto.getStatus());
+			pstat.setString(5, dto.getSeq());
 			
 			return pstat.executeUpdate();
 			

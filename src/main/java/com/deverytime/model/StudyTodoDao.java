@@ -9,17 +9,20 @@ public class StudyTodoDao extends BasicDao{
 
 	public ArrayList<StudyTodoDto> todolist(HashMap<String, String> map, String seq) {
 		
+		ArrayList<StudyTodoDto> list = new ArrayList<StudyTodoDto>();
+		
 		try {
 			
-			String sql = String.format("select * from (select a.*, rownum as rnum from todo a where studyScheduleSeq = ?) where rnum between %s and %s"
+			String sort = "ORDER BY seq DESC";
+			
+			String sql = String.format("select * from (select a.*, rownum as rnum from (select * from todo where studyScheduleSeq = ? %s) a) where rnum between %s and %s"
+					,sort
 					,map.get("begin")
 					,map.get("end"));
 			
 			pstat = conn.prepareStatement(sql);
 			pstat.setString(1, seq);
 			rs = pstat.executeQuery();
-			
-			ArrayList<StudyTodoDto> list = new ArrayList<StudyTodoDto>();
 			
 			while(rs.next()) {
 				StudyTodoDto dto = new StudyTodoDto();

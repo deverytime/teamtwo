@@ -2,6 +2,7 @@ package com.deverytime.study;
 
 import java.io.IOException;
 import java.io.PrintWriter;
+import java.time.LocalDate;
 
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
@@ -50,8 +51,17 @@ public class EditStudySchedule extends HttpServlet{
 		String seq = req.getParameter("seq");
 		String title = req.getParameter("title");
 		String content = req.getParameter("content");
-		String startdate = req.getParameter("startDate");
-		String enddate = req.getParameter("endDate");
+		String startDateStr = req.getParameter("startDate");
+		String endDateStr = req.getParameter("endDate");
+		
+		LocalDate startDate = LocalDate.parse(startDateStr);
+		LocalDate endDate = LocalDate.parse(endDateStr);
+		
+		if(startDate.isAfter(endDate)) {
+			resp.getWriter().print("<script>alert('시작일은 종료일보다 빨라야 합니다.');history.back();</script>");
+			resp.getWriter().close();
+			return;
+		}
 		
 		StudyScheduleService service = new StudyScheduleService();
 		
@@ -60,8 +70,8 @@ public class EditStudySchedule extends HttpServlet{
 		dto.setSeq(seq);
 		dto.setTitle(title);
 		dto.setContent(content);
-		dto.setStartDate(startdate);
-		dto.setEndDate(enddate);
+		dto.setStartDate(startDateStr);
+		dto.setEndDate(endDateStr);
 		
 		int result = service.edit(dto);
 		
