@@ -9,54 +9,62 @@ import com.deverytime.library.BasicDao;
 public class StudyDao extends BasicDao{
 
 	public ArrayList<StudyDto> list(HashMap<String, String> map) {
-		
-		try {
-			
-			String where = "";
-			
-			if(map.get("search").equals("y")) {
-				where = String.format("where %s like '%%%s%%'"
-						, map.get("word"));
-			}
-			
-			String sql = "";
-			
-			sql = String.format("select * from (select a.*, rownum as rnum from vwStudy a %s) where rnum between %s and %s"
-							,where
-							,map.get("begin")
-							,map.get("end"));
-			
-			rs = stat.executeQuery(sql);
-			
-			ArrayList<StudyDto> list = new ArrayList<StudyDto>();
-			
-			while(rs.next()) {
-				StudyDto dto = new StudyDto();
-				
-				dto.setSeq(rs.getString("seq"));
-				dto.setName(rs.getString("name"));
-				dto.setDescription(rs.getString("description"));
-				dto.setCapacity(rs.getString("capacity"));
-				dto.setStatus(rs.getString("status"));
-				dto.setCreateDate(rs.getString("createDate"));
-				
-				dto.setScheduleCount(rs.getString("scheduleCount"));
-				dto.setHeadCount(rs.getString("headCount"));
-				
-				
-				list.add(dto);
-			}
-			
-			return list;
-			
-		} catch (Exception e) {
-			e.printStackTrace();
-		} finally {
-			closeAll();	
-		}
-		
-		return null;
-		
+	    
+	    ArrayList<StudyDto> list = new ArrayList<StudyDto>();
+	    String sql = "";
+	    String where = "";
+	    
+	    // 1. 조건절 구성
+	    if(map.get("search").equals("y")) {
+	        String status = map.get("status");
+	        String word = map.get("word");
+	        
+	        // 1. 상태값만 있는 경우
+	        if (status != null && !status.equals("") && (word == null || word.equals(""))) {
+	            where = String.format("where status = '%s'", status);
+	        } 
+	        // 2. 검색어만 있는 경우
+	        else if ((status == null || status.equals("")) && word != null && !word.equals("")) {
+	            where = String.format("where (name like '%%%s%%' or description like '%%%s%%')", word, word);
+	        } 
+	        // 3. 둘 다 있는 경우
+	        else if (status != null && !status.equals("") && word != null && !word.equals("")) {
+	            where = String.format("where status = '%s' and (name like '%%%s%%' or description like '%%%s%%')", status, word, word);
+	        }
+	    }
+	    
+	    // 2. 페이징 쿼리 (정렬 기준이 있다면 vwStudy 내부에 있거나 여기에 추가해야 함)
+	    sql = String.format("select * from (select a.*, rownum as rnum from vwStudy a %s) where rnum between ? and ?", where);
+
+	    try {
+	        // PreparedStatement 사용
+	        pstat = conn.prepareStatement(sql);
+	        pstat.setString(1, map.get("begin"));
+	        pstat.setString(2, map.get("end"));
+	        
+	        rs = pstat.executeQuery();
+	        
+	        while(rs.next()) {
+	            StudyDto dto = new StudyDto();
+	            dto.setSeq(rs.getString("seq"));
+	            dto.setName(rs.getString("name"));
+	            dto.setDescription(rs.getString("description"));
+	            dto.setCapacity(rs.getString("capacity"));
+	            dto.setStatus(rs.getString("status"));
+	            dto.setCreateDate(rs.getString("createDate"));
+	            dto.setScheduleCount(rs.getString("scheduleCount"));
+	            dto.setHeadCount(rs.getString("headCount"));
+	            
+	            list.add(dto);
+	        }
+	        return list;
+	        
+	    } catch (Exception e) {
+	        e.printStackTrace();
+	    } finally {
+	        closeAll();    
+	    }
+	    return null;
 	}
 
 	public int getTotalCountSM(HashMap<String, String> map, MemberDto mdto) {

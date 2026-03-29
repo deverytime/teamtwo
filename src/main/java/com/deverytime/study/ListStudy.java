@@ -23,17 +23,18 @@ public class ListStudy extends HttpServlet{
 	protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
 					
 		String word = req.getParameter("word");
+		String status = req.getParameter("status");
 		String search = "n"; //목록보기(n), 검색하기(y)
 		
-		if(word == null || word.trim().equals("")) {
-			search = "n";
-		} else {
-			search = "y";
+		// 검색어나 상태값 중 하나라도 있다면 검색 모드(y)로 전환
+		if ((word != null && !word.trim().equals("")) || (status != null && !status.trim().equals(""))) {
+		    search = "y";
 		}
 		
 		
 		HashMap<String, String> map = new HashMap<String, String>();
 		map.put("word", word);
+		map.put("status", status);
 		map.put("search", search);
 		
 		
