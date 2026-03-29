@@ -134,6 +134,7 @@ public class ViewStudy extends HttpServlet{
 			
 		}
 		
+		String managerSeq = service.getManagerSeq(seq);
 		
 		req.setAttribute("totalCount", totalCount);
 		req.setAttribute("pagebar", pagebar);
@@ -141,6 +142,7 @@ public class ViewStudy extends HttpServlet{
 		req.setAttribute("mlist", mlist);
 		req.setAttribute("isManager", isManager);
 		req.setAttribute("isMember", isMember);
+		req.setAttribute("managerSeq", managerSeq);
 		
 		req.getRequestDispatcher("/WEB-INF/views/study/study-view.jsp").forward(req, resp);
 		

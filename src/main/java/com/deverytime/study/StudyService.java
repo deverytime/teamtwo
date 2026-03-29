@@ -220,5 +220,28 @@ public class StudyService {
 		
 	}
 
+	public int deport(String mseq, String seq) {
+		
+		StudyDao dao = new StudyDao();
+		
+		return dao.deport(mseq, seq);
+		
+	}
+
+	public String getManagerSeq(String seq) {
+		
+		StudyDao dao = new StudyDao();
+		
+		return dao.getManagerSeq(seq);
+		
+	}
+
+	public int delegateManager(String seq, String mseq, String managerSeq) {
+		
+		StudyDao dao = new StudyDao();
+		
+		return dao.delegateManager(seq, mseq, managerSeq);
+	}
+
 	
 }

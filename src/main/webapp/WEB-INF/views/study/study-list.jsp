@@ -24,10 +24,10 @@
 
         <div class="content-card card-pad mb-10 bg-slate-50 border-slate-200 shadow-inner">
             <form method="GET" action="/teamtwo/study/study-list.do" class="flex flex-col md:flex-row gap-3">
-                <select class="select select-bordered bg-white w-full md:w-44">
-                    <option>전체 상태</option> 
-                    <option value="0">모집중</option>
-                    <option value="1">모집완료</option>
+                <select class="select select-bordered bg-white w-full md:w-44" name="status">
+                    <option value="" ${empty map.status ? 'selected' : ''}>전체 상태</option> 
+                    <option value="0" ${map.status == '0' ? 'selected' : ''}>모집중</option>
+                    <option value="1" ${map.status == '1' ? 'selected' : ''}>모집완료</option>
                 </select>
                 <div class="join w-full">
                     <input type="text" placeholder="스터디 제목이나 내용으로 검색" 
