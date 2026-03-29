@@ -384,7 +384,7 @@ public class StudyDao extends BasicDao{
 		
 		try {
 			
-			String sql = "delete from study_member where memberseq = ? and studySeq = ?";
+			String sql = "delete from study_member where memberseq = ? and studySeq = ? and type = 0";
 			
 			pstat = conn.prepareStatement(sql);
 			pstat.setString(1, dto.getSeq());
