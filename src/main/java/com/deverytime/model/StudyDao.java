@@ -11,7 +11,6 @@ public class StudyDao extends BasicDao{
 	public ArrayList<StudyDto> list(HashMap<String, String> map) {
 	    
 	    ArrayList<StudyDto> list = new ArrayList<StudyDto>();
-	    String sql = "";
 	    String where = "";
 	    
 	    // 1. 조건절 구성
@@ -33,8 +32,14 @@ public class StudyDao extends BasicDao{
 	        }
 	    }
 	    
+	    String sort = "ORDER BY seq DESC";
+	    
 	    // 2. 페이징 쿼리 (정렬 기준이 있다면 vwStudy 내부에 있거나 여기에 추가해야 함)
-	    sql = String.format("select * from (select a.*, rownum as rnum from vwStudy a %s) where rnum between ? and ?", where);
+	    String sql = String.format(
+	    	    "SELECT * FROM (SELECT a.*, rownum as rnum FROM (SELECT * FROM vwStudy %s %s) a) WHERE rnum BETWEEN ? AND ?", 
+	    	    where, 
+	    	    sort
+	    	);
 
 	    try {
 	        // PreparedStatement 사용
@@ -166,41 +171,61 @@ public class StudyDao extends BasicDao{
 
 	public ArrayList<MemberDto> memberlist(String seq, HashMap<String, String> map) {
 		
+		//에러시 list가 없는 것을 방지하기 위해 밖에서 선언
+		ArrayList<MemberDto> list = new ArrayList<MemberDto>();
+		
 		try {
 			
-			String sql = String.format("select * from (select a.*, rownum as rnum from vwStudyMember a where studySeq = ?) where rnum between %s and %s"
-					,map.get("begin")
-					,map.get("end"));
+			String sort = "ORDER BY regdate DESC, seq DESC";
 			
+			String sql = String.format("select * from (select a.*, rownum as rnum from (select * from vwStudyMember where studySeq = ? %s) a) where rnum between %s and %s"
+									,sort
+									,map.get("begin")
+									,map.get("end"));
+
 			pstat = conn.prepareStatement(sql);
+
 			pstat.setString(1, seq);
+
 			rs = pstat.executeQuery();
-			
-			ArrayList<MemberDto> list = new ArrayList<MemberDto>();
-			
-			while(rs.next()) {
+
+			while (rs.next()) {
+
 				MemberDto dto = new MemberDto();
-				
+
 				dto.setSeq(rs.getString("seq"));
+
 				dto.setId(rs.getString("id"));
+
 				dto.setName(rs.getString("name"));
+
 				dto.setEmail(rs.getString("email"));
+
 				dto.setRegdate(rs.getString("regdate"));
-				
+
 				list.add(dto);
+
 			}
-			
-			return list;
-			
+
+
+		return list;
+
+
 		} catch (Exception e) {
-			e.printStackTrace();
+
+		e.printStackTrace();
+
 		} finally {
-			closeAll();
+
+		closeAll();
+
 		}
-		
+
+
 		return null;
-		
-	}
+
+
+		} 
 
 	public int getTotalCountM(String seq) {
 		
