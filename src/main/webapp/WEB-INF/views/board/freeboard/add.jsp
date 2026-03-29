@@ -65,6 +65,13 @@
 										<input type="file" name="file"
 											class="file-input file-input-bordered w-full bg-white">
 									</div>
+									
+									<input type="hidden" name="board" value="${param.board}">
+									<!-- 검색 조건 유지 (list에서 온 경우) -->
+									<input type="hidden" name="category" value="${param.category}">
+									<input type="hidden" name="searchType" value="${param.searchType}"> 
+									<input type="hidden" name="keyword" value="${param.keyword}"> 
+									<input type="hidden" name="page" value="${param.page}">
 									<button type="button" class="btn btn-soft-brand mt-2"
 										onclick="addFile()">+ 파일 추가</button>
 								</div>

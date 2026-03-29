@@ -110,7 +110,7 @@
 					<!-- 오른쪽 글쓰기 버튼 -->
 					<div class="w-24 flex justify-end">
 						<button class="btn btn-brand"
-							onclick="location.href='add.do?board=${board}'">글쓰기</button>
+							onclick="location.href='add.do?board=${board}&category=${param.category}&searchType=${param.searchType}&keyword=${param.keyword}'">글쓰기</button>
 					</div>
 				</div>
 		</div>
