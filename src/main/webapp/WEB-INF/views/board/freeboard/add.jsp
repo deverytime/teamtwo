@@ -41,7 +41,7 @@
 							</div>
 
 							<div class="flexshirink-0">
-								<select name="category" class="select select-boarderd white">
+								<select name="subject" class="select select-boarderd white">
 									<c:forEach var="entry" items="${categoryMap}">
 										<option value="${entry.key}">${entry.value}</option>
 									</c:forEach>
