@@ -119,6 +119,10 @@
 								<option value="5">기타</option>
 							</select>
 							<div class="modal-action">
+								<input type="hidden" name="category" value="${param.category }">
+								<input type="hidden" name="searchType" value="${param.searchType }">
+								<input type="hidden" name="keyword" value="${param.keyword }">
+								<input type="hidden" name="page" value="${param.page }">
 								<button type="submit" class="btn btn-error">신고</button>
 								<button type="button" class="btn" onclick="report_modal.close()">취소</button>
 							</div>
