@@ -5,9 +5,11 @@
 	<div id="floatingMenu" class="bg-slate-100 rounded-2xl p-4 shadow-sm transition-transform duration-500 ease-out will-change-transform">
 		<ul class="menu w-full p-0 gap-2">
 			<li><a href="/teamtwo/admin/member-list.do" class="font-semibold text-slate-600 hover:text-primary ${uri.contains('member') ? 'active bg-white shadow-sm text-primary' : ''}">회원 관리</a></li>
-			<li><a href="/teamtwo/admin/board-list.do" class="font-semibold text-slate-600 hover:text-primary ${uri.contains('board') ? 'active bg-white shadow-sm text-primary' : ''}">게시글 관리</a></li>
+			
+			<li><a href="/teamtwo/admin/board-list.do" class="font-semibold text-slate-600 hover:text-primary ${uri.contains('admin/board') ? 'active bg-white shadow-sm text-primary' : ''}">게시글 관리</a></li>
+			
 			<li><a href="/teamtwo/admin/study-list.do" class="font-semibold text-slate-600 hover:text-primary ${uri.contains('study') ? 'active bg-white shadow-sm text-primary' : ''}">스터디 관리</a></li>
-			<li><a href="/teamtwo/admin/request-list.do" class="font-semibold text-slate-600 hover:text-primary ${uri.contains('request') ? 'active bg-white shadow-sm text-primary' : ''}">요청 관리</a></li>
+			<li><a href="/teamtwo/board/request/list.do" class="font-semibold text-slate-600 hover:text-primary ${uri.contains('request') ? 'active bg-white shadow-sm text-primary' : ''}">요청 관리</a></li>
 		</ul>
 	</div>
 
