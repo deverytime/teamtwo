@@ -208,7 +208,7 @@ public class AdminService {
 
 		String pagebar = PagingUtil.makePagebar(
 				paging,
-				"/teamtwo/admin/request/list.do",
+				"/teamtwo/board/request/list.do",
 				queryString
 		);
 
