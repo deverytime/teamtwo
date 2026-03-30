@@ -9,7 +9,7 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
-@WebServlet("/admin/request-list.do")
+@WebServlet("/board/request/list.do")
 public class ListRequest extends HttpServlet {
 
 	@Override
@@ -41,6 +41,6 @@ public class ListRequest extends HttpServlet {
 		System.out.println("status: " + result.get("status"));
 		System.out.println("totalCount: " + result.get("totalCount"));
 
-		req.getRequestDispatcher("/WEB-INF/views/admin/request-list.jsp").forward(req, resp);
+		req.getRequestDispatcher("/WEB-INF/views/board/request/list.jsp").forward(req, resp);
 	}
 }
