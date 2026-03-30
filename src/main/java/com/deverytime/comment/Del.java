@@ -24,7 +24,7 @@ public class Del extends HttpServlet {
 		String category = req.getParameter("category");
 		String searchType = req.getParameter("searchType");
 		String keyword = req.getParameter("keyword");
-		
+		String page = req.getParameter("page");
 		
 		
 		// 삭제
@@ -39,9 +39,9 @@ public class Del extends HttpServlet {
 		String redirectUrl = "/teamtwo/board/freeboard/view.do?seq=" + postSeq +
 		    "&board=" + req.getParameter("board") +
 		    "&category=" + category+
-		    "&searchType=" + req.getParameter("searchType") +
+		    "&searchType=" + searchType +
 		    "&keyword=" + keywordEnc +
-		    "&page=" + req.getParameter("page");
+		    "&page=" + page;
 
 		resp.sendRedirect(redirectUrl);  // encodeRedirectURL 제거!
 	}

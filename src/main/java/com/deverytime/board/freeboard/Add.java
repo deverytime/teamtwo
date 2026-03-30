@@ -129,7 +129,7 @@ public class Add extends HttpServlet {
 		    // 한글오류
 		    String encodedKeyword = URLEncoder.encode(keyword, "UTF-8");
 
-		    resp.sendRedirect("list.do?board=" + dto.getBoardType() + "&category=" + paramCategory + "&searchType=" + searchType + "&keyword=" + encodedKeyword);
+		    resp.sendRedirect("list.do?board=" + dto.getBoardType() + "&category=" + paramCategory + "&searchType=" + searchType + "&keyword=" + encodedKeyword + "&page=" + page );
 		} else {
 			// history.back();
 //			resp.sendRedirect("javascript:history.back()");

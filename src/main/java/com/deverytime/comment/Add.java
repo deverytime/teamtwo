@@ -34,6 +34,7 @@ public class Add extends HttpServlet {
 		String category = req.getParameter("category");
 		String searchType = req.getParameter("searchType");
 		String keyword = req.getParameter("keyword");
+		String page = req.getParameter("page");
 		
 		dto.setCategory(category);
 		dto.setSearchType(searchType);
@@ -61,8 +62,8 @@ public class Add extends HttpServlet {
 		    "&board=" + board + 
 		    "&category=" + category +
 		    "&searchType=" + searchType + 
-		    "&keyword=" + keywordEnc; 
-		    //"&page=" + page;
+		    "&keyword=" + keywordEnc +
+		    "&page=" + page;
 
 		resp.sendRedirect(redirectUrl);
 
