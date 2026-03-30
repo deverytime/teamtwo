@@ -90,15 +90,16 @@ public class PlanService {
 	        query += "&type=" + type;
 	    }
 
-	    // 시작 (join wrapper)
-	    pagebar.append("<div class='join'>");
+	    // 시작
+	    pagebar.append("<div class='flex justify-center'>");
+	    pagebar.append("<div class='inline-flex items-center overflow-hidden rounded-lg border border-slate-300 bg-white shadow-sm'>");
 
 	    // 이전
 	    if (n <= 1) {
-	        pagebar.append("<a class='join-item btn btn-sm btn-disabled'>이전</a>");
+	        pagebar.append("<span class='px-3 py-2 text-sm text-slate-300 bg-slate-100 border-r border-slate-300 cursor-not-allowed'>이전</span>");
 	    } else {
 	        pagebar.append(String.format(
-	                "<a class='join-item btn btn-sm' href='/teamtwo/plan/list.do?page=%d%s'>이전</a>",
+	                "<a class='px-3 py-2 text-sm text-slate-700 hover:bg-slate-100 border-r border-slate-300 transition' href='/teamtwo/plan/list.do?page=%d%s'>이전</a>",
 	                n - 1, query
 	        ));
 	    }
@@ -108,12 +109,12 @@ public class PlanService {
 
 	        if (n == nowPage) {
 	            pagebar.append(String.format(
-	                    "<a class='join-item btn btn-sm btn-active'>%d</a>",
+	                    "<span class='px-3 py-2 text-sm font-semibold text-white bg-indigo-500 border-r border-slate-300'>%d</span>",
 	                    n
 	            ));
 	        } else {
 	            pagebar.append(String.format(
-	                    "<a class='join-item btn btn-sm' href='/teamtwo/plan/list.do?page=%d%s'>%d</a>",
+	                    "<a class='px-3 py-2 text-sm text-slate-700 hover:bg-slate-100 border-r border-slate-300 transition' href='/teamtwo/plan/list.do?page=%d%s'>%d</a>",
 	                    n, query, n
 	            ));
 	        }
@@ -124,15 +125,16 @@ public class PlanService {
 
 	    // 다음
 	    if (n > totalPage) {
-	        pagebar.append("<a class='join-item btn btn-sm btn-disabled'>다음</a>");
+	        pagebar.append("<span class='px-3 py-2 text-sm text-slate-300 bg-slate-100 cursor-not-allowed'>다음</span>");
 	    } else {
 	        pagebar.append(String.format(
-	                "<a class='join-item btn btn-sm' href='/teamtwo/plan/list.do?page=%d%s'>다음</a>",
+	                "<a class='px-3 py-2 text-sm text-slate-700 hover:bg-slate-100 transition' href='/teamtwo/plan/list.do?page=%d%s'>다음</a>",
 	                n, query
 	        ));
 	    }
 
 	    // 끝
+	    pagebar.append("</div>");
 	    pagebar.append("</div>");
 
 	    return pagebar.toString();
