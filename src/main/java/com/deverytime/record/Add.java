@@ -31,10 +31,12 @@ public class Add extends HttpServlet {
 		RecordService service = new RecordService();
 	    
 		String progressStr = req.getParameter("progress");
+		String timeStr = req.getParameter("time");
 		
 		RecordDto dto = RecordDto.builder()
 			    .studyDate(Date.valueOf(req.getParameter("studyDate")))
 			    .content(req.getParameter("content"))
+			    .time(timeStr != null ? Integer.parseInt(timeStr) : 1)
 			    .progress(progressStr != null ? Integer.parseInt(progressStr) : 0)
 			    .memo(req.getParameter("memo"))
 			    .recordStatus(req.getParameter("recordStatus"))

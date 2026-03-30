@@ -14,6 +14,7 @@ import lombok.NoArgsConstructor;
 public class RecordDto {
 	private String seq;           // 번호
     private Date studyDate;       // 실제 공부한 날짜
+    private int time;         // 공부 시간
     private String content;       // 내용
     private int progress;         // 진행률
     private String memo;          // 기록 메모 (선택)
