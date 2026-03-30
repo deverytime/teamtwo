@@ -813,4 +813,27 @@ public class AdminDao extends BasicDao {
 
 	    return 0;
 	}
+
+	public int addRequest(RequestDto dto) {
+
+		try {
+	        String sql = "insert into request_board "
+	                   + "(seq, title, subject, content, readCount, regDate, status, memberSeq) "
+	                   + "values (requestBoardSeq.nextval, ?, ?, ?, 0, sysdate, 0, ?)";
+
+	        pstat = conn.prepareStatement(sql);
+
+	        pstat.setString(1, dto.getTitle());
+	        pstat.setInt(2, dto.getSubject());
+	        pstat.setString(3, dto.getContent());
+	        pstat.setString(4, dto.getMemberSeq());
+
+	        return pstat.executeUpdate();
+
+	    } catch (Exception e) {
+	        e.printStackTrace();
+	    }
+		
+		return -1;
+	}
 }

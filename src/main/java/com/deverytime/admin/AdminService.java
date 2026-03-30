@@ -12,6 +12,8 @@ import com.deverytime.model.AdminReqDto;
 import com.deverytime.model.BoardDto;
 import com.deverytime.model.MemberDto;
 import com.deverytime.model.PagingDto;
+import com.deverytime.model.PlanDto;
+import com.deverytime.model.RequestDto;
 import com.deverytime.model.StudyDto;
 import com.deverytime.paging.PagingService;
 import com.deverytime.paging.PagingUtil;
@@ -271,5 +273,11 @@ public class AdminService {
 	    AdminDao dao = new AdminDao();
 	    
 	    return dao.delStudy(seq);
+	}
+
+	public int addRequest(RequestDto dto) {
+		AdminDao dao = new AdminDao();
+	    
+	    return dao.addRequest(dto);
 	}
 }
