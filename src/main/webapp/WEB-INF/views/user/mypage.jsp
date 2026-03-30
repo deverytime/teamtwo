@@ -17,7 +17,7 @@
 	<%@ include file="/WEB-INF/views/inc/header.jsp"%>
 
 	<main class="page-wrap mypage-wrap py-12">
-		<div class="mb-8 text-center border-b pb-6">
+		<div class="mb-8 text-center !border-b border-slate-200 pb-6">
 			<h1 class="text-3xl font-bold mb-2">마이페이지</h1>
 			<p class="text-slate-500">내 정보를 관리하세요</p>
 		</div>

@@ -24,7 +24,7 @@
 
 			<div class="grid grid-cols-2 gap-6 mb-6">
 				<div class="bg-white p-6 rounded-xl shadow-sm border border-slate-100">
-					<h3 class="font-bold text-lg mb-4 text-slate-700 border-b pb-2">기본 정보</h3>
+					<h3 class="font-bold text-lg mb-4 text-slate-700 border-b border-slate-200 pb-2">기본 정보</h3>
 					<ul class="space-y-3">
 						<li class="flex"><span class="w-24 text-slate-500">회원번호</span><span class="font-semibold">${dto.seq}</span></li>
 						<li class="flex"><span class="w-24 text-slate-500">아이디</span><span class="font-semibold text-primary">${dto.id}</span></li>
@@ -36,7 +36,7 @@
 				</div>
 
 				<div class="bg-white p-6 rounded-xl shadow-sm border border-slate-100">
-					<h3 class="font-bold text-lg mb-4 text-slate-700 border-b pb-2">활동 정보</h3>
+					<h3 class="font-bold text-lg mb-4 text-slate-700 border-b border-slate-200 pb-2">활동 정보</h3>
 					<ul class="space-y-3">
 						<li class="flex"><span class="w-32 text-slate-500">작성 게시글 수</span><span class="font-bold">${dto.totalPosts}개</span></li>
 						<li class="flex"><span class="w-32 text-slate-500">작성 댓글 수</span><span class="font-bold">${dto.totalComments}개</span></li>
@@ -60,7 +60,7 @@
 				</div>
 				
 				<div class="flex items-center gap-2">
-					<span class="text-sm text-slate-500">상태 선택:</span>
+					<span class="text-sm text-slate-500 whitespace-nowrap">상태 선택:</span>
 					<select name="status" class="select select-bordered select-sm focus:select-primary">
 						<option value="0" ${dto.status == 0 ? 'selected' : ''}>정상</option>
 						<option value="1" ${dto.status == 1 ? 'selected' : ''}>정지</option>

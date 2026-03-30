@@ -58,7 +58,7 @@
 								공유 게시판</a></li>
 						<li><a href="/teamtwo/board/datasharingboard/list.do">자료
 								공유 게시판</a></li>
-						<li><a href="/teamtwo/board/inquiryboard/list.do">문의 게시판</a></li>
+						<li><a href="/teamtwo/board/request/list.do">문의 게시판</a></li>
 					</ul></li>
 
 				<c:choose>
