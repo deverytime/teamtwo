@@ -260,4 +260,16 @@ public class AdminService {
 
 		dao.addRequestComment(requestBoardSeq, content);
 	}
+
+	public int delPost(String seq) {
+		AdminDao dao = new AdminDao();
+		
+		return dao.delPost(seq);
+	}
+
+	public int delStudy(String seq) {
+	    AdminDao dao = new AdminDao();
+	    
+	    return dao.delStudy(seq);
+	}
 }

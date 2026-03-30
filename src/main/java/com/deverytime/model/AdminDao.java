@@ -773,4 +773,44 @@ public class AdminDao extends BasicDao {
 			e.printStackTrace();
 		}
 	}
+
+	public int delPost(String seq) {
+		
+		try {
+			String sql = "delete from post "
+	                   + "where seq = ? ";
+
+	        pstat = conn.prepareStatement(sql);
+	        pstat.setString(1, seq);
+
+	        return pstat.executeUpdate();
+
+		} catch (Exception e) {
+			e.printStackTrace();
+		} finally {
+			closeAll();
+		}
+		
+		return 0;
+	}
+	
+	public int delStudy(String seq) {
+
+	    try {
+	        String sql = "delete from study "
+	                   + "where seq = ?";
+
+	        pstat = conn.prepareStatement(sql);
+	        pstat.setString(1, seq);
+
+	        return pstat.executeUpdate();
+
+	    } catch (Exception e) {
+	        e.printStackTrace();
+	    } finally {
+	        closeAll();
+	    }
+
+	    return 0;
+	}
 }
