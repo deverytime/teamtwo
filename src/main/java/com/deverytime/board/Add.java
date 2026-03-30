@@ -91,10 +91,6 @@ public class Add extends HttpServlet {
 		dto.setTitle(title);
 		dto.setContent(content);
 
-		System.out.println(keyword);
-		System.out.println(keyword);
-		System.out.println(keyword);
-		System.out.println(keyword);
 		
 		BoardService service = new BoardService();
 

@@ -204,4 +204,11 @@ public class BoardService {
 		return dao.getFile(fileSeq);
 	}
 
+	public ArrayList<BoardDto> trendingList() {
+		
+		BoardDao dao = new BoardDao();
+		
+		return dao.trendingList();
+	}
+
 }
