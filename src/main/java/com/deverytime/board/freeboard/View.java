@@ -1,7 +1,7 @@
 package com.deverytime.board.freeboard;
 
 import java.io.IOException;
-
+import java.net.URLEncoder;
 import java.util.HashSet;
 import java.util.Set;
 
@@ -37,6 +37,7 @@ public class View extends HttpServlet {
 		String category = req.getParameter("category");
 		String searchType = req.getParameter("searchType");
 		String keyword = req.getParameter("keyword");
+		String page = req.getParameter("page");
 		
 		dto.setCategory(category);
 		dto.setSearchType(searchType);
@@ -74,8 +75,14 @@ public class View extends HttpServlet {
 		// 4. 파일 처리
 		List<FileDto> fileList = service.getFileList(seq);
 		
+		
+		
 		req.setAttribute("dto", dto);
 		req.setAttribute("fileList", fileList);
+//		req.setAttribute("page", page);
+//		req.setAttribute("category", category);
+//		req.setAttribute("searchType", searchType);
+//		req.set
 		
 		req.getRequestDispatcher("/WEB-INF/views/board/freeboard/view.jsp").forward(req, resp);
 	}

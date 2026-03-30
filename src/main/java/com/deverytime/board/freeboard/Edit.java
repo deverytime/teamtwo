@@ -3,6 +3,7 @@ package com.deverytime.board.freeboard;
 import java.io.File;
 import java.io.IOException;
 import java.io.PrintWriter;
+import java.net.URLEncoder;
 
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
@@ -63,10 +64,14 @@ public class Edit extends HttpServlet {
 
 		String id = (String) session.getAttribute("auth");
 		String board = mr.getParameter("board");
-		String category = mr.getParameter("category");
+		String category = mr.getParameter("subject"); // 작성자가 선택한 카테고리
 		String title = mr.getParameter("title");
 		String content = mr.getParameter("content");
 		String seq = mr.getParameter("seq");
+		String paramCategory = mr.getParameter("category"); // 주소 파라미터
+		String page = mr.getParameter("page");
+		String searchType = mr.getParameter("searchType");
+		String keyword = mr.getParameter("keyword");
 		
 		BoardDto dto = new BoardDto();
 		dto.setId(id);
@@ -77,12 +82,19 @@ public class Edit extends HttpServlet {
 		dto.setSeq(seq);
 		
 		BoardService service = new BoardService();
+		String encodedKeyword = URLEncoder.encode(keyword, "UTF-8");
 
 		int result = service.edit(dto);
 		
 		if (result == 1) {
 			// view.do로
-			resp.sendRedirect("view.do?board=" + dto.getBoardType() + "&seq=" + dto.getSeq());
+			resp.sendRedirect("view.do?board=" + board 
+					+ "&seq=" + dto.getSeq()
+					+ "&category=" + paramCategory
+					+ "&searchType=" + searchType
+					+ "&keyword=" + encodedKeyword
+					+ "&page=" + page
+					);
 		} else {
 			// history.back();
 //					resp.sendRedirect("javascript:history.back()");

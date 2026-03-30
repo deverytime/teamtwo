@@ -32,6 +32,11 @@ public class Report extends HttpServlet {
 		String seq = req.getParameter("seq");
 		String board = req.getParameter("board");
 		String reasonSeq = req.getParameter("reasonSeq");
+		
+		String category = req.getParameter("category"); // 주소 파라미터
+		String searchType = req.getParameter("searchType");
+		String keyword = req.getParameter("keyword");
+		String page = req.getParameter("page");
 
 		BoardDto dto = new BoardDto();
 		dto.setReasonSeq(reasonSeq);
@@ -45,11 +50,11 @@ public class Report extends HttpServlet {
 
 		if (result == 1) {
 			// 신고 처리
-			resp.sendRedirect("view.do?board=" + board+ "&seq=" + seq);
+			resp.sendRedirect("view.do?board=" + board+ "&seq=" + seq + "&category=" + category + "&searchType=" + searchType + "&keyword=" + keyword + "&page=" + page);
 
 		} else {
 			// 이미 신고한 경우
-			resp.sendRedirect("view.do?board=" + board + "&seq=" + seq + "&msg=reportalready");
+			resp.sendRedirect("view.do?board=" + board + "&seq=" + seq + "&category=" + category + "&searchType=" + searchType + "&keyword=" + keyword + "&page=" + page + "&msg=reportalready");
 		}
 
 	}
