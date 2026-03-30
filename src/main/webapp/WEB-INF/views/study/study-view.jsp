@@ -16,6 +16,9 @@
                 <p class="section-desc">스터디 상세 내용과 멤버를 관리합니다.</p>
             </div>
            <div class="flex gap-2">
+           		<c:if test="${isManager}">
+			        <span class="badge badge-lg badge-primary badge-outline h-10 px-2">Manager</span>
+			    </c:if>
 			    <c:if test="${isMember}">
 			        <span class="badge h-10 px-6 border-emerald-200 bg-emerald-50 text-emerald-600 font-bold">
 			            참여중
