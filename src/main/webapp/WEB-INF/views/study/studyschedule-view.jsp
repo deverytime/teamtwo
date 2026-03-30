@@ -30,7 +30,7 @@
             </div>
             <div class="flex gap-2">
                 <button class="btn btn-soft-brand" onclick="location.href='/teamtwo/study/studyschedule-edit.do?seq=${dto.seq}';">일정 수정</button>
-                <button class="btn btn-ghost" onclick="history.back();">뒤로가기</button>
+                <button class="btn btn-ghost" onclick="location.href='/teamtwo/study/studyschedule-list.do?seq=${studySeq}';">뒤로가기</button>
             </div>
         </div>
 
