@@ -56,7 +56,7 @@
 			<div class="content-card card-pad">
 				<div class="flex justify-between items-end mb-4">
 					<h2 class="text-lg font-bold flex items-center gap-2">💬 자유게시판 최신글</h2>
-					<a href="/teamtwo/board/freeboard/List.do" class="text-sm text-brand-600 hover:underline">더보기 &gt;</a>
+					<a href="/teamtwo/board/list.do" class="text-sm text-brand-600 hover:underline">더보기 &gt;</a>
 				</div>
 				<ul class="divide-y divide-slate-100">
 					<li class="py-3 hover:bg-slate-50 cursor-pointer transition-colors" onclick="location.href='#'">

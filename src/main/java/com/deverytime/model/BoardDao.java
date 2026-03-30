@@ -22,7 +22,7 @@ public class BoardDao extends BasicDao {
 			String keyword = param.getKeyword();
 
 			// 검색어 쿼리 구간
-			// String.format피하기
+			// String.format 피하기
 			StringBuilder sql = new StringBuilder();
 			sql.append("select * from vwPost where boardType = ?");
 

@@ -30,7 +30,7 @@ public class Register extends HttpServlet {
 		
 		// 3. 결과에 따른 페이지 이동
 		if (result > 0) {
-			// 가입 성공: 기획서(MEM-01)에 따라 로그인 페이지로 이동
+			// 가입 성공: 로그인 페이지로 이동
 			resp.sendRedirect("/teamtwo/user/login.do");
 		} else {
 			// 가입 실패: 경고창 띄우고 뒤로 가기
