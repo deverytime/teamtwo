@@ -68,12 +68,11 @@ public class View extends HttpServlet {
 		// 3. DB작업 + 댓글도 가져와야함
 
 		BoardDto tDto = new BoardDto();
-		tDto = service.view(dto);
+		dto = service.view(dto);
 
 		// 4. 파일 처리
 		List<FileDto> fileList = service.getFileList(seq);
 
-		req.setAttribute("tDto", tDto);
 		req.setAttribute("dto", dto);
 		req.setAttribute("fileList", fileList);
 		req.setAttribute("page", page);
