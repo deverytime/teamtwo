@@ -604,4 +604,38 @@ public class BoardDao extends BasicDao {
 		return new ArrayList<>();
 	}
 
+	public BoardDto get(String seq) {
+
+		try {
+			
+			String sql = "select * from vwPost a where seq = ?";
+			
+			pstat = conn.prepareStatement(sql);
+			pstat.setString(1, seq);
+			
+			rs = pstat.executeQuery();
+			
+			if(rs.next()) {
+				BoardDto dto = new BoardDto();
+				
+				dto.setSeq(rs.getString("seq"));
+				dto.setCategory(rs.getString("category"));
+				dto.setContent(rs.getString("content"));
+				dto.setId(rs.getString("id"));
+				dto.setRegDate(rs.getString("regDate"));
+				dto.setReadCount(rs.getString("readcount"));
+				
+				
+				return dto;
+			}
+			
+		} catch (Exception e) {
+			e.printStackTrace();
+		} finally {
+			closeAll();
+		}
+		
+		return null;
+	}
+
 }
