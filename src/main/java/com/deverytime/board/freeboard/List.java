@@ -52,8 +52,13 @@ public class List extends HttpServlet {
 		int totalCount = service.getTotalCount(dto);
 		PagingService pagingService = new PagingService();
 		HashMap<String, String> pagingMap = pagingService.getPaging(page, totalCount, dto.getPageSize());
-		String pagebar = pagingService.getPagebar(pagingMap, "list.do", "list.do", 
-		        "board", "category", "searchType", "keyword");
+		pagingMap.put("baord", board);
+		pagingMap.put("category", category);
+		pagingMap.put("searchType", searchType);
+		pagingMap.put("keyword", keyword);
+		pagingMap.put("page", page);
+		String pagebar = pagingService.getPagebar(pagingMap, "list.do", 
+		        "board", "category", "searchType", "keyword", "page");
 		
 		// 5. 첨부
 		req.setAttribute("list", list);
