@@ -30,30 +30,49 @@
 				</div>
 			</div>
 
-			<div class="bg-white p-4 rounded-xl shadow-sm border border-slate-100 mb-6 flex justify-between items-center">
-				<form action="/teamtwo/board/request/list.do" method="GET" class="flex gap-2 w-full max-w-3xl">
-					<select name="subject" class="select select-bordered focus:select-primary">
-						<option value="">구분 전체</option>
-						<option value="0" ${subject == '0' ? 'selected' : ''}>일반 문의</option>
-						<option value="1" ${subject == '1' ? 'selected' : ''}>게시판 요청</option>
-					</select>
-					<select name="status" class="select select-bordered focus:select-primary">
-						<option value="">상태 전체</option>
-						<option value="0" ${status == '0' ? 'selected' : ''}>처리 대기</option>
-						<option value="1" ${status == '1' ? 'selected' : ''}>처리 완료</option>
-					</select>
-					<select name="type" class="select select-bordered focus:select-primary">
-						<option value="all" ${type == 'all' ? 'selected' : ''}>전체 검색</option>
-						<option value="title" ${type == 'title' ? 'selected' : ''}>제목</option>
-						<option value="content" ${type == 'content' ? 'selected' : ''}>내용</option>
-					</select>
-					<input type="text" name="word" value="${word}" placeholder="검색어 입력" class="input input-bordered flex-1 focus:input-primary" />
-					<button type="submit" class="btn btn-primary">검색</button>
-				</form>
-				<c:if test="${not empty word or not empty subject or not empty status}">
-					<a href="/teamtwo/board/request/list.do" class="btn btn-ghost btn-sm">초기화</a>
-				</c:if>
-			</div>
+<div class="bg-white p-4 rounded-xl shadow-sm border border-slate-100 mb-6">
+
+  <form action="/teamtwo/board/request/list.do" method="GET"
+      class="flex items-center justify-between gap-3">
+
+    <!-- 왼쪽: 필터 -->
+    <div class="flex items-center gap-2">
+      <select name="subject" class="select select-bordered focus:select-primary">
+        <option value="">구분 전체</option>
+        <option value="0" ${subject == '0' ? 'selected' : ''}>일반 문의</option>
+        <option value="1" ${subject == '1' ? 'selected' : ''}>게시판 요청</option>
+      </select>
+
+      <select name="status" class="select select-bordered focus:select-primary">
+        <option value="">상태 전체</option>
+        <option value="0" ${status == '0' ? 'selected' : ''}>처리 대기</option>
+        <option value="1" ${status == '1' ? 'selected' : ''}>처리 완료</option>
+      </select>
+
+      <select name="type" class="select select-bordered focus:select-primary">
+        <option value="all" ${type == 'all' ? 'selected' : ''}>전체 검색</option>
+        <option value="title" ${type == 'title' ? 'selected' : ''}>제목</option>
+        <option value="content" ${type == 'content' ? 'selected' : ''}>내용</option>
+      </select>
+    </div>
+
+    <!-- 오른쪽: 검색 -->
+    <div class="flex items-center gap-2">
+      <input type="text"
+           name="word"
+           value="${word}"
+           placeholder="검색어 입력"
+           class="input input-bordered w-72 focus:input-primary" />
+
+      <button type="submit" class="btn btn-primary">검색</button>
+
+      <c:if test="${not empty word or not empty subject or not empty status}">
+        <a href="/teamtwo/board/request/list.do" class="btn btn-ghost btn-sm">초기화</a>
+      </c:if>
+    </div>
+
+  </form>
+</div>
 
 			<div class="bg-white rounded-xl shadow-sm border border-slate-100 overflow-hidden">
 				<table class="table w-full text-center hover">
