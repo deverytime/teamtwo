@@ -9,7 +9,7 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
-@WebServlet("/admin/list-member.do")
+@WebServlet("/admin/member-list.do")
 public class ListMember extends HttpServlet {
 
 	@Override
@@ -27,6 +27,12 @@ public class ListMember extends HttpServlet {
 		req.setAttribute("type", result.get("type"));
 		req.setAttribute("word", result.get("word"));
 		req.setAttribute("totalCount", result.get("totalCount"));
+		
+		System.out.println("list: " + (result.get("list")).toString());
+		System.out.println("pagebar: " + (result.get("pagebar")).toString());
+		System.out.println("type: " + result.get("type"));
+		System.out.println("word: " + result.get("word"));
+		System.out.println("totalCount: " + result.get("totalCount"));
 
 		req.getRequestDispatcher("/WEB-INF/views/admin/member-list.jsp").forward(req, resp);
 	}
