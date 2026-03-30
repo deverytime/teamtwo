@@ -18,8 +18,20 @@
 
 		<div class="mb-8">
 			<c:if test="${board==1}">
-				<h1 class="section-title">자유게시판</h1>
+				<h1 class="section-title">자유 게시판</h1>
 				<p class="section-desc">자유롭게 소통하는 공간입니다.</p>
+			</c:if>
+			<c:if test="${board==2}">
+				<h1 class="section-title">질문 게시판</h1>
+				<p class="section-desc">궁금한 것을 편하게 질문해 보세요.</p>
+			</c:if>
+			<c:if test="${board==3}">
+				<h1 class="section-title">자료 공유 게시판</h1>
+				<p class="section-desc">유용한 자료를 함께 나눠요.</p>
+			</c:if>
+			<c:if test="${board==4}">
+				<h1 class="section-title">학습 공유 게시판</h1>
+				<p class="section-desc">공부하면서 얻은 지식과 경험을 공유해 보세요.</p>
 			</c:if>
 		</div>
 
@@ -49,7 +61,7 @@
 								</select> <input type="text" name="keyword" value="${param.keyword}"
 									placeholder="검색어 입력" class="input input-bordered bg-white" />
 									<input type="hidden" name="board" value="${board}">
-									<input type="hidden" name="category" value="${category}">
+									<input type="hidden" name="category" value="${param.category}">
 								<button type="submit" class="btn btn-brand">검색</button>
 							</div>
 						</form>

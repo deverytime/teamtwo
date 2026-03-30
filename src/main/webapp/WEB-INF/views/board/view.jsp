@@ -40,7 +40,16 @@
 		<!-- 게시판 이름 -->
 		<div class="mb-4">
 			<c:if test="${dto.boardType==1}">
-				<h1 class="section-title">자유게시판</h1>
+				<h1 class="section-title">자유 게시판</h1>
+			</c:if>
+			<c:if test="${dto.boardType==2}">
+				<h1 class="section-title">질문 게시판</h1>
+			</c:if>
+			<c:if test="${dto.boardType==3}">
+				<h1 class="section-title">자료 공유 게시판</h1>
+			</c:if>
+			<c:if test="${dto.boardType==4}">
+				<h1 class="section-title">학습 공유 게시판</h1>
 			</c:if>
 		</div>
 
@@ -50,11 +59,11 @@
 			<div class="card-pad border-b border-slate-200">
 
 				<!-- 카테고리 뱃지 -->
-				<span class="text-xs bg-slate-100 text-slate-500 px-2 py-1 rounded">${dto.category}</span>
+				<span class="text-xs bg-slate-100 text-slate-500 px-2 py-1 rounded">${tDto.category}</span>
 
 				<!-- 제목 + 수정/삭제 버튼 (같은 줄) -->
 				<div class="flex items-center justify-between mt-2 mb-2">
-					<h2 class="text-2xl font-bold">${dto.title}</h2>
+					<h2 class="text-2xl font-bold">${tDto.title}</h2>
 
 					<!-- ② 수정/삭제 버튼 (본인 글 조건 나중에 추가) -->
 					<c:if test="${dto.id == auth}">

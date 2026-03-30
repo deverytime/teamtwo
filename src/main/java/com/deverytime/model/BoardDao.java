@@ -196,7 +196,14 @@ public class BoardDao extends BasicDao {
 			// 보드타입으로 어떤 게시판인지 판별
 			if (dto.getBoardType().equals("1")) {
 				board = "where boardType=1 and ";
+			} else if (dto.getBoardType().equals("2")) {
+				board = "where boardType=2 and ";
+			} else if (dto.getBoardType().equals("3")) {
+				board = "where boardType=3 and ";
+			} else if (dto.getBoardType().equals("4")) {
+				board = "where boardType=4 and ";
 			}
+			
 
 			sql = sql + board + seq;
 

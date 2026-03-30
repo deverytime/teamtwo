@@ -18,7 +18,16 @@
 
 		<div class="mb-8">
 			<c:if test="${dto.boardType==1}">
-				<h1 class="section-title">자유게시판</h1>
+				<h1 class="section-title">자유 게시판</h1>
+			</c:if>
+			<c:if test="${dto.boardType==2}">
+				<h1 class="section-title">질문 게시판</h1>
+			</c:if>
+			<c:if test="${dto.boardType==3}">
+				<h1 class="section-title">자료 공유 게시판</h1>
+			</c:if>
+			<c:if test="${dto.boardType==4}">
+				<h1 class="section-title">학습 공유 게시판</h1>
 			</c:if>
 			<hr>
 			<br>

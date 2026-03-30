@@ -52,11 +52,11 @@
 						class="dropdown-content menu bg-white rounded-xl w-48 p-2 shadow-md border border-slate-200 top-full left-1/2 -translate-x-1/2 z-[50]">
 						<li><a href="/teamtwo/board/trendingboard/list.do">인기글
 								게시판</a></li>
-						<li><a href="/teamtwo/board/freeboard/list.do">자유 게시판</a></li>
-						<li><a href="/teamtwo/board/questionboard/list.do">질문 게시판</a></li>
-						<li><a href="/teamtwo/board/experiencesharingboard/list.do">학습
+						<li><a href="/teamtwo/board/list.do?board=1">자유 게시판</a></li>
+						<li><a href="/teamtwo/board/list.do?board=2">질문 게시판</a></li>
+						<li><a href="/teamtwo/board/list.do?board=3">자료
 								공유 게시판</a></li>
-						<li><a href="/teamtwo/board/datasharingboard/list.do">자료
+						<li><a href="/teamtwo/board/list.do?board=4">학습
 								공유 게시판</a></li>
 						<li><a href="/teamtwo/board/request/list.do">문의 게시판</a></li>
 					</ul></li>

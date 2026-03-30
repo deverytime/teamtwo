@@ -1,6 +1,7 @@
 package com.deverytime.board;
 
 import java.io.IOException;
+import java.net.URLEncoder;
 import java.util.ArrayList;
 import java.util.HashMap;
 
@@ -56,7 +57,6 @@ public class List extends HttpServlet {
 		pagingMap.put("category", category);
 		pagingMap.put("searchType", searchType);
 		pagingMap.put("keyword", keyword);
-		
 		String pagebar = pagingService.getPagebar(pagingMap, "list.do", 
 		        "board", "category", "searchType", "keyword" );
 		

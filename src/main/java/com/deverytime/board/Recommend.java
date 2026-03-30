@@ -13,7 +13,7 @@ import javax.servlet.http.HttpSession;
 
 import com.deverytime.model.BoardDto;
 
-@WebServlet(value = "/board/freeboard/recommend.do")
+@WebServlet(value = "/board/recommend.do")
 public class Recommend extends HttpServlet {
 
 	@Override
