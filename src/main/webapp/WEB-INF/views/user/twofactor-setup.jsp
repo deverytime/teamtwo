@@ -46,11 +46,10 @@
 	</main>
 
 	<script>
-		const URL = '/teamtwo/user/twofactor-setup.do'; 
-		let serverCode = ''; 
-		let isVerified = false;
+		const URL = '/teamtwo/user/twofactor-setup.do';
+		let isVerified = false; // serverCode 변수는 삭제!
 
-		// 1. 이메일 전송
+		// 1. 이메일 전송 (정답 인증번호는 받아오지 않음)
 		function sendMail() {
 			document.getElementById('verifyMsg').className = 'text-sm font-semibold mb-6 h-5 text-slate-500';
 			document.getElementById('verifyMsg').innerText = '인증번호를 발송 중입니다...';
@@ -58,13 +57,12 @@
 			fetch(URL, {
 				method: 'POST',
 				headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
-				// action=sendAuth 꼬리표 붙이기
 				body: 'action=sendAuth&email=${authDto.email}' 
 			})
 			.then(res => res.json())
 			.then(data => {
 				if(data.result === 1) {
-					serverCode = data.code; 
+					// data.code를 저장하는 부분 삭제
 					document.getElementById('verifyMsg').className = 'text-sm font-semibold mb-6 h-5 text-primary';
 					document.getElementById('verifyMsg').innerText = '인증번호가 발송되었습니다.';
 				} else {
@@ -74,16 +72,14 @@
 			});
 		}
 
-		// 창 열리면 즉시 발송
 		window.onload = sendMail;
-
-		// 재발송 버튼
 		document.getElementById('btnResend').addEventListener('click', sendMail);
 
-		// 2. 인증번호 확인
+		// 2. 인증번호 확인 (서버로 채점 요청)
 		document.getElementById('btnVerify').addEventListener('click', function() {
 			const inputCode = document.getElementById('authCode').value;
 			const msg = document.getElementById('verifyMsg');
+			const mode = '${param.mode}'; // 로그인, 탈퇴 등 어떤 목적인지 챙김
 
 			if (inputCode === '') {
 				msg.className = 'text-sm font-semibold mb-6 h-5 text-error';
@@ -91,44 +87,42 @@
 				return;
 			}
 
-			if (inputCode === serverCode) {
-				msg.className = 'text-sm font-semibold mb-6 h-5 text-success';
-				msg.innerText = '인증되었습니다.';
-				isVerified = true;
-				document.getElementById('btnEnable').className = 'btn btn-primary flex-1';
-			} else {
-				msg.className = 'text-sm font-semibold mb-6 h-5 text-error';
-				msg.innerText = '인증번호가 틀렸습니다.';
-				isVerified = false;
-				document.getElementById('btnEnable').className = 'btn btn-disabled flex-1';
-			}
+			// 서버(Java)로 내가 입력한 번호를 보내서 맞는지 확인받기
+			fetch(URL, {
+				method: 'POST',
+				headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
+				body: 'action=verify&code=' + inputCode + '&mode=' + mode
+			})
+			.then(res => res.json())
+			.then(data => {
+				if(data.result === 1) {
+					msg.className = 'text-sm font-semibold mb-6 h-5 text-success';
+					msg.innerText = '인증되었습니다.';
+					isVerified = true;
+					document.getElementById('btnEnable').className = 'btn btn-primary flex-1';
+				} else {
+					msg.className = 'text-sm font-semibold mb-6 h-5 text-error';
+					msg.innerText = '인증번호가 틀렸습니다.';
+					isVerified = false;
+					document.getElementById('btnEnable').className = 'btn btn-disabled flex-1';
+				}
+			});
 		});
 
-		// 3. 계속하기 (꼬리표에 따라 길 나누기)
+		// 3. 계속하기
 		document.getElementById('btnEnable').addEventListener('click', function() {
 			if (!isVerified) return;
 
-			// 주소창에 달린 ?mode= 값을 가져옴 (없으면 빈 문자열)
 			const mode = '${param.mode}';
 
 			if (mode === 'login') {
-				// ===============================================
-				// [1] 로그인 목적으로 왔을 때
-				// ===============================================
-				// 이미 Login.java에서 세션 처리는 끝났으므로, 
-				// 2차 인증 통과만 확인되면 바로 메인 페이지로 보냄
+				// 이미 서버에서 검증 + 세션 승급(tempAuthId -> auth)까지 끝나면 이동
 				location.href = '/teamtwo/index.do';
-				
 			} else if (mode === 'unregister') {
-				// [2] 탈퇴 목적으로 왔을 때 (인증 성공 시 탈퇴 화면으로)
 				location.href = '/teamtwo/user/unregister.do';
 			} else if (mode === 'pwchange') {
-				// [3] 비밀번호 변경을 위해 왔을 때
 				location.href = '/teamtwo/user/pw-edit.do?verified=true';
 			} else {
-				// ===============================================
-				// [4] 마이페이지에서 활성화 목적으로 왔을 때
-				// ===============================================
 				fetch(URL, { 
 					method: 'POST',
 					headers: { 'Content-Type': 'application/x-www-form-urlencoded' },

@@ -1,4 +1,4 @@
-package com.deverytime.board.freeboard;
+package com.deverytime.board;
 
 import java.io.IOException;
 import java.io.PrintWriter;
@@ -13,7 +13,7 @@ import javax.servlet.http.HttpSession;
 
 import com.deverytime.model.BoardDto;
 
-@WebServlet(value = "/board/freeboard/recommend.do")
+@WebServlet(value = "/board/recommend.do")
 public class Recommend extends HttpServlet {
 
 	@Override
@@ -29,15 +29,16 @@ public class Recommend extends HttpServlet {
 		String searchType = req.getParameter("searchType");
 		String keyword = req.getParameter("keyword");
 		String page = req.getParameter("page");
+		String encodedKeyword = URLEncoder.encode(keyword, "UTF-8");
+		String seq = req.getParameter("seq");
+		String board = req.getParameter("board");
 		
 		// 로그인 안한 사용자면 안내 메시지 출력
 		if(session.getAttribute("auth") == null) {
-		    resp.sendRedirect("view.do?board=" + req.getParameter("board") + "&seq=" + req.getParameter("seq") +"&msg=login");
+		    resp.sendRedirect("view.do?board=" + req.getParameter("board") + "&seq=" + seq + "&category=" + category + "&searchType=" + searchType + "&keyword=" + encodedKeyword + "&page=" + page + "&msg=login");
 		    return;
 		}
 		
-		String seq = req.getParameter("seq");
-		String board = req.getParameter("board");
 		
 		BoardDto dto = new BoardDto();
 		dto.setSeq(seq);
@@ -49,15 +50,15 @@ public class Recommend extends HttpServlet {
 		int result = service.recommend(dto);
 		
 		
-		String encodedKeyword = URLEncoder.encode(keyword, "UTF-8");
+		
 		
 		if(result == 1) {
 			// 추천 처리
-			resp.sendRedirect("view.do?board=" + board + "&seq=" + seq + "&category=" + category + "&searchType=" + searchType + "&keyword=" + keyword + "&page=" + page);
+			resp.sendRedirect("view.do?board=" + board + "&seq=" + seq + "&category=" + category + "&searchType=" + searchType + "&keyword=" + encodedKeyword + "&page=" + page);
 			
 		} else {
 			// 이미 추천한 경우
-			resp.sendRedirect("view.do?board=" + board + "&seq=" + seq + "&category=" + category + "&searchType=" + searchType + "&keyword=" + keyword + "&page=" + page +"&msg=already");
+			resp.sendRedirect("view.do?board=" + board + "&seq=" + seq + "&category=" + category + "&searchType=" + searchType + "&keyword=" + encodedKeyword + "&page=" + page +"&msg=already");
 		}
 		 
 		

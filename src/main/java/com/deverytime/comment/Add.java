@@ -58,7 +58,7 @@ public class Add extends HttpServlet {
 		// 리다이렉트 (상태보존)
 		// 검색어 한글 오류 방지
 		String keywordEnc = java.net.URLEncoder.encode(keyword, "UTF-8");
-		String redirectUrl = "/teamtwo/board/freeboard/view.do?seq=" + postSeq + 
+		String redirectUrl = "/teamtwo/board/view.do?seq=" + postSeq + 
 		    "&board=" + board + 
 		    "&category=" + category +
 		    "&searchType=" + searchType + 

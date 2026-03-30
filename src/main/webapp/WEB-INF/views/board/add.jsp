@@ -20,6 +20,15 @@
 			<c:if test="${board==1}">
 				<h1 class="section-title">자유게시판</h1>
 			</c:if>
+			<c:if test="${board==2}">
+				<h1 class="section-title">질문 게시판</h1>
+			</c:if>
+			<c:if test="${board==3}">
+				<h1 class="section-title">자료 공유 게시판</h1>
+			</c:if>
+			<c:if test="${board==4}">
+				<h1 class="section-title">학습 공유 게시판</h1>
+			</c:if>
 			<hr>
 			<br>
 			<button class="btn btn-soft-brand"
@@ -116,6 +125,16 @@
 		    document.querySelector('[onclick="addFile()"]').style.display = 'none';
 		  }
 		}
+		
+		function removeFile(btn) {
+			  const fileList = document.getElementById('fileList');
+			  
+			  // 첫 번째 줄(기본 1개)은 삭제 안 되게 하려면 아래 조건 추가
+			  // if (fileList.children.length <= 1) return;
+			  
+			  btn.parentElement.remove();
+			  document.querySelector('[onclick="addFile()"]').style.display = '';
+			}
 	</script>
 </body>
 </html>

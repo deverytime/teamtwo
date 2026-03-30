@@ -1,4 +1,4 @@
-package com.deverytime.board.freeboard;
+package com.deverytime.board;
 
 import java.io.File;
 import java.io.IOException;
@@ -16,7 +16,7 @@ import com.deverytime.model.BoardDto;
 import com.oreilly.servlet.MultipartRequest;
 import com.oreilly.servlet.multipart.DefaultFileRenamePolicy;
 
-@WebServlet(value = "/board/freeboard/edit.do")
+@WebServlet(value = "/board/edit.do")
 public class Edit extends HttpServlet {
 
 	@Override
@@ -41,7 +41,7 @@ public class Edit extends HttpServlet {
 		req.setAttribute("dto", dto);
 		req.setAttribute("categoryMap", service.getCategoryMap());
 
-		req.getRequestDispatcher("/WEB-INF/views/board/freeboard/edit.jsp").forward(req, resp);
+		req.getRequestDispatcher("/WEB-INF/views/board/edit.jsp").forward(req, resp);
 	}
 
 	@Override
