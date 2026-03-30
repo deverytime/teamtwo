@@ -40,7 +40,19 @@ public class DelegateStudyManager extends HttpServlet{
 		
 		StudyService service = new StudyService();
 		
-		int result = service.delegateManager(seq, mseq, managerSeq);
+		MemberDto mdto = (MemberDto)auth;
+		
+		StudyDto dto = service.get(seq);
+		
+		int result = service.isManager(mdto, dto);
+		
+		if(result == 0) {
+			resp.getWriter().print("<script>alert('스터디장 권한이 필요합니다.');location.href='/teamtwo/index.do';</script>");
+			resp.getWriter().close();
+			return;
+		}
+		
+		int result2 = service.delegateManager(seq, mseq, managerSeq);
 		
 		PrintWriter writer = resp.getWriter();
 		

@@ -10,6 +10,9 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
+import com.deverytime.model.MemberDto;
+import com.deverytime.model.StudyDto;
+
 @WebServlet(value = "/study/study-deport.do")
 public class DeportStudy extends HttpServlet {
 
@@ -31,12 +34,24 @@ public class DeportStudy extends HttpServlet {
 			return;
 		}
 		
+		MemberDto mdto = (MemberDto)auth;
+		
 		String seq = req.getParameter("seq");
 		String mseq = req.getParameter("mseq");
 		
 		StudyService service = new StudyService();
 		
-		int result = service.deport(mseq, seq);
+		StudyDto dto = service.get(seq);
+		
+		int result = service.isManager(mdto, dto);
+		
+		if(result == 0) {
+			resp.getWriter().print("<script>alert('스터디장 권한이 필요합니다.');location.href='/teamtwo/index.do';</script>");
+			resp.getWriter().close();
+			return;
+		}
+		
+		int result2 = service.deport(mseq, seq);
 		
 		PrintWriter writer = resp.getWriter();
 		
