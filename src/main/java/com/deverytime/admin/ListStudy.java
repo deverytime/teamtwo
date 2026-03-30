@@ -36,4 +36,40 @@ public class ListStudy extends HttpServlet {
 
 		req.getRequestDispatcher("/WEB-INF/views/admin/study-list.jsp").forward(req, resp);
 	}
+	
+	@Override
+	protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
+
+	    req.setCharacterEncoding("UTF-8");
+
+	    AdminService service = new AdminService();
+
+	    // 삭제할 스터디 번호
+	    String seq = req.getParameter("seq");
+
+	    // 방어 코드
+	    if (seq == null || seq.trim().equals("")) {
+	        resp.setContentType("text/html; charset=UTF-8");
+	        resp.getWriter().print("<script>alert('잘못된 요청입니다.'); location.href='/teamtwo/admin/admin.do';</script>");
+	        resp.getWriter().close();
+	        return;
+	    }
+
+	    // 삭제 실행
+	    int result = service.delStudy(seq);
+
+	    resp.setContentType("text/html; charset=UTF-8");
+
+	    if (result == 1) {
+	        resp.getWriter().print(
+	            "<script>alert('스터디를 삭제했습니다.'); " +
+	            "location.href='/teamtwo/admin/study-list.do';</script>"
+	        );
+	    } else {
+	        resp.getWriter().print(
+	            "<script>alert('스터디 삭제에 실패했습니다.'); " +
+	            "location.href='/teamtwo/admin/study-list.do';</script>"
+	        );
+	    }
+	}
 }
