@@ -11,7 +11,7 @@ import javax.servlet.http.HttpServletResponse;
 import com.deverytime.model.AdminCommentsDto;
 import com.deverytime.model.AdminReqDto;
 
-@WebServlet("/admin/request-view.do")
+@WebServlet("/board/request/view.do")
 public class ViewRequest extends HttpServlet {
 
 	@Override
@@ -52,7 +52,7 @@ public class ViewRequest extends HttpServlet {
 		
 		req.setAttribute("dto", dto);
 
-		req.getRequestDispatcher("/WEB-INF/views/admin/request-view.jsp").forward(req, resp);
+		req.getRequestDispatcher("/WEB-INF/views/board/request/view.jsp").forward(req, resp);
 	}
 	
 	@Override
@@ -79,7 +79,7 @@ public class ViewRequest extends HttpServlet {
 			service.addRequestComment(seq, content);
 		}
 
-		resp.sendRedirect("/teamtwo/admin/request-view.do?seq=" + seq);
+		resp.sendRedirect("/teamtwo/board/request/view.do?seq=" + seq);
 	}
 	
 }
