@@ -1,6 +1,7 @@
 package com.deverytime.board.freeboard;
 
 import java.io.IOException;
+import java.net.URLEncoder;
 
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
@@ -17,16 +18,30 @@ public class Del extends HttpServlet {
 		//Del.java
 		// 1. 정보받기
 		String seq = req.getParameter("seq");
-		String boardType = req.getParameter("boardType");
+		String board = req.getParameter("board");
+		
+		//
+		String category = req.getParameter("category");
+		String searchType = req.getParameter("searchType");
+		String keyword = req.getParameter("keyword");
+		String page = req.getParameter("page");
+		 		
 		
 		// 2. DB 작업(삭제)
 		BoardService service = new BoardService();
 		
 		int result = service.del(seq);
 		
+		// 한글오류
+	    String encodedKeyword = URLEncoder.encode(keyword, "UTF-8");
+		
 		if(result == 1) {
 			// 삭제완료
-			resp.sendRedirect("list.do?board=" + boardType);
+			resp.sendRedirect("list.do?board=" + board
+					+ "&category=" + category  
+					+ "&searchType=" + searchType
+					+ "&keyword=" + encodedKeyword
+					+ "&page=" + page);
 			
 		} else {
 			// 삭제실패
