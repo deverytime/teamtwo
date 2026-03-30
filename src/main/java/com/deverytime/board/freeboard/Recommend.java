@@ -2,6 +2,7 @@ package com.deverytime.board.freeboard;
 
 import java.io.IOException;
 import java.io.PrintWriter;
+import java.net.URLEncoder;
 
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
@@ -24,6 +25,11 @@ public class Recommend extends HttpServlet {
 		resp.setContentType("text/html; charset=UTF-8");
 		HttpSession session = req.getSession();
 		
+		String category = req.getParameter("category"); // 주소 파라미터
+		String searchType = req.getParameter("searchType");
+		String keyword = req.getParameter("keyword");
+		String page = req.getParameter("page");
+		
 		// 로그인 안한 사용자면 안내 메시지 출력
 		if(session.getAttribute("auth") == null) {
 		    resp.sendRedirect("view.do?board=" + req.getParameter("board") + "&seq=" + req.getParameter("seq") +"&msg=login");
@@ -42,13 +48,16 @@ public class Recommend extends HttpServlet {
 		
 		int result = service.recommend(dto);
 		
+		
+		String encodedKeyword = URLEncoder.encode(keyword, "UTF-8");
+		
 		if(result == 1) {
 			// 추천 처리
-			resp.sendRedirect("view.do?board=" + board + "&seq=" + seq);
+			resp.sendRedirect("view.do?board=" + board + "&seq=" + seq + "&category=" + category + "&searchType=" + searchType + "&keyword=" + keyword + "&page=" + page);
 			
 		} else {
 			// 이미 추천한 경우
-			resp.sendRedirect("view.do?board=" + board + "&seq=" + seq + "&msg=already");
+			resp.sendRedirect("view.do?board=" + board + "&seq=" + seq + "&category=" + category + "&searchType=" + searchType + "&keyword=" + keyword + "&page=" + page +"&msg=already");
 		}
 		 
 		
