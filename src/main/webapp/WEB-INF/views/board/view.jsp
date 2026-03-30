@@ -144,7 +144,7 @@
 				<!-- ⑤ 공유 -->
 				<div class="card-pad flex items-center justify-center">
 					<button class="btn btn-soft-brand btn-sm"
-						onclick="navigator.clipboard.writeText(window.location.href); alert('링크가 복사되었습니다.')">공유</button>
+						onclick="shareCleanUrl();">공유</button>
 				</div>
 
 			</div>
@@ -266,6 +266,20 @@
 	                       `&page=` + page;
 	    }
 	}
+	
+	function shareCleanUrl() {
+	    // 현재 URL에서 msg 파라미터만 제거
+	    const url = new URL(window.location.href);
+	    url.searchParams.delete('msg');
+	    
+	    navigator.clipboard.writeText(url.href).then(() => {
+	        alert('링크가 복사되었습니다!');
+	    }).catch(() => {
+	        // 클립보드 실패시 fallback
+	        prompt('링크를 복사하세요:', url.href);
+	    });
+	}
+
 	</script>
 </body>
 
