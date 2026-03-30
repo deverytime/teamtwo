@@ -80,6 +80,7 @@ public class View extends HttpServlet {
 		req.setAttribute("searchType", searchType);
 		req.setAttribute("keyword", keyword);
 		req.setAttribute("page", page);
+		
 
 		req.getRequestDispatcher("/WEB-INF/views/board/view.jsp").forward(req, resp);
 	}
