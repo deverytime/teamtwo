@@ -188,20 +188,20 @@ public class AdminDao extends BasicDao {
 			sql.append("        from post b ");
 			sql.append("        inner join member m on b.memberSeq = m.seq ");
 
+			boolean hasType = type != null && !type.trim().equals("");
 			boolean hasWord = word != null && !word.trim().equals("");
 
+			if (hasType || hasWord) {
+				sql.append("where ");
+			}
+
+			if (hasType) {
+				sql.append("b.boardSeq = ? ");
+			}
+
 			if (hasWord) {
-				if ("title".equals(type)) {
-					sql.append("where b.title like ? ");
-				} else if ("content".equals(type)) {
-					sql.append("where b.content like ? ");
-				} else if ("nickname".equals(type)) {
-					sql.append("where m.nickname like ? ");
-				} else if ("all".equals(type)) {
-					sql.append("where b.title like ? ");
-					sql.append("   or b.content like ? ");
-					sql.append("   or m.nickname like ? ");
-				}
+				if (hasType) sql.append("and ");
+				sql.append("b.title like ? ");
 			}
 
 			sql.append("        order by b.seq desc ");
@@ -212,16 +212,12 @@ public class AdminDao extends BasicDao {
 
 			int index = 1;
 
-			if (hasWord) {
-				String searchWord = "%" + word + "%";
+			if (hasType) {
+				pstat.setString(index++, type);
+			}
 
-				if ("all".equals(type)) {
-					pstat.setString(index++, searchWord);
-					pstat.setString(index++, searchWord);
-					pstat.setString(index++, searchWord);
-				} else if ("title".equals(type) || "content".equals(type) || "nickname".equals(type)) {
-					pstat.setString(index++, searchWord);
-				}
+			if (hasWord) {
+				pstat.setString(index++, "%" + word + "%");
 			}
 
 			pstat.setInt(index++, begin);
@@ -233,7 +229,7 @@ public class AdminDao extends BasicDao {
 
 			while (rs.next()) {
 				BoardDto dto = new BoardDto();
-				dto.setSeq(rs.getString("seq"));				
+				dto.setSeq(rs.getString("seq"));
 				dto.setTitle(rs.getString("title"));
 				dto.setContent(rs.getString("content"));
 				dto.setReadCount(rs.getString("readCount"));
@@ -267,34 +263,34 @@ public class AdminDao extends BasicDao {
 			sql.append("from post b ");
 			sql.append("inner join member m on b.memberSeq = m.seq ");
 
+			boolean hasType = type != null && !type.trim().equals("");
 			boolean hasWord = word != null && !word.trim().equals("");
 
+			if (hasType || hasWord) {
+				sql.append("where ");
+			}
+
+			if (hasType) {
+				sql.append("b.boardSeq = ? ");
+			}
+
 			if (hasWord) {
-				if ("title".equals(type)) {
-					sql.append("where b.title like ? ");
-				} else if ("content".equals(type)) {
-					sql.append("where b.content like ? ");
-				} else if ("nickname".equals(type)) {
-					sql.append("where m.nickname like ? ");
-				} else if ("all".equals(type)) {
-					sql.append("where b.title like ? ");
-					sql.append("   or b.content like ? ");
-					sql.append("   or m.nickname like ? ");
-				}
+				if (hasType) sql.append("and ");
+				sql.append("(b.title like ? or b.content like ?) ");
 			}
 
 			pstat = conn.prepareStatement(sql.toString());
 
+			int index = 1;
+
+			if (hasType) {
+				pstat.setString(index++, type);
+			}
+
 			if (hasWord) {
 				String searchWord = "%" + word + "%";
-
-				if ("all".equals(type)) {
-					pstat.setString(1, searchWord);
-					pstat.setString(2, searchWord);
-					pstat.setString(3, searchWord);
-				} else if ("title".equals(type) || "content".equals(type) || "nickname".equals(type)) {
-					pstat.setString(1, searchWord);
-				}
+				pstat.setString(index++, searchWord);
+				pstat.setString(index++, searchWord);
 			}
 
 			rs = pstat.executeQuery();
