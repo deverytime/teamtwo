@@ -177,8 +177,8 @@ public class RecordDao extends BasicDao {
 	    try {
 	        String sql = "update record set "
 	                   + "studyDate = ?, "
-	                   + "content = ?, "
 	                   + "time = ?, " 
+	                   + "content = ?, "
 	                   + "progress = ?, "
 	                   + "memo = ?, "
 	                   + "updateDate = sysdate, "
@@ -246,6 +246,29 @@ public class RecordDao extends BasicDao {
 	    }
 
 	    return null;
+	}
+
+	public int getMaxTime(String planSeq) {
+		
+		try {
+			String sql = "select nvl(max(time), 0) as maxTime "
+	                   + "from record "
+	                   + "where planSeq = ?";
+
+	        pstat = conn.prepareStatement(sql);
+	        pstat.setString(1, planSeq);
+
+	        rs = pstat.executeQuery();
+
+	        if (rs.next()) {
+	            return rs.getInt("maxTime");
+	        }
+
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		
+		return 0;
 	}
 	
 }

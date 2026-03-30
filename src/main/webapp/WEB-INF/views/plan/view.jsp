@@ -26,41 +26,78 @@
 
     <!-- 계획 카드 -->
     <div class="bg-white rounded-2xl shadow-sm border border-slate-200 p-6 mb-6">
-
-      <!-- 상단 2열 -->
-      <div class="flex items-center gap-10 w-fit">
-      
-        <!-- 좌측 -->
-        <div>
-          <p class="text-sm text-slate-400 mb-1">계획명</p>
-          <h3 class="text-2xl font-bold text-slate-800">${dto.title}</h3>
-      
-          <span class="inline-flex mt-3 rounded-full px-3 py-1 text-sm font-medium
-            ${dto.progressStatus == '진행중' ? 'bg-blue-100 text-blue-700' : ''}
-            ${dto.progressStatus == '완료' ? 'bg-emerald-100 text-emerald-700' : ''}
-            ${dto.progressStatus == '미완료' ? 'bg-red-100 text-red-700' : ''}
-          ">
-            ${dto.progressStatus}
-          </span>
-        </div>
-      
-        <!-- 우측 (진행률) -->
+    
+    <!-- 상단 영역 -->
+    <div class="flex items-center gap-10">
+      <!-- 1열 -->
+      <div class="w-fit max-w-[500px] break-words">
+        <p class="text-sm text-slate-400 mb-1">계획명</p>
+        <h3 class="text-2xl font-bold text-slate-800">${dto.title}</h3>
+        <span class="inline-flex mt-3 rounded-full px-3 py-1 text-sm font-medium
+          ${dto.progressStatus == '진행중' ? 'bg-blue-100 text-blue-700' : ''}
+          ${dto.progressStatus == '완료' ? 'bg-emerald-100 text-emerald-700' : ''}
+          ${dto.progressStatus == '미완료' ? 'bg-red-100 text-red-700' : ''}
+        ">
+          ${dto.progressStatus}
+        </span>
+      </div>
+    
+      <!-- 2열 -->
+      <div class="flex flex-col items-center pt-[2px]">
+        <p class="text-sm text-slate-400 mb-3">현재 진행률</p>
         <div
-          class="radial-progress text-indigo-500 font-bold text-lg"
-          style="--value:${empty dto.records ? 0 : dto.records[0].progress}; --size:96px; --thickness:10px;">
+          class="radial-progress text-indigo-500 font-bold text-xl bg-indigo-50"
+          style="--value:${empty dto.records ? 0 : dto.records[0].progress}; --size:120px; --thickness:12px;">
           ${empty dto.records ? 0 : dto.records[0].progress}%
         </div>
-        
-<!--         <div class="shrink-0"> -->
-<!--           <div -->
-<!--             class="radial-progress text-emerald-500 font-bold text-xl" -->
-<!--             style="--value:35; --size:96px; --thickness:10px;" -->
-<!--           > -->
-<!--             35% -->
-<!--           </div> -->
-<!--         </div> -->
-      
       </div>
+    
+      <div class="flex flex-col items-center pt-[2px]">
+
+      <!-- 3열 -->
+      <c:choose>
+        <%-- 기간기반 --%>
+        <c:when test="${dto.type == '기간기반'}">
+          <p class="text-sm text-slate-400 mb-3">권장 진행률</p>
+    
+          <div
+            class="radial-progress text-emerald-500 font-bold text-xl bg-emerald-50"
+            style="--value:${empty dto.records ? 0 : dto.records[0].progress}; --size:120px; --thickness:12px;">
+            ${empty dto.records ? 0 : dto.records[0].progress}%
+          </div>
+        </c:when>
+        <%-- 완료기반 --%>
+        <c:when test="${dto.type == '완료기반'}">
+          <p class="text-sm text-slate-400 mb-3">완료한 목표</p>
+          <div class="flex flex-col items-center justify-center w-[120px] h-[120px] rounded-3xl bg-emerald-50 border border-emerald-100">    
+            <div class="relative w-[60px] h-[40px]">    
+              <!-- 완료 수 (왼쪽 위 → 더 위로) -->
+              <span class="absolute left-0 top-0 -translate-x-1 -translate-y-2 text-3xl font-bold text-emerald-600 z-10">
+                3
+              </span>
+            
+              <!-- 전체 수 (오른쪽 아래 → 더 아래로) -->
+              <span class="absolute right-0 bottom-0 translate-x-1 translate-y-2 text-3xl font-semibold text-slate-400 z-10">
+                4
+              </span>
+              <!-- 대각선 라인 -->
+              <div class="absolute top-[55%] left-[5%] w-[90%] h-[1px] bg-slate-300 rotate-[-45deg]"></div>
+            </div>
+          </div>
+        </c:when>
+      </c:choose>
+    </div>
+    
+      <!-- 4열 -->
+      <div class="flex flex-col items-center pt-[2px]">
+        <p class="text-sm text-slate-400 mb-3">최대 공부시간</p>
+      
+        <div class="flex items-center justify-center w-[120px] h-[120px] 
+                    rounded-full bg-violet-50 text-violet-600 font-bold text-xl">
+          ${dto.maxTime}시간
+        </div>
+      </div>
+    </div>
 
       <!-- 설명 -->
       <div class="mt-6 border-t border-slate-100 pt-5">
@@ -118,12 +155,6 @@
         </div>
       </c:if>
 
-      <div class="rounded-xl bg-slate-50 p-4">
-        <p class="text-sm text-slate-400 mb-1">최근 수정일</p>
-        <p class="text-base font-medium text-slate-800">
-          <fmt:formatDate value="${dto.updateDate}" pattern="M월 d일" />
-        </p>
-      </div>
 
     </div>
   </div>

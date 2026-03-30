@@ -35,4 +35,5 @@ public class PlanDto {
 	@Builder.Default
 	private List<RecordDto> records = new ArrayList<>();
 	private long recordCount;
+	private int maxTime;
 }

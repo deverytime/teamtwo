@@ -185,6 +185,15 @@ public class PlanService {
 		int recordCount = recordDao2.getRecordCountByPlan(seq);
 		planDto.setRecordCount(recordCount);
 		
+		// 최대 학습시간 가져오기
+		RecordDao dao3 = new RecordDao();
+		planDto.setMaxTime(dao3.getMaxTime(seq));
+		
+		// 완료기반인 경우 추가정보 가져오기
+		if (("완료기반").equals(planDto.getType())) {
+			
+		}
+		
 		return planDto;
 	}
 
