@@ -108,6 +108,7 @@
                 initialView: 'dayGridMonth',
                 locale: 'ko',
                 dayMaxEvents: true, // 일정이 많으면 +more로 표시
+                displayEventTime: false,
                 headerToolbar: {
                     left: 'prev,next today',
                     center: 'title',
