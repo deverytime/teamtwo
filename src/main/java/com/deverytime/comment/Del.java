@@ -36,7 +36,7 @@ public class Del extends HttpServlet {
 		// 한글 오류 방지
 		String keywordEnc = URLEncoder.encode(req.getParameter("keyword"), StandardCharsets.UTF_8);
 
-		String redirectUrl = "/teamtwo/board/freeboard/view.do?seq=" + postSeq +
+		String redirectUrl = "/teamtwo/board/view.do?seq=" + postSeq +
 		    "&board=" + req.getParameter("board") +
 		    "&category=" + category+
 		    "&searchType=" + searchType +
