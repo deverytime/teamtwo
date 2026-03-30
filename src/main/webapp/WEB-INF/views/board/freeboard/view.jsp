@@ -120,9 +120,10 @@
 							</select>
 							<div class="modal-action">
 								<input type="hidden" name="category" value="${param.category }">
-								<input type="hidden" name="searchType" value="${param.searchType }">
-								<input type="hidden" name="keyword" value="${param.keyword }">
-								<input type="hidden" name="page" value="${param.page }">
+								<input type="hidden" name="searchType"
+									value="${param.searchType }"> <input type="hidden"
+									name="keyword" value="${param.keyword }"> <input
+									type="hidden" name="page" value="${param.page }">
 								<button type="submit" class="btn btn-error">신고</button>
 								<button type="button" class="btn" onclick="report_modal.close()">취소</button>
 							</div>
@@ -145,6 +146,12 @@
 
 			<!-- ① 댓글 입력 폼 (상단 고정) -->
 			<form method="post" action="/teamtwo/comment/add.do">
+				<input type="hidden" name="seq" value="${dto.seq}"> <input
+					type="hidden" name="board" value="${dto.boardType}"> <input
+					type="hidden" name="category" value="${param.category}"> <input
+					type="hidden" name="searchType" value="${param.searchType}">
+				<input type="hidden" name="keyword" value="${param.keyword}">
+				<input type="hidden" name="page" value="${param.page }">
 				<div class="border-b pb-4 mb-6 border-slate-200">
 					<div class="flex items-start gap-3 opacity-60">
 						<div
@@ -163,13 +170,6 @@
 							</div>
 						</c:if>
 						<c:if test="${not empty auth }">
-							<input type="hidden" name="seq" value="${dto.seq}">
-							<input type="hidden" name="board" value="${dto.boardType}">
-							<input type="hidden" name="category" value="${param.category}">
-							<input type="hidden" name="searchType"
-								value="${param.searchType}">
-							<input type="hidden" name="keyword" value="${param.keyword}">
-
 							<div class="flex-1">
 								<textarea
 									class="textarea textarea-bordered w-full h-20 resize-none"
@@ -227,17 +227,17 @@
 		<div class="flex justify-between">
 			<c:if test="${not empty dto.prevSeq}">
 				<button class="btn btn-soft-brand"
-					onclick="location.href='view.do?seq=${dto.prevSeq}&board=${dto.boardType}'">이전
+					onclick="location.href='view.do?seq=${dto.prevSeq}&board=${dto.boardType}&category=${param.category}&searchType=${param.searchType}&keyword=${param.keyword}&page=${param.page }'">이전
 					글 보기</button>
 			</c:if>
 			<c:if test="${empty dto.prevSeq }">
 				<button class="btn">이전글이 없습니다</button>
 			</c:if>
 			<button class="btn btn-soft-brand"
-				onclick="location.href='list.do?board=${dto.boardType}'">돌아가기</button>
+				onclick="location.href='list.do?board=${dto.boardType}&category=${param.category}&searchType=${param.searchType}&keyword=${param.keyword}&page=${param.page }'">돌아가기</button>
 			<c:if test="${not empty dto.nextSeq}">
 				<button class="btn btn-soft-brand"
-					onclick="location.href='view.do?seq=${dto.nextSeq}&board=${dto.boardType}'">다음
+					onclick="location.href='view.do?seq=${dto.nextSeq}&board=${dto.boardType}&category=${param.category}&searchType=${param.searchType}&keyword=${param.keyword}&page=${param.page }'">다음
 					글 보기</button>
 			</c:if>
 			<c:if test="${empty dto.nextSeq }">

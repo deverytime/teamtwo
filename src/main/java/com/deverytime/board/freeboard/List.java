@@ -56,9 +56,9 @@ public class List extends HttpServlet {
 		pagingMap.put("category", category);
 		pagingMap.put("searchType", searchType);
 		pagingMap.put("keyword", keyword);
-		pagingMap.put("page", page);
+		
 		String pagebar = pagingService.getPagebar(pagingMap, "list.do", 
-		        "board", "category", "searchType", "keyword", "page");
+		        "board", "category", "searchType", "keyword" );
 		
 		// 5. 첨부
 		req.setAttribute("list", list);
