@@ -24,29 +24,22 @@ public class Login extends HttpServlet {
 
 	@Override
 	protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
-		
+
 		// 1. 서비스 객체한테 로그인 검사 위임
 		MemberService service = new MemberService();
-		int result = service.login(req); 
-		
+		int result = service.login(req);
+
 		resp.setContentType("text/html; charset=UTF-8");
 		PrintWriter out = resp.getWriter();
-		
+
 		// 2. 결과에 따른 처리
 		if (result == 1) {
 			// 로그인 성공
 			// Service에서 넘겨준 회원 전체 정보(DTO)를 꺼냄
-			MemberDto dto = (MemberDto) req.getAttribute("memberDto"); 
+			MemberDto dto = (MemberDto) req.getAttribute("memberDto");
 			HttpSession session = req.getSession();
-			
-			// 1) 인증 티켓 (아이디만 단일 저장 - 로그인 여부 확인용)
-			session.setAttribute("auth", dto.getId()); 
-			
-			// 2) 개인 정보 뭉치 (글쓰기 등에서 seq, name 꺼내 쓸 때 활용)
-			session.setAttribute("authDto", dto); 
-			
-			
-			// 아이디 자동 저장 쿠키 생성
+
+			// === 1. 아이디 자동 저장 쿠키 생성 (공통 처리) ===
 			String id = req.getParameter("id");
 			String saveId = req.getParameter("saveId");
 			if (saveId != null) {
@@ -61,19 +54,30 @@ public class Login extends HttpServlet {
 				resp.addCookie(cookie);
 			}
 
-			// 2차 인증 활성화 여부에 따른 페이지 이동
+			// === 2. 2차 인증 여부에 따른 세션 발급 분기 ===
 			if (dto.getTwoFactor() == 1) {
-				// 2차 인증 페이지에서의 분기 처리를 위해 mode=login 이라는 꼬리표를 달아서 보냄
-				resp.sendRedirect("/teamtwo/user/twofactor-setup.do?mode=login"); 
+				// [2차 인증 대상자]
+				// 진짜 세션(auth)을 주지 않고 '임시 출입증'만 준다.
+				session.setAttribute("tempAuthId", dto.getId());
+
+				// 2차 인증 페이지로 이동 (인증 통과 시 TwofactorSetup에서 진짜 세션 발급)
+				resp.sendRedirect("/teamtwo/user/twofactor-setup.do?mode=login");
+
 			} else {
-				resp.sendRedirect("/teamtwo/index.do"); 
+				// [2차 인증 미사용자]
+				// 2차 인증을 사용하지 않으니 바로 진짜 출입증 발급
+				session.setAttribute("auth", dto.getId());
+				session.setAttribute("authDto", dto);
+
+				resp.sendRedirect("/teamtwo/index.do");
 			}
-			
+
 		} else if (result == 0) {
 			out.print("<script>alert('존재하지 않는 아이디입니다.'); history.back();</script>");
 			out.close();
 		} else if (result == -1) {
-			out.print("<script>alert('로그인에 5회 이상 실패하여 계정 이용이 제한됩니다.'); location.href='/teamtwo/user/pw-find.do';</script>");
+			out.print(
+					"<script>alert('로그인에 5회 이상 실패하여 계정 이용이 제한됩니다.'); location.href='/teamtwo/user/pw-find.do';</script>");
 			out.close();
 		} else if (result == -2) {
 			// Service에서 넘겨준 현재 실패 횟수 꺼내기
