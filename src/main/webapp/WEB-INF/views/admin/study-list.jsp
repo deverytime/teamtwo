@@ -58,7 +58,7 @@
 										</td>
 										<td class="text-sm text-slate-500">${dto.createDate.substring(0,10)}</td>
 										<td>
-											<button type="button" class="btn btn-error btn-xs btn-outline" onclick="if(confirm('스터디를 해산시키겠습니까?')) location.href='/teamtwo/admin/study-delete.do?seq=${dto.seq}';">삭제</button>
+										<button type="button" class="btn btn-error btn-xs btn-outline" onclick="deleteStudy(${dto.seq})">삭제</button>
 										</td>
 									</tr>
 								</c:forEach>
@@ -70,5 +70,17 @@
 			<div class="mt-8 flex justify-center">${pagebar}</div>
 		</main>
 	</div>
+	<form id="deleteStudyForm" action="/teamtwo/admin/study-list.do" method="POST">
+		<input type="hidden" name="seq" id="deleteStudySeq">
+	</form>
+
+	<script>
+		function deleteStudy(seq) {
+			if(confirm('해당 스터디를 삭제하시겠습니까?')) {
+				document.getElementById('deleteStudySeq').value = seq;
+				document.getElementById('deleteStudyForm').submit();
+			}
+		}
+	</script>
 </body>
 </html>
