@@ -1,4 +1,4 @@
-package com.deverytime.board.freeboard;
+package com.deverytime.board;
 
 import java.io.IOException;
 import java.io.PrintWriter;
@@ -13,7 +13,7 @@ import javax.servlet.http.HttpSession;
 
 import com.deverytime.model.BoardDto;
 
-@WebServlet(value = "/board/freeboard/recommend.do")
+@WebServlet(value = "/board/recommend.do")
 public class Recommend extends HttpServlet {
 
 	@Override

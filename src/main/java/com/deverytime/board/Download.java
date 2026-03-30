@@ -1,4 +1,4 @@
-package com.deverytime.board.freeboard;
+package com.deverytime.board;
 
 import java.io.File;
 import java.io.FileInputStream;
@@ -14,7 +14,7 @@ import javax.servlet.http.HttpServletResponse;
 
 import com.deverytime.model.FileDto;
 
-@WebServlet(value = "/board/freeboard/download.do")
+@WebServlet(value = "/board/download.do")
 public class Download extends HttpServlet {
 
 	@Override

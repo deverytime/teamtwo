@@ -1,4 +1,4 @@
-package com.deverytime.board.freeboard;
+package com.deverytime.board;
 
 import java.io.IOException;
 
@@ -11,7 +11,7 @@ import javax.servlet.http.HttpSession;
 
 import com.deverytime.model.BoardDto;
 
-@WebServlet(value = "/board/freeboard/report.do")
+@WebServlet(value = "/board/report.do")
 public class Report extends HttpServlet {
 
 	@Override
@@ -22,21 +22,22 @@ public class Report extends HttpServlet {
 		resp.setContentType("text/html; charset=UTF-8");
 		HttpSession session = req.getSession();
 
-		// 로그인 안한 사용자면 안내 메시지 출력
-		if (session.getAttribute("auth") == null) {
-			resp.sendRedirect(
-					"view.do?board=" + req.getParameter("board") + "&seq=" + req.getParameter("seq") + "&msg=login");
-			return;
-		}
-
 		String seq = req.getParameter("seq");
 		String board = req.getParameter("board");
 		String reasonSeq = req.getParameter("reasonSeq");
-		
+
 		String category = req.getParameter("category"); // 주소 파라미터
 		String searchType = req.getParameter("searchType");
 		String keyword = req.getParameter("keyword");
 		String page = req.getParameter("page");
+
+		// 로그인 안한 사용자면 안내 메시지 출력
+		if (session.getAttribute("auth") == null) {
+			resp.sendRedirect("view.do?board=" + req.getParameter("board") + "&seq=" + "&category=" + category
+					+ "&searchType=" + searchType + "&keyword=" + keyword + "&page=" + page + req.getParameter("seq")
+					+ "&msg=login");
+			return;
+		}
 
 		BoardDto dto = new BoardDto();
 		dto.setReasonSeq(reasonSeq);
@@ -50,11 +51,13 @@ public class Report extends HttpServlet {
 
 		if (result == 1) {
 			// 신고 처리
-			resp.sendRedirect("view.do?board=" + board+ "&seq=" + seq + "&category=" + category + "&searchType=" + searchType + "&keyword=" + keyword + "&page=" + page);
+			resp.sendRedirect("view.do?board=" + board + "&seq=" + seq + "&category=" + category + "&searchType="
+					+ searchType + "&keyword=" + keyword + "&page=" + page);
 
 		} else {
 			// 이미 신고한 경우
-			resp.sendRedirect("view.do?board=" + board + "&seq=" + seq + "&category=" + category + "&searchType=" + searchType + "&keyword=" + keyword + "&page=" + page + "&msg=reportalready");
+			resp.sendRedirect("view.do?board=" + board + "&seq=" + seq + "&category=" + category + "&searchType="
+					+ searchType + "&keyword=" + keyword + "&page=" + page + "&msg=reportalready");
 		}
 
 	}
