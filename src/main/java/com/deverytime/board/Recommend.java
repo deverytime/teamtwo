@@ -1,4 +1,4 @@
-package com.deverytime.board.freeboard;
+package com.deverytime.board;
 
 import java.io.IOException;
 import java.io.PrintWriter;

@@ -1,4 +1,4 @@
-package com.deverytime.board.freeboard;
+package com.deverytime.board;
 
 import java.io.IOException;
 import java.net.URLEncoder;
@@ -16,7 +16,7 @@ import javax.servlet.http.HttpSession;
 import com.deverytime.model.BoardDto;
 import com.deverytime.model.FileDto;
 
-@WebServlet(value = "/board/freeboard/view.do")
+@WebServlet(value = "/board/view.do")
 public class View extends HttpServlet {
 
 	@Override
@@ -84,7 +84,7 @@ public class View extends HttpServlet {
 //		req.setAttribute("searchType", searchType);
 //		req.set
 		
-		req.getRequestDispatcher("/WEB-INF/views/board/freeboard/view.jsp").forward(req, resp);
+		req.getRequestDispatcher("/WEB-INF/views/board/view.jsp").forward(req, resp);
 	}
 
 }

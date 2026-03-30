@@ -1,6 +1,8 @@
 package com.deverytime.board;
 
 import java.io.IOException;
+import java.util.ArrayList;
+import java.util.HashMap;
 
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
@@ -8,16 +10,65 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
-@WebServlet(value = "/list.do")
+import com.deverytime.model.BoardDto;
+import com.deverytime.paging.PagingService;
+
+@WebServlet(value = "/board/list.do")
 public class List extends HttpServlet {
 
 	@Override
 	protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
 
 		//List.java
+		// 1. 파라미터 받기
+		String board = req.getParameter("board");
+		if(board == null || board.equals("")) board = "1"; // 기본값 자유게시판
 		
+		String category = req.getParameter("category"); //null 가능 -> 전체 주제
+		
+		// 검색 기능을 위해 추가
+		String searchType = req.getParameter("searchType");
+		String keyword = req.getParameter("keyword");
+		
+		// 페이징을 위해 추가
+		String page = req.getParameter("page");
+		if(page == null || page.equals("")) page = "1";
+		
+		// 2. 목록조회
 
-		req.getRequestDispatcher("/WEB-INF/views/list.jsp").forward(req, resp);
+		BoardService service = new BoardService();
+		BoardDto dto = new BoardDto();
+		
+		dto.setBoardType(board);
+		dto.setCategory(category);
+		dto.setSearchType(searchType);
+		dto.setKeyword(keyword);
+		dto.setPageStr(page);
+		
+		// 3. 목록보기
+		ArrayList<BoardDto> list = service.list(dto);
+		
+		// 4. 페이징
+		int totalCount = service.getTotalCount(dto);
+		PagingService pagingService = new PagingService();
+		HashMap<String, String> pagingMap = pagingService.getPaging(page, totalCount, dto.getPageSize());
+		pagingMap.put("baord", board);
+		pagingMap.put("category", category);
+		pagingMap.put("searchType", searchType);
+		pagingMap.put("keyword", keyword);
+		
+		String pagebar = pagingService.getPagebar(pagingMap, "list.do", 
+		        "board", "category", "searchType", "keyword" );
+		
+		// 5. 첨부
+		req.setAttribute("list", list);
+		req.setAttribute("board", board);
+		req.setAttribute("param", dto);
+		req.setAttribute("category", category);
+		req.setAttribute("categoryMap", service.getCategoryMap());
+		req.setAttribute("pagebar", pagebar);
+
+		req.getRequestDispatcher("/WEB-INF/views/board/list.jsp").forward(req, resp);
 	}
 
 }

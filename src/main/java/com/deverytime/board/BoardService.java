@@ -1,4 +1,4 @@
-package com.deverytime.board.freeboard;
+package com.deverytime.board;
 
 import java.time.LocalDate;
 import java.util.List;
