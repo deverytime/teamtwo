@@ -443,6 +443,7 @@ public class AdminDao extends BasicDao {
 			sql.append("            rb.seq, rb.title, rb.subject, rb.content, ");
 			sql.append("            rb.regDate, rb.status, rb.memberSeq ");
 			sql.append("        from request_board rb ");
+			sql.append("        inner join member m on rb.memberSeq = m.seq ");
 			sql.append("        where 1=1 ");
 
 			boolean hasWord = word != null && !word.trim().equals("");

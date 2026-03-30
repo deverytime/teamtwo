@@ -64,6 +64,7 @@ public class ViewRequest extends HttpServlet {
 
 		String mode = req.getParameter("mode");
 		String seq = req.getParameter("seq");
+		System.out.println(mode);
 
 		// request-view.jsp 에 폼 두개 두고 mode 값에 따라 분기
 		// 1. 요청 상태 변경인 경우

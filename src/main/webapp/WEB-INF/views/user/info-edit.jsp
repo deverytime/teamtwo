@@ -16,7 +16,7 @@
 	<%@ include file="/WEB-INF/views/inc/header.jsp"%>
 
 	<main class="page-wrap edit-wrap py-12">
-		<div class="mb-8 text-center border-b pb-6">
+		<div class="mb-8 text-center border-b !border-slate-200 pb-6">
 			<h1 class="text-3xl font-bold mb-2">회원 정보 수정</h1>
 			<p class="text-slate-500">변경할 정보를 입력하세요</p>
 		</div>
