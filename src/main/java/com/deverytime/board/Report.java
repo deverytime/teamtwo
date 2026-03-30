@@ -1,6 +1,7 @@
 package com.deverytime.board;
 
 import java.io.IOException;
+import java.net.URLEncoder;
 
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
@@ -30,11 +31,12 @@ public class Report extends HttpServlet {
 		String searchType = req.getParameter("searchType");
 		String keyword = req.getParameter("keyword");
 		String page = req.getParameter("page");
+		String encodedKeyword = URLEncoder.encode(keyword, "UTF-8");
 
 		// 로그인 안한 사용자면 안내 메시지 출력
 		if (session.getAttribute("auth") == null) {
-			resp.sendRedirect("view.do?board=" + req.getParameter("board") + "&seq=" + "&category=" + category
-					+ "&searchType=" + searchType + "&keyword=" + keyword + "&page=" + page + req.getParameter("seq")
+			resp.sendRedirect("view.do?board=" + board + "&seq=" + seq + "&category=" + category
+					+ "&searchType=" + searchType + "&keyword=" + encodedKeyword + "&page=" + page 
 					+ "&msg=login");
 			return;
 		}
@@ -44,20 +46,21 @@ public class Report extends HttpServlet {
 		dto.setSeq(seq);
 		dto.setId((String) session.getAttribute("auth"));
 
-		// 2. 추천 처리
+		// 2. 신고처
 		BoardService service = new BoardService();
+		
 
 		int result = service.report(dto);
 
 		if (result == 1) {
 			// 신고 처리
 			resp.sendRedirect("view.do?board=" + board + "&seq=" + seq + "&category=" + category + "&searchType="
-					+ searchType + "&keyword=" + keyword + "&page=" + page);
+					+ searchType + "&keyword=" + encodedKeyword + "&page=" + page);
 
 		} else {
 			// 이미 신고한 경우
 			resp.sendRedirect("view.do?board=" + board + "&seq=" + seq + "&category=" + category + "&searchType="
-					+ searchType + "&keyword=" + keyword + "&page=" + page + "&msg=reportalready");
+					+ searchType + "&keyword=" + encodedKeyword + "&page=" + page + "&msg=reportalready");
 		}
 
 	}
