@@ -30,6 +30,26 @@
                     class="input input-bordered w-2/3"
                     required>
             </div>
+            
+            <div class="flex justify-between items-center">
+              <label class="form-label inline! text-center">학습 시간</label>
+              <select name="time"
+                      class="select select-bordered w-2/3"
+                      required>
+                <option value="1">1시간</option>
+                <option value="2">2시간</option>
+                <option value="3">3시간</option>
+                <option value="4">4시간</option>
+                <option value="5">5시간</option>
+                <option value="6">6시간</option>
+                <option value="7">7시간</option>
+                <option value="8">8시간</option>
+                <option value="9">9시간</option>
+                <option value="10">10시간</option>
+                <option value="11">11시간</option>
+                <option value="12">12시간</option>
+              </select>
+            </div>          
   
             <!-- 진행률 -->
             <div class="flex justify-between items-center">

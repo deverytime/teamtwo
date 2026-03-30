@@ -26,6 +26,26 @@
                      class="input input-bordered w-2/3"
                      required>
             </div>
+            
+            <div class="flex justify-between items-center">
+              <label class="form-label inline! text-center">학습 시간</label>
+              <select name="time"
+                      class="select select-bordered w-2/3"
+                      required>
+                <option value="1" ${dto.time == 1 ? 'selected' : ''}>1시간</option>
+                <option value="2" ${dto.time == 2 ? 'selected' : ''}>2시간</option>
+                <option value="3" ${dto.time == 3 ? 'selected' : ''}>3시간</option>
+                <option value="4" ${dto.time == 4 ? 'selected' : ''}>4시간</option>
+                <option value="5" ${dto.time == 5 ? 'selected' : ''}>5시간</option>
+                <option value="6" ${dto.time == 6 ? 'selected' : ''}>6시간</option>
+                <option value="7" ${dto.time == 7 ? 'selected' : ''}>7시간</option>
+                <option value="8" ${dto.time == 8 ? 'selected' : ''}>8시간</option>
+                <option value="9" ${dto.time == 9 ? 'selected' : ''}>9시간</option>
+                <option value="10" ${dto.time == 10 ? 'selected' : ''}>10시간</option>
+                <option value="11" ${dto.time == 11 ? 'selected' : ''}>11시간</option>
+                <option value="12" ${dto.time == 12 ? 'selected' : ''}>12시간</option>
+              </select>
+            </div>
       
             <!-- 진행률 -->
             <div class="flex justify-between items-center">
