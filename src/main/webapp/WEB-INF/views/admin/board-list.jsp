@@ -51,7 +51,7 @@
 										<td>${dto.nickname}</td>
 										<td class="text-sm text-slate-500">${dto.regDate.substring(0,10)}</td>
 										<td>
-											<button type="button" class="btn btn-error btn-xs btn-outline" onclick="if(confirm('진짜 삭제하시겠습니까?')) location.href='/teamtwo/admin/board-delete.do?seq=${dto.seq}';">삭제</button>
+										<button type="button" class="btn btn-error btn-xs btn-outline" onclick="deleteBoard(${dto.seq})">삭제</button>
 										</td>
 									</tr>
 								</c:forEach>
@@ -63,5 +63,19 @@
 			<div class="mt-8 flex justify-center">${pagebar}</div>
 		</main>
 	</div>
+	<form id="deleteForm" action="/teamtwo/admin/board-list.do" method="POST">
+		<input type="hidden" name="seq" id="deleteSeq">
+	</form>
+
+	<script>
+		function deleteBoard(seq) {
+			if(confirm('선택한 게시글을 삭제하시겠습니까?')) {
+				// 숨겨둔 폼의 input에 글 번호를 넣고
+				document.getElementById('deleteSeq').value = seq;
+				// 폼을 POST 방식으로 제출 (ListBoard.java의 doPost가 받음)
+				document.getElementById('deleteForm').submit();
+			}
+		}
+	</script>
 </body>
 </html>
