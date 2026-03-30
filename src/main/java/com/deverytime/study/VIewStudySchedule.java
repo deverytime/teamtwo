@@ -31,7 +31,7 @@ public class VIewStudySchedule extends HttpServlet{
 		
 		//로그인 체크 로직
 		if(auth == null) {
-			resp.getWriter().print("<script>alert('로그인이 필요한 서비스입니다.');history.back();</script>");
+			resp.getWriter().print("<script>alert('로그인이 필요한 서비스입니다.');location.href='/teamtwo/index.do';</script>");
 			resp.getWriter().close();
 			return;
 		}

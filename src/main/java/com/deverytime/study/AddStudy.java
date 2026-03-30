@@ -18,6 +18,21 @@ public class AddStudy extends HttpServlet{
 	@Override
 	protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
 		
+		req.setCharacterEncoding("UTF-8"); 
+		resp.setCharacterEncoding("UTF-8");
+        resp.setContentType("text/html; charset=UTF-8");
+		
+		HttpSession session = req.getSession();
+		
+		Object auth = session.getAttribute("auth");
+		
+		//로그인 체크 로직
+		if(auth == null) {
+			resp.getWriter().print("<script>alert('로그인이 필요한 서비스입니다.');location.href='/teamtwo/index.do';</script>");
+			resp.getWriter().close();
+			return;
+		}
+		
 		req.getRequestDispatcher("/WEB-INF/views/study/study-add.jsp").forward(req, resp);
 		
 	}
@@ -35,7 +50,7 @@ public class AddStudy extends HttpServlet{
 		
 		//로그인 체크 로직
 		if(auth == null) {
-			resp.getWriter().print("<script>alert('로그인이 필요한 서비스입니다.');history.back();</script>");
+			resp.getWriter().print("<script>alert('로그인이 필요한 서비스입니다.');location.href='/teamtwo/index.do';</script>");
 			resp.getWriter().close();
 			return;
 		}

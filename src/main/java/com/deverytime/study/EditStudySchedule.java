@@ -19,14 +19,27 @@ public class EditStudySchedule extends HttpServlet{
 	@Override
 	protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
 		
+		req.setCharacterEncoding("UTF-8"); 
+		resp.setCharacterEncoding("UTF-8");
+        resp.setContentType("text/html; charset=UTF-8");
+		
+		HttpSession session = req.getSession();
+		
+		Object auth = session.getAttribute("auth");
+		
+		//로그인 체크 로직
+		if(auth == null) {
+			resp.getWriter().print("<script>alert('로그인이 필요한 서비스입니다.');location.href='/teamtwo/index.do';</script>");
+			resp.getWriter().close();
+			return;
+		}
+		
 		String seq = req.getParameter("seq");
-		String studySeq = req.getParameter("studySeq");
 		
 		StudyScheduleService service = new StudyScheduleService();
 		StudyScheduleDto dto = service.get(seq);
 		
 		req.setAttribute("dto", dto);
-		req.setAttribute("studySeq", studySeq);
 		
 		req.getRequestDispatcher("/WEB-INF/views/study/studyschedule-edit.jsp").forward(req, resp);
 		
@@ -45,7 +58,7 @@ public class EditStudySchedule extends HttpServlet{
 		
 		//로그인 체크 로직
 		if(auth == null) {
-			resp.getWriter().print("<script>alert('로그인이 필요한 서비스입니다.');history.back();</script>");
+			resp.getWriter().print("<script>alert('로그인이 필요한 서비스입니다.');location.href='/teamtwo/index.do';</script>");
 			resp.getWriter().close();
 			return;
 		}
@@ -55,8 +68,6 @@ public class EditStudySchedule extends HttpServlet{
 		String content = req.getParameter("content");
 		String startDateStr = req.getParameter("startDate");
 		String endDateStr = req.getParameter("endDate");
-		
-		String studySeq = req.getParameter("studySeq");
 		
 		LocalDate startDate = LocalDate.parse(startDateStr);
 		LocalDate endDate = LocalDate.parse(endDateStr);
@@ -84,7 +95,7 @@ public class EditStudySchedule extends HttpServlet{
 		if(result > 0) {
 			writer.print("<script>");
 			writer.print("alert('수정 완료!');");
-			writer.print("location.href='/teamtwo/study/studyschedule-list.do?seq=" + studySeq + "';");
+			writer.print("location.href='/teamtwo/study/studyschedule-view.do?seq=" + seq + "';");
 			writer.print("</script>");
 		} else {
 			writer.print("<script>");
