@@ -41,7 +41,7 @@
 							</div>
 
 							<div class="flexshirink-0">
-								<select name="category" class="select select-boarderd white">
+								<select name="subject" class="select select-boarderd white">
 									<c:forEach var="entry" items="${categoryMap}">
 										<option value="${entry.key}" <c:if test="${dto.category == entry.key}">selected</c:if>>${entry.value}</option>
 									</c:forEach>
@@ -59,7 +59,8 @@
 									class="textarea textarea-bordered w-full bg-white resize-none"
 									placeholder="내용을 입력하세요." rows="15" required>${dto.content}</textarea>
 							</div>
-							<div>
+							<!-- 파일 수정은 시간 상 나중에 처 
+								<div>
 								<div class="card-pad border-b border-slate-200">
 									<div id="fileList" class="flex flex-col gap-2">
 										<input type="file" name="file"
@@ -68,10 +69,14 @@
 									<button type="button" class="btn btn-soft-brand mt-2"
 										onclick="addFile()">+ 파일 추가</button>
 								</div>
-							</div>
+							</div> -->
 						</div>
 						<input type="hidden" name="seq" value="${dto.seq}">
 						<input type="hidden" name="board" value="${dto.boardType}">
+						<input type="hidden" name="category" value="${param.category}">
+						<input type="hidden" name="searchType" value="${param.searchType}">
+						<input type="hidden" name="keyword" value="${param.keyword}">
+						<input type="hidden" name="page" value="${param.page}">
 						<div class="flex justify-end mr-8 mb-5">
 							<button type="submit" class="btn btn-brand">수정하기</button>
 						</div>
@@ -83,7 +88,7 @@
 	</main>
 
 	<script>
-		// 현재 페이지 전용 JavaScript가 필요하면 여기에 작성
+		<!-- // 현재 페이지 전용 JavaScript가 필요하면 여기에 작성
 		function addFile() {
 		  const fileList = document.getElementById('fileList');
 		
@@ -114,7 +119,7 @@
 		  
 		  btn.parentElement.remove();
 		  document.querySelector('[onclick="addFile()"]').style.display = '';
-		}
+		} -->
 	</script>
 </body>
 </html>

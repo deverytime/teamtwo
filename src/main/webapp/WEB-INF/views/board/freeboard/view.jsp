@@ -61,9 +61,9 @@
 
 						<div class="flex gap-2 flex-shrink-0">
 							<button class="btn btn-soft-brand btn-sm"
-								onclick="location.href='edit.do?seq=${dto.seq}&board=${dto.boardType}'">수정</button>
+								onclick="location.href='edit.do?seq=${dto.seq}&board=${dto.boardType}&category=${param.category}&searchType=${param.searchType}&keyword=${param.keyword}&page=${param.page}'">수정</button>
 							<button class="btn btn-error btn-sm"
-								onclick="location.href='del.do?seq=${dto.seq}&board=${dto.boardType}'">삭제</button>
+								onclick="location.href='del.do?seq=${dto.seq}&board=${dto.boardType}&category=${param.category}&searchType=${param.searchType}&keyword=${param.keyword}&page=${param.page}'">삭제</button>
 						</div>
 					</c:if>
 				</div>
@@ -100,7 +100,7 @@
 				<!-- ④ 추천 / 신고 -->
 				<div class="card-pad flex gap-2 items-center justify-center">
 					<button class="btn btn-soft-brand btn-sm"
-						onclick="location.href='recommend.do?seq=${dto.seq}&board=${dto.boardType}'">추천
+						onclick="location.href='recommend.do?seq=${dto.seq}&board=${dto.boardType}&category=${param.category }&searchType=${param.searchType}&keyword=${param.keyword}&page=${param.page }'">추천
 						${dto.recommend}</button>
 					<button class="btn btn-error btn-sm"
 						onclick="report_modal.showModal()">신고</button>
@@ -119,6 +119,10 @@
 								<option value="5">기타</option>
 							</select>
 							<div class="modal-action">
+								<input type="hidden" name="category" value="${param.category }">
+								<input type="hidden" name="searchType" value="${param.searchType }">
+								<input type="hidden" name="keyword" value="${param.keyword }">
+								<input type="hidden" name="page" value="${param.page }">
 								<button type="submit" class="btn btn-error">신고</button>
 								<button type="button" class="btn" onclick="report_modal.close()">취소</button>
 							</div>

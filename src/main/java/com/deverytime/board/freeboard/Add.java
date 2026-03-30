@@ -82,6 +82,7 @@ public class Add extends HttpServlet {
 		String searchType = mr.getParameter("searchType");
 		String keyword = mr.getParameter("keyword");
 		String paramCategory = mr.getParameter("category");
+		String page = mr.getParameter("page");
 
 		BoardDto dto = new BoardDto();
 		dto.setId(id);
@@ -90,6 +91,11 @@ public class Add extends HttpServlet {
 		dto.setTitle(title);
 		dto.setContent(content);
 
+		System.out.println(keyword);
+		System.out.println(keyword);
+		System.out.println(keyword);
+		System.out.println(keyword);
+		
 		BoardService service = new BoardService();
 
 		int result = service.add(dto);
