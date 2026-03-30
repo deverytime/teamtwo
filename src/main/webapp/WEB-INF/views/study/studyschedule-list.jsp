@@ -56,9 +56,10 @@
         </div>
 
         <div class="content-card overflow-hidden">
-            <div class="card-pad border-b bg-slate-50/50">
-                <h3 class="font-bold text-lg text-slate-800">전체 일정 목록</h3>
-            </div>
+            <div class="card-pad border-b bg-slate-50/50 flex items-center gap-2">
+		        <h3 class="font-bold text-lg text-slate-800 mb-0">전체 일정 목록</h3>
+		        <span class="badge badge-sm badge-ghost font-normal">Total ${calendarList.size()}</span>
+		    </div>
             <table class="table w-full">
                 <thead class="bg-slate-50">
                     <tr>
@@ -76,7 +77,7 @@
                             <td class="text-center text-sm text-slate-500">${dto.endDate}</td>
                             <td class="text-right pr-6" onclick="event.stopPropagation();">
                                 <div class="join">
-                                    <button class="btn btn-xs btn-ghost text-brand-600 join-item" onclick="location.href='/teamtwo/study/studyschedule-edit.do?seq=${dto.seq}';">수정</button>
+                                    <button class="btn btn-xs btn-ghost text-brand-600 join-item" onclick="location.href='/teamtwo/study/studyschedule-edit.do?seq=${dto.seq}&studySeq=${seq}';">수정</button>
                                     <button class="btn btn-xs btn-ghost text-error join-item" onclick="if(confirm('삭제하시겠습니까?')) location.href='/teamtwo/study/studyschedule-del.do?seq=${dto.seq}&studySeq=${seq}';">삭제</button>
                                 </div>
                             </td>
