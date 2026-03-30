@@ -20,13 +20,11 @@ public class EditStudySchedule extends HttpServlet{
 	protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
 		
 		String seq = req.getParameter("seq");
-		String studySeq = req.getParameter("studySeq");
 		
 		StudyScheduleService service = new StudyScheduleService();
 		StudyScheduleDto dto = service.get(seq);
 		
 		req.setAttribute("dto", dto);
-		req.setAttribute("studySeq", studySeq);
 		
 		req.getRequestDispatcher("/WEB-INF/views/study/studyschedule-edit.jsp").forward(req, resp);
 		
@@ -56,8 +54,6 @@ public class EditStudySchedule extends HttpServlet{
 		String startDateStr = req.getParameter("startDate");
 		String endDateStr = req.getParameter("endDate");
 		
-		String studySeq = req.getParameter("studySeq");
-		
 		LocalDate startDate = LocalDate.parse(startDateStr);
 		LocalDate endDate = LocalDate.parse(endDateStr);
 		
@@ -84,7 +80,7 @@ public class EditStudySchedule extends HttpServlet{
 		if(result > 0) {
 			writer.print("<script>");
 			writer.print("alert('수정 완료!');");
-			writer.print("location.href='/teamtwo/study/studyschedule-list.do?seq=" + studySeq + "';");
+			writer.print("location.href='/teamtwo/study/studyschedule-view.do?seq=" + seq + "';");
 			writer.print("</script>");
 		} else {
 			writer.print("<script>");

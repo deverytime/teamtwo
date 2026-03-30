@@ -20,11 +20,14 @@ public class EditTodo extends HttpServlet{
 	protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
 		
 		String seq = req.getParameter("seq");
+		String scheduleSeq = req.getParameter("scheduleSeq");
 		
 		StudyTodoService service = new StudyTodoService();
 		StudyTodoDto dto = service.get(seq);
 		
 		req.setAttribute("dto", dto);
+		req.setAttribute("scheduleSeq", scheduleSeq);
+		
 		
 		req.getRequestDispatcher("/WEB-INF/views/study/todo-edit.jsp").forward(req, resp);
 		

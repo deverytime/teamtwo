@@ -27,7 +27,7 @@
 
       <div class="content-card card-pad max-w-3xl">
 
-        <form class="space-y-5" method="POST" action="/teamtwo/study/studyschedule-edit.do?seq=${dto.seq}&studySeq=${studySeq}">
+        <form class="space-y-5" method="POST" action="/teamtwo/study/studyschedule-edit.do?seq=${dto.seq}">
           <div>
             <label class="form-label">스터디 일정 명</label>
             <input

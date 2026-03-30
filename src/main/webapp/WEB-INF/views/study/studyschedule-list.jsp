@@ -77,7 +77,7 @@
                             <td class="text-center text-sm text-slate-500">${dto.endDate}</td>
                             <td class="text-right pr-6" onclick="event.stopPropagation();">
                                 <div class="join">
-                                    <button class="btn btn-xs btn-ghost text-brand-600 join-item" onclick="location.href='/teamtwo/study/studyschedule-edit.do?seq=${dto.seq}&studySeq=${seq}';">수정</button>
+                                    <button class="btn btn-xs btn-ghost text-brand-600 join-item" onclick="location.href='/teamtwo/study/studyschedule-edit.do?seq=${dto.seq}';">수정</button>
                                     <button class="btn btn-xs btn-ghost text-error join-item" onclick="if(confirm('삭제하시겠습니까?')) location.href='/teamtwo/study/studyschedule-del.do?seq=${dto.seq}&studySeq=${seq}';">삭제</button>
                                 </div>
                             </td>
