@@ -76,7 +76,7 @@ public class AdminDao extends BasicDao {
 			}
 
 			sql.append("        order by seq desc ");
-			sql.append("    m) ");
+			sql.append("    ) m ");
 			sql.append(") where rnum between ? and ?");
 
 			pstat = conn.prepareStatement(sql.toString());
@@ -107,7 +107,9 @@ public class AdminDao extends BasicDao {
 				dto.setSeq(rs.getString("seq"));
 				dto.setId(rs.getString("id"));
 				dto.setName(rs.getString("name"));
-				dto.setNickname(rs.getString("nick"));
+				dto.setNickname(rs.getString("nickname"));
+				dto.setEmail(rs.getString("email"));
+				dto.setStatus(rs.getInt("status"));
 				dto.setRegdate(rs.getString("regdate"));
 
 				list.add(dto);
@@ -141,7 +143,7 @@ public class AdminDao extends BasicDao {
 				} else if ("nickname".equals(type)) {
 					sql.append("where nickname like ? ");
 				} else if ("all".equals(type)) {
-					sql.append("where id like ? or name like ? or nick like ? ");
+					sql.append("where id like ? or name like ? or nickname like ? ");
 				}
 			}
 
@@ -167,12 +169,672 @@ public class AdminDao extends BasicDao {
 
 		} catch (Exception e) {
 			e.printStackTrace();
-		} finally {
-			closeAll();
 		}
 
 		return 0;
 	}
 	
+	public List<BoardDto> getBoardList(int begin, int end, String type, String word) {
+
+		try {
+			StringBuilder sql = new StringBuilder();
+
+			sql.append("select * from (");
+			sql.append("    select rownum as rnum, t.* from (");
+			sql.append("        select ");
+			sql.append("            b.seq, b.title, b.content, ");
+			sql.append("            b.readCount, b.regDate, b.recommend, b.report, ");
+			sql.append("            b.memberSeq, m.id, m.nickname ");
+			sql.append("        from post b ");
+			sql.append("        inner join member m on b.memberSeq = m.seq ");
+
+			boolean hasWord = word != null && !word.trim().equals("");
+
+			if (hasWord) {
+				if ("title".equals(type)) {
+					sql.append("where b.title like ? ");
+				} else if ("content".equals(type)) {
+					sql.append("where b.content like ? ");
+				} else if ("nickname".equals(type)) {
+					sql.append("where m.nickname like ? ");
+				} else if ("all".equals(type)) {
+					sql.append("where b.title like ? ");
+					sql.append("   or b.content like ? ");
+					sql.append("   or m.nickname like ? ");
+				}
+			}
+
+			sql.append("        order by b.seq desc ");
+			sql.append("    ) t ");
+			sql.append(") where rnum between ? and ?");
+
+			pstat = conn.prepareStatement(sql.toString());
+
+			int index = 1;
+
+			if (hasWord) {
+				String searchWord = "%" + word + "%";
+
+				if ("all".equals(type)) {
+					pstat.setString(index++, searchWord);
+					pstat.setString(index++, searchWord);
+					pstat.setString(index++, searchWord);
+				} else if ("title".equals(type) || "content".equals(type) || "nickname".equals(type)) {
+					pstat.setString(index++, searchWord);
+				}
+			}
+
+			pstat.setInt(index++, begin);
+			pstat.setInt(index++, end);
+
+			rs = pstat.executeQuery();
+
+			List<BoardDto> list = new ArrayList<>();
+
+			while (rs.next()) {
+				BoardDto dto = new BoardDto();
+				dto.setSeq(rs.getString("seq"));				
+				dto.setTitle(rs.getString("title"));
+				dto.setContent(rs.getString("content"));
+				dto.setReadCount(rs.getString("readCount"));
+				dto.setRegDate(rs.getString("regDate"));
+				dto.setRecommend(rs.getString("recommend"));
+				dto.setReport(rs.getString("report"));
+				dto.setMemberSeq(rs.getString("memberSeq"));
+				dto.setId(rs.getString("id"));
+				dto.setNickname(rs.getString("nickname"));
+
+				list.add(dto);
+			}
+
+			return list;
+
+		} catch (Exception e) {
+			e.printStackTrace();
+		} finally {
+			closeAll();
+		}
+
+		return new ArrayList<>();
+	}
 	
+	public int getBoardCount(String type, String word) {
+
+		try {
+			StringBuilder sql = new StringBuilder();
+
+			sql.append("select count(*) as cnt ");
+			sql.append("from post b ");
+			sql.append("inner join member m on b.memberSeq = m.seq ");
+
+			boolean hasWord = word != null && !word.trim().equals("");
+
+			if (hasWord) {
+				if ("title".equals(type)) {
+					sql.append("where b.title like ? ");
+				} else if ("content".equals(type)) {
+					sql.append("where b.content like ? ");
+				} else if ("nickname".equals(type)) {
+					sql.append("where m.nickname like ? ");
+				} else if ("all".equals(type)) {
+					sql.append("where b.title like ? ");
+					sql.append("   or b.content like ? ");
+					sql.append("   or m.nickname like ? ");
+				}
+			}
+
+			pstat = conn.prepareStatement(sql.toString());
+
+			if (hasWord) {
+				String searchWord = "%" + word + "%";
+
+				if ("all".equals(type)) {
+					pstat.setString(1, searchWord);
+					pstat.setString(2, searchWord);
+					pstat.setString(3, searchWord);
+				} else if ("title".equals(type) || "content".equals(type) || "nickname".equals(type)) {
+					pstat.setString(1, searchWord);
+				}
+			}
+
+			rs = pstat.executeQuery();
+
+			if (rs.next()) {
+				return rs.getInt("cnt");
+			}
+
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+
+		return 0;
+	}
+
+	public List<StudyDto> getStudyList(int begin, int end, String type, String word) {
+
+		try {
+			StringBuilder sql = new StringBuilder();
+
+			sql.append("select * from (");
+			sql.append("    select rownum as rnum, t.* from (");
+			sql.append("        select ");
+			sql.append("            s.seq, s.name, s.description, ");
+			sql.append("            s.capacity, s.status, s.createDate ");
+			sql.append("        from study s ");
+
+			boolean hasWord = word != null && !word.trim().equals("");
+
+			if (hasWord) {
+				if ("name".equals(type)) {
+					sql.append("where s.name like ? ");
+				} else if ("description".equals(type)) {
+					sql.append("where s.description like ? ");
+				} else if ("all".equals(type)) {
+					sql.append("where s.name like ? ");
+					sql.append("   or s.description like ? ");
+				}
+			}
+
+			sql.append("        order by s.seq desc ");
+			sql.append("    ) t ");
+			sql.append(") where rnum between ? and ?");
+
+			pstat = conn.prepareStatement(sql.toString());
+
+			int index = 1;
+
+			if (hasWord) {
+				String searchWord = "%" + word + "%";
+
+				if ("all".equals(type)) {
+					pstat.setString(index++, searchWord);
+					pstat.setString(index++, searchWord);
+				} else if ("name".equals(type) || "description".equals(type)) {
+					pstat.setString(index++, searchWord);
+				}
+			}
+
+			pstat.setInt(index++, begin);
+			pstat.setInt(index++, end);
+
+			rs = pstat.executeQuery();
+
+			List<StudyDto> list = new ArrayList<>();
+
+			while (rs.next()) {
+				StudyDto dto = new StudyDto();
+
+				dto.setSeq(rs.getString("seq"));
+				dto.setName(rs.getString("name"));
+				dto.setDescription(rs.getString("description"));
+				dto.setCapacity(rs.getString("capacity"));
+				dto.setStatus(rs.getString("status"));
+				dto.setCreateDate(rs.getString("createDate"));
+
+				list.add(dto);
+			}
+
+			return list;
+
+		} catch (Exception e) {
+			e.printStackTrace();
+		} finally {
+			closeAll();
+		}
+
+		return new ArrayList<>();
+	}
+	
+	public int getStudyCount(String type, String word) {
+
+		try {
+			StringBuilder sql = new StringBuilder();
+
+			sql.append("select count(*) as cnt ");
+			sql.append("from study s ");
+
+			boolean hasWord = word != null && !word.trim().equals("");
+
+			if (hasWord) {
+				if ("name".equals(type)) {
+					sql.append("where s.name like ? ");
+				} else if ("description".equals(type)) {
+					sql.append("where s.description like ? ");
+				} else if ("all".equals(type)) {
+					sql.append("where s.name like ? ");
+					sql.append("   or s.description like ? ");
+				}
+			}
+
+			pstat = conn.prepareStatement(sql.toString());
+
+			if (hasWord) {
+				String searchWord = "%" + word + "%";
+
+				if ("all".equals(type)) {
+					pstat.setString(1, searchWord);
+					pstat.setString(2, searchWord);
+				} else if ("name".equals(type) || "description".equals(type)) {
+					pstat.setString(1, searchWord);
+				}
+			}
+
+			rs = pstat.executeQuery();
+
+			if (rs.next()) {
+				return rs.getInt("cnt");
+			}
+
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+
+		return 0;
+	}
+	
+	public List<AdminReqDto> getRequestList(int begin, int end, String type, String word, String subject, String status) {
+
+		try {
+			StringBuilder sql = new StringBuilder();
+
+			sql.append("select * from (");
+			sql.append("    select rownum as rnum, t.* from (");
+			sql.append("        select ");
+			sql.append("            rb.seq, rb.title, rb.subject, rb.content, ");
+			sql.append("            rb.regDate, rb.status, rb.memberSeq ");
+			sql.append("        from request_board rb ");
+			sql.append("        inner join member m on rb.memberSeq = m.seq ");
+			sql.append("        where 1=1 ");
+
+			boolean hasWord = word != null && !word.trim().equals("");
+			boolean hasSubject = subject != null && !subject.trim().equals("");
+			boolean hasStatus = status != null && !status.trim().equals("");
+
+			// 필터
+			if (hasSubject) {
+				sql.append("and rb.subject = ? ");
+			}
+
+			if (hasStatus) {
+				sql.append("and rb.status = ? ");
+			}
+
+			// 검색
+			if (hasWord) {
+			    if ("title".equals(type)) {
+			        sql.append("and rb.title like ? ");
+			    } else if ("content".equals(type)) {
+			        sql.append("and rb.content like ? ");
+			    } else {
+			        sql.append("and (rb.title like ? or rb.content like ?) ");
+			    }
+			}
+
+			sql.append("        order by rb.seq desc ");
+			sql.append("    ) t ");
+			sql.append(") where rnum between ? and ?");
+
+			pstat = conn.prepareStatement(sql.toString());
+
+			int index = 1;
+
+			if (hasSubject) {
+				pstat.setString(index++, subject);
+			}
+
+			if (hasStatus) {
+				pstat.setString(index++, status);
+			}
+
+			if (hasWord) {
+				String searchWord = "%" + word + "%";
+
+				if ("all".equals(type)) {
+					pstat.setString(index++, searchWord);
+					pstat.setString(index++, searchWord);
+				} else if ("title".equals(type) || "content".equals(type)) {
+					pstat.setString(index++, searchWord);
+				}
+			}
+
+			pstat.setInt(index++, begin);
+			pstat.setInt(index++, end);
+
+			rs = pstat.executeQuery();
+
+			List<AdminReqDto> list = new ArrayList<>();
+
+			while (rs.next()) {
+				AdminReqDto dto = new AdminReqDto();
+
+				dto.setSeq(rs.getString("seq"));
+				dto.setTitle(rs.getString("title"));
+				dto.setSubject(Integer.parseInt(rs.getString("subject")));
+				dto.setContent(rs.getString("content"));
+				dto.setRegDate(rs.getDate("regDate"));
+				dto.setStatus(rs.getInt("status"));
+				dto.setMemberSeq(rs.getString("memberSeq"));
+
+				list.add(dto);
+			}
+
+			return list;
+
+		} catch (Exception e) {
+			e.printStackTrace();
+		} finally {
+			closeAll();
+		}
+
+		return new ArrayList<>();
+	}
+
+	public int getRequestCount(String type, String word, String subject, String status) {
+
+		try {
+			StringBuilder sql = new StringBuilder();
+
+			sql.append("select count(*) as cnt ");
+			sql.append("from request_board rb ");
+			sql.append("where 1=1 ");
+
+			boolean hasWord = word != null && !word.trim().equals("");
+			boolean hasSubject = subject != null && !subject.trim().equals("");
+			boolean hasStatus = status != null && !status.trim().equals("");
+
+			// 필터
+			if (hasSubject) {
+				sql.append("and rb.subject = ? ");
+			}
+
+			if (hasStatus) {
+				sql.append("and rb.status = ? ");
+			}
+
+			// 검색
+			if (hasWord) {
+				if ("title".equals(type)) {
+					sql.append("and rb.title like ? ");
+				} else if ("content".equals(type)) {
+					sql.append("and rb.content like ? ");
+				} else if ("all".equals(type)) {
+					sql.append("and (rb.title like ? or rb.content like ?) ");
+				}
+			}
+
+			pstat = conn.prepareStatement(sql.toString());
+
+			int index = 1;
+
+			if (hasSubject) {
+				pstat.setString(index++, subject);
+			}
+
+			if (hasStatus) {
+				pstat.setString(index++, status);
+			}
+
+			if (hasWord) {
+				String searchWord = "%" + word + "%";
+
+				if ("all".equals(type)) {
+					pstat.setString(index++, searchWord);
+					pstat.setString(index++, searchWord);
+				} else if ("title".equals(type) || "content".equals(type)) {
+					pstat.setString(index++, searchWord);
+				}
+			}
+
+			rs = pstat.executeQuery();
+
+			if (rs.next()) {
+				return rs.getInt("cnt");
+			}
+
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+
+		return 0;
+	}
+
+	public AdminMemberDto getMemberDetailInfo(String seq) {
+
+		try {
+			String sql = ""
+					+ "select "
+					+ "    m.seq, "
+					+ "    m.name, "
+					+ "    m.id, "
+					+ "    m.nickname, "
+					+ "    m.email, "
+					+ "    m.status, "
+					+ "    m.failCount, "
+					+ "    (select count(*) from post p where p.memberSeq = m.seq) as totalPosts, "
+					+ "    (select count(*) from comments c where c.memberSeq = m.seq) as totalComments, "
+					+ "    (select count(distinct sm.studySeq) "
+					+ "        from study_member sm "
+					+ "        where sm.memberSeq = m.seq) as totalStudies "
+					+ "from member m "
+					+ "where m.seq = ?";
+
+			pstat = conn.prepareStatement(sql);
+			pstat.setString(1, seq);
+
+			rs = pstat.executeQuery();
+
+			if (rs.next()) {
+				return AdminMemberDto.builder()
+						.seq(rs.getString("seq"))
+						.name(rs.getString("name"))
+						.id(rs.getString("id"))
+						.nickname(rs.getString("nickname"))
+						.email(rs.getString("email"))
+						.status(rs.getInt("status"))
+						.failCount(rs.getInt("failCount"))
+						.totalPosts(rs.getInt("totalPosts"))
+						.totalComments(rs.getInt("totalComments"))
+						.totalStudies(rs.getInt("totalStudies"))
+						.build();
+			}
+
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+
+		return null;
+	}
+	
+	public void updateMemberStatus(String seq, int status) {
+
+		try {
+			String sql = "update member set status = ? where seq = ?";
+
+			pstat = conn.prepareStatement(sql);
+			pstat.setInt(1, status);
+			pstat.setString(2, seq);
+
+			pstat.executeUpdate();
+
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+	}
+	
+	public AdminReqDto getRequestDetailInfo(String seq) {
+
+		try {
+			String sql = ""
+					+ "select "
+					+ "    rb.seq, "
+					+ "    rb.title, "
+					+ "    rb.content, "
+					+ "    rb.subject, "
+					+ "    rb.status, "
+					+ "    rb.regDate, "
+					+ "    rb.memberSeq, "
+					+ "    rb.readCount, "
+					+ "    m.nickname "
+					+ "from request_board rb "
+					+ "    inner join member m on rb.memberSeq = m.seq "
+					+ "where rb.seq = ?";
+
+			pstat = conn.prepareStatement(sql);
+			pstat.setString(1, seq);
+
+			rs = pstat.executeQuery();
+
+			if (rs.next()) {
+				return AdminReqDto.builder()
+						.seq(rs.getString("seq"))
+						.title(rs.getString("title"))
+						.content(rs.getString("content"))
+						.subject(rs.getInt("subject"))
+						.status(rs.getInt("status"))
+						.regDate(rs.getDate("regDate"))
+						.memberSeq(rs.getString("memberSeq"))
+						.readCount(rs.getInt("readCount"))
+						.nickname(rs.getString("nickname"))
+						.build();
+			}
+
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+
+		return null;
+	}
+	
+	public List<AdminCommentsDto> getRequestComments(String requestBoardSeq) {
+
+		List<AdminCommentsDto> list = new ArrayList<>();
+
+		try {
+			String sql = ""
+					+ "select "
+					+ "    seq, "
+					+ "    content, "
+					+ "    requestBoardSeq "
+					+ "from request_comments "
+					+ "where requestBoardSeq = ? "
+					+ "order by seq asc";
+
+			pstat = conn.prepareStatement(sql);
+			pstat.setString(1, requestBoardSeq);
+
+			rs = pstat.executeQuery();
+
+			while (rs.next()) {
+				AdminCommentsDto dto = AdminCommentsDto.builder()
+						.seq(rs.getString("seq"))
+						.content(rs.getString("content"))
+						.requestBoardSeq(rs.getString("requestBoardSeq"))
+						.build();
+
+				list.add(dto);
+			}
+
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+
+		return list;
+	}
+	
+	public void updateRequestStatus(String seq, String status) {
+
+		try {
+			String sql = "update request_board set status = ? where seq = ?";
+
+			pstat = conn.prepareStatement(sql);
+			pstat.setString(1, status);
+			pstat.setString(2, seq);
+
+			pstat.executeUpdate();
+
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+	}
+
+	public void addRequestComment(String requestBoardSeq, String content) {
+
+		try {
+			String sql = ""
+					+ "insert into request_comments (seq, content, requestBoardSeq) "
+					+ "values (request_comments_seq.nextval, ?, ?)";
+
+			pstat = conn.prepareStatement(sql);
+			pstat.setString(1, content);
+			pstat.setString(2, requestBoardSeq);
+
+			pstat.executeUpdate();
+
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+	}
+
+	public int delPost(String seq) {
+		
+		try {
+			String sql = "delete from post "
+	                   + "where seq = ? ";
+
+	        pstat = conn.prepareStatement(sql);
+	        pstat.setString(1, seq);
+
+	        return pstat.executeUpdate();
+
+		} catch (Exception e) {
+			e.printStackTrace();
+		} finally {
+			closeAll();
+		}
+		
+		return 0;
+	}
+	
+	public int delStudy(String seq) {
+
+	    try {
+	        String sql = "delete from study "
+	                   + "where seq = ?";
+
+	        pstat = conn.prepareStatement(sql);
+	        pstat.setString(1, seq);
+
+	        return pstat.executeUpdate();
+
+	    } catch (Exception e) {
+	        e.printStackTrace();
+	    } finally {
+	        closeAll();
+	    }
+
+	    return 0;
+	}
+
+	public int addRequest(RequestDto dto) {
+
+		try {
+	        String sql = "insert into request_board "
+	                   + "(seq, title, subject, content, readCount, regDate, status, memberSeq) "
+	                   + "values (requestBoardSeq.nextval, ?, ?, ?, 0, sysdate, 0, ?)";
+
+	        pstat = conn.prepareStatement(sql);
+
+	        pstat.setString(1, dto.getTitle());
+	        pstat.setInt(2, dto.getSubject());
+	        pstat.setString(3, dto.getContent());
+	        pstat.setString(4, dto.getMemberSeq());
+
+	        return pstat.executeUpdate();
+
+	    } catch (Exception e) {
+	        e.printStackTrace();
+	    }
+		
+		return -1;
+	}
 }

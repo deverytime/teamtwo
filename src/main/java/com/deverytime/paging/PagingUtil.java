@@ -26,7 +26,7 @@ public class PagingUtil {
 	}
 
 	/**
-	 * Bootstrap 스타일 페이지바 HTML 생성
+	 * Tailwind 스타일 페이지바 HTML 생성
 	 * 
 	 * @param paging      PagingDto 객체
 	 * @param baseUrl     기본 URL
@@ -36,43 +36,56 @@ public class PagingUtil {
 	public static String makePagebar(PagingDto paging, String baseUrl, String queryString) {
 		int nowPage = paging.getNowPage();
 		int totalPage = paging.getTotalPage();
-		int blockSize = paging.getBlockSize(); // 한 블록당 페이지 수 (10)
+		int blockSize = paging.getBlockSize();
 
 		int loop = 1;
-		int n = ((nowPage - 1) / blockSize) * blockSize + 1; // 블록 시작페이지
+		int n = ((nowPage - 1) / blockSize) * blockSize + 1;
 
 		StringBuilder pagebar = new StringBuilder();
-		pagebar.append("<div class='join'>"); // Bootstrap join 클래스
 
-		// 1️⃣ 이전 버튼
+		pagebar.append("<div class='flex justify-center'>");
+		pagebar.append("<div class='inline-flex items-center overflow-hidden rounded-lg border border-slate-300 bg-white shadow-sm'>");
+
+		// 이전 버튼
 		if (n <= 1) {
-			pagebar.append("<a class='join-item btn btn-sm btn-disabled'>이전</a>");
+			pagebar.append("<span class='px-3 py-2 text-sm text-slate-300 bg-slate-100 border-r border-slate-300 cursor-not-allowed'>이전</span>");
 		} else {
-			pagebar.append(String.format("<a class='join-item btn btn-sm' href='%s?page=%d%s'>이전</a>", baseUrl, n - 1,
-					queryString));
+			pagebar.append(String.format(
+				"<a class='px-3 py-2 text-sm text-slate-700 hover:bg-slate-100 border-r border-slate-300 transition' href='%s?page=%d%s'>이전</a>",
+				baseUrl, n - 1, queryString
+			));
 		}
 
-		// 2️⃣ 페이지 번호 (블록 단위)
+		// 페이지 번호
 		while (!(loop > blockSize || n > totalPage)) {
 			if (n == nowPage) {
-				pagebar.append(String.format("<a class='join-item btn btn-sm btn-active'>%d</a>", n)); // 현재페이지 강조
+				pagebar.append(String.format(
+					"<span class='px-3 py-2 text-sm font-semibold text-white bg-indigo-500 border-r border-slate-300'>%d</span>",
+					n
+				));
 			} else {
-				pagebar.append(String.format("<a class='join-item btn btn-sm' href='%s?page=%d%s'>%d</a>", baseUrl, n,
-						queryString, n));
+				pagebar.append(String.format(
+					"<a class='px-3 py-2 text-sm text-slate-700 hover:bg-slate-100 border-r border-slate-300 transition' href='%s?page=%d%s'>%d</a>",
+					baseUrl, n, queryString, n
+				));
 			}
 			loop++;
 			n++;
 		}
 
-		// 3️⃣ 다음 버튼
+		// 다음 버튼
 		if (n > totalPage) {
-			pagebar.append("<a class='join-item btn btn-sm btn-disabled'>다음</a>");
+			pagebar.append("<span class='px-3 py-2 text-sm text-slate-300 bg-slate-100 cursor-not-allowed'>다음</span>");
 		} else {
-			pagebar.append(String.format("<a class='join-item btn btn-sm' href='%s?page=%d%s'>다음</a>", baseUrl, n,
-					queryString));
+			pagebar.append(String.format(
+				"<a class='px-3 py-2 text-sm text-slate-700 hover:bg-slate-100 transition' href='%s?page=%d%s'>다음</a>",
+				baseUrl, n, queryString
+			));
 		}
 
 		pagebar.append("</div>");
+		pagebar.append("</div>");
+
 		return pagebar.toString();
 	}
 

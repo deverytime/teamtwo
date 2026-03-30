@@ -15,9 +15,9 @@
 		<%@ include file="/WEB-INF/views/admin/admin-sidebar.jsp"%>
 
 		<main class="flex-1 p-8">
-			<div class="mb-8 border-b pb-4">
-				<h1 class="text-3xl font-bold mb-2">관리자 메뉴</h1>
-				<p class="text-slate-500">사이트의 전체 현황을 한눈에 파악하세요.</p>
+			<div class="mb-8 border-b border-slate-200 pb-4">
+    			<h1 class="text-3xl font-bold mb-2">관리자 메뉴</h1>
+				<p class="text-slate-500">관리자 메뉴입니다.</p>
 			</div>
 
 			<div class="grid grid-cols-3 gap-6 mb-8">
@@ -53,7 +53,7 @@
 				</a>
 			</div>
 
-			<a href="/teamtwo/admin/request-list.do" class="block bg-white p-6 rounded-2xl shadow-sm border border-slate-100 hover:border-primary hover:shadow-md transition-all">
+			<a href="/teamtwo/board/request/list.do" class="block bg-white p-6 rounded-2xl shadow-sm border border-slate-100 hover:border-primary hover:shadow-md transition-all">
 				<div class="flex justify-between items-center mb-4">
 					<h3 class="font-bold text-lg text-slate-800">게시판 요청 관리</h3>
 					<span class="text-sm text-primary font-semibold">목록으로 이동 &rarr;</span>
