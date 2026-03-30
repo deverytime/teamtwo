@@ -8,7 +8,8 @@ import com.oreilly.servlet.MultipartRequest;
 import com.oreilly.servlet.multipart.DefaultFileRenamePolicy;
 
 public class MemberService {
-
+	
+	// 회원가입 관련 로직
 	public int register(HttpServletRequest req) {
 		try {
 			// 1. 프로필 사진이 저장될 실제 경로
@@ -301,7 +302,7 @@ public class MemberService {
 		boolean isSuccess = com.deverytime.library.MailUtil.sendMail(email, subject, content);
 
 		if (isSuccess) {
-			return code; // 성공하면 생성된 코드를 반환!
+			return code; // 성공하면 생성된 코드를 반환
 		}
 		return null; // 실패하면 null 반환
 	}

@@ -47,7 +47,7 @@
 
 	<script>
 		const URL = '/teamtwo/user/twofactor-setup.do';
-		let isVerified = false; // serverCode 변수는 삭제!
+		let isVerified = false; // serverCode 변수는 삭제
 
 		// 1. 이메일 전송 (정답 인증번호는 받아오지 않음)
 		function sendMail() {
