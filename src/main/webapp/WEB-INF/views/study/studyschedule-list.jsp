@@ -71,7 +71,7 @@
                 </thead>
                 <tbody>
                     <c:forEach items="${schlist}" var="dto">
-                        <tr class="hover:bg-slate-50/50 cursor-pointer" onclick="location.href='/teamtwo/study/studyschedule-view.do?seq=${dto.seq}';">
+                        <tr class="hover:bg-slate-50/50 cursor-pointer" onclick="location.href='/teamtwo/study/studyschedule-view.do?seq=${dto.seq}&studySeq=${seq}';">
                             <td class="pl-6 font-bold text-slate-700">${dto.title}</td>
                             <td class="text-center text-sm text-slate-500">${dto.startDate}</td>
                             <td class="text-center text-sm text-slate-500">${dto.endDate}</td>

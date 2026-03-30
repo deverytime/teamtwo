@@ -39,6 +39,7 @@ public class VIewStudySchedule extends HttpServlet{
 		//로그인 상태라면 데이터 추출
 		MemberDto mdto = (MemberDto)auth;
 		String seq = req.getParameter("seq");
+		String studySeq = req.getParameter("studySeq");
 		
 		
 		HashMap<String, String> map = new HashMap<String, String>();
@@ -120,6 +121,7 @@ public class VIewStudySchedule extends HttpServlet{
 		req.setAttribute("pagebar", pagebar);
 		req.setAttribute("todolist", todolist);
 		req.setAttribute("dto", dto);
+		req.setAttribute("studySeq", studySeq);
 		
 		req.getRequestDispatcher("/WEB-INF/views/study/studyschedule-view.jsp").forward(req, resp);
 		
