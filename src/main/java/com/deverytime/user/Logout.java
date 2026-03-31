@@ -26,7 +26,6 @@ public class Logout extends HttpServlet {
 		if (referer != null && (
 			referer.contains("/admin/") ||             // 관리자 메뉴 
 			referer.contains("/user/mypage.do") ||     // 마이페이지
-			referer.contains("/study/study-list.do") ||  // 나의 스터디
 			referer.contains("/plan/list.do")       // 나의 학습계획
 			// 필요한 보안 페이지가 있다면 여기에 || 로 계속 추가
 		)) {
