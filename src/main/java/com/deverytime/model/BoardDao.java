@@ -608,7 +608,7 @@ public class BoardDao extends BasicDao {
 
 		try {
 
-			String sql = "select * from vwPost a where seq = ?";
+			String sql = "select * from vwPost where seq = ?";
 
 			pstat = conn.prepareStatement(sql);
 			pstat.setString(1, seq);

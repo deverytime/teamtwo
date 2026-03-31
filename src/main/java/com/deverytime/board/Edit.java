@@ -48,6 +48,7 @@ public class Edit extends HttpServlet {
 	protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
 
 		// 1. 보낸 정보 받기
+		
 		String uploadPath = getServletContext().getRealPath("/uploads");
 		// System.out.println("업로드 경로: " + uploadPath);
 
