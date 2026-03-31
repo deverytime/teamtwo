@@ -25,39 +25,38 @@ public class AuthFilter implements Filter {
 		// 익명 사용자 > URL 직접 접근 방지
 		HttpServletRequest req = (HttpServletRequest) request;
 		HttpSession session = req.getSession();
+		String auth = (String) session.getAttribute("auth");
 
-		if (session.getAttribute("auth") == null) {
-			
-			// System.out.println("익명사용자");
+		// 1. 익명 사용자 차단 (기본 로직 유지)
+		if (auth == null) {
 			if (req.getRequestURI().endsWith("add.do") || req.getRequestURI().endsWith("edit.do")
 					|| req.getRequestURI().endsWith("del.do")) {
-				response.getWriter().print("<script>alert('now allowed');history.back();</script>;");
-				response.getWriter().close();
-				return;
+				response.setContentType("text/html; charset=UTF-8");
+				response.getWriter().print("<script>alert('정상경로로 들어와 로그인 해주세요.');history.back();</script>");
+				return; // 필터 종료
 			}
 		} else {
-			// System.out.println("인증사용자");
-
-			// 수정하기, 삭제하기 > 본인만
+			// 2. 수정/삭제 시 본인 확인 로직
 			if (req.getRequestURI().endsWith("edit.do") || req.getRequestURI().endsWith("del.do")) {
 
-				// 현재 글 + 본인 글?
-				// 1. 현재 글번호?
 				String seq = req.getParameter("seq");
 
-				BoardDao dao = new BoardDao();
-				BoardDto dto = dao.get(seq);
+				// MultipartRequest 요청인 경우 seq가 null로 들어옴
+				if (seq != null) {
+					BoardDao dao = new BoardDao();
+					BoardDto dto = dao.get(seq);
 
-				// dto.get(seq) > 현재 글쓴이
-				// 세션 아이디
-				if (!session.getAttribute("auth").equals(dto.getId())) {
-					response.getWriter().print("<script>alert('now allowed');history.back();</script>;");
-					response.getWriter().close();
-					return;
+					// dto가 정상적으로 조회되었을 때만 본인 체크 수행
+					if (dto != null) {
+						if (!auth.equals(dto.getId())) {
+							response.setContentType("text/html; charset=UTF-8");
+							response.getWriter().print("<script>alert('정상경로로 들어온 사용자만 글을 수정하거나 삭제할 수 있습니다.');history.back();</script>");
+							return; // 필터 종료
+						}
+					}
 				}
-
+				// seq가 null이거나 dto가 null인 경우는 필터를 통과시킴 (Servlet에서 처리 예정)
 			}
-
 		}
 
 		chain.doFilter(request, response);
