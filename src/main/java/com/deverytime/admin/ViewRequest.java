@@ -10,13 +10,14 @@ import javax.servlet.http.HttpServletResponse;
 
 import com.deverytime.model.AdminCommentsDto;
 import com.deverytime.model.AdminReqDto;
+import com.deverytime.model.MemberDto;
 
 @WebServlet("/board/request/view.do")
 public class ViewRequest extends HttpServlet {
 
 	@Override
 	protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
-
+		
 		AdminService service = new AdminService();
 
 		String seq = req.getParameter("seq");

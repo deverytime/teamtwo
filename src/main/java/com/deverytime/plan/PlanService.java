@@ -174,6 +174,9 @@ public class PlanService {
 		
 		PlanDto planDto = dao.get(seq, memberSeq);
 		
+		// dto 없으면 null return
+		if (planDto == null) { return null; }
+		
 		// 상세정보 용 변수 넣어주기
 		LocalDate today = LocalDate.now();
 

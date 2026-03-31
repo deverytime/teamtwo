@@ -8,7 +8,10 @@ import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import javax.servlet.http.HttpSession;
 
+import com.deverytime.model.MemberDto;
+import com.deverytime.model.RecordDao;
 import com.deverytime.model.RecordDto;
 
 @WebServlet("/record/add.do")
@@ -17,9 +20,23 @@ public class Add extends HttpServlet {
 	@Override
 	protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
 
+		HttpSession session = req.getSession();
+		MemberDto auth = (MemberDto) session.getAttribute("authDto");
+
+		if (auth == null) {
+		    resp.sendRedirect("/teamtwo/user/login.do");
+		    return;
+		}
+		
 		String planSeq = req.getParameter("seq");
 		
 		req.setAttribute("planSeq", planSeq);
+		
+		RecordService service = new RecordService();
+		RecordDto dto = new RecordDto();
+
+		dto.setPlanSeq(planSeq);
+		dto.setMinProgress(service.getLatestProgress(planSeq, null));
 
 		req.getRequestDispatcher("/WEB-INF/views/record/add.jsp").forward(req, resp);
 	}
@@ -42,6 +59,7 @@ public class Add extends HttpServlet {
 			    .recordStatus(req.getParameter("recordStatus"))
 			    .planSeq(req.getParameter("planSeq"))
 			    .build();
+		
 
 	    int result = service.add(dto);
 	    

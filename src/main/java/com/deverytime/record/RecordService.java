@@ -43,4 +43,9 @@ public class RecordService {
 		return dao.getDetailInfo(seq, memberSeq);
 	}
 
+	public int getLatestProgress(String planSeq, String seq) {
+		RecordDao dao = new RecordDao();
+		
+		return dao.getLatestProgress(planSeq, seq);
+	}
 }

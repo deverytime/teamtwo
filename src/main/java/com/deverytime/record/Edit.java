@@ -41,11 +41,16 @@ public class Edit extends HttpServlet {
         RecordDto dto = service.get(seq, memberSeq);
 
         // 본인 기록 아닐 때 처리
+        resp.setCharacterEncoding("UTF-8");
         resp.setContentType("text/html; charset=UTF-8");
         if (dto == null) {
             resp.getWriter().print("<script>alert('권한이 없습니다.');history.back();</script>");
             return;
         }
+        
+    	dto.setMinProgress(service.getLatestProgress(dto.getPlanSeq(), dto.getSeq()));
+
+        req.setAttribute("dto", dto);
 
         // jsp 에 담기
         req.setAttribute("dto", dto);

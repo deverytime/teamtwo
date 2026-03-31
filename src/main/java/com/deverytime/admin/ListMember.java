@@ -9,12 +9,25 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+import com.deverytime.model.MemberDto;
+
 @WebServlet("/admin/member-list.do")
 public class ListMember extends HttpServlet {
 
 	@Override
 	protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
 
+		// 1. 관리자 권한 체크
+		MemberDto authDto = (MemberDto) req.getSession().getAttribute("authDto");
+		
+		// type 1이 아니면 진입 불가
+		if (authDto == null || authDto.getType() != 1) {
+			resp.setContentType("text/html; charset=UTF-8");
+			resp.getWriter().print("<script>alert('관리자만 접근 가능합니다.'); location.href='/teamtwo/index.do';</script>");
+			resp.getWriter().close();
+			return;
+		}
+		
 		AdminService service = new AdminService();
 		String page = req.getParameter("page");
 		String type = req.getParameter("type");
