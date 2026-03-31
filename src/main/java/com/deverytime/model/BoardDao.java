@@ -91,6 +91,7 @@ public class BoardDao extends BasicDao {
 				dto.setCategory(rs.getString("category"));
 				dto.setNickname(rs.getString("nickname"));
 				dto.setBoardType(rs.getString("boardType"));
+				dto.setCommentCount(rs.getInt("commentCount"));
 
 				list.add(dto);
 			}

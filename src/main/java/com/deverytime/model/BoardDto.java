@@ -22,6 +22,7 @@ public class BoardDto {
 	private String report;
 	private String memberSeq; // id때문에 필요
 	private String id;
+
 	
 	private String nickname; // member와 조인 닉네임 
 	
@@ -41,6 +42,7 @@ public class BoardDto {
 	
 	// 댓글 관련
 	private ArrayList<CommentDto> comments;
+	private int commentCount;
 	
 
 }
