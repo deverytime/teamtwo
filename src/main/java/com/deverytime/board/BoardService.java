@@ -87,6 +87,18 @@ public class BoardService {
 		// DB에 인서트하기전에 id로 memberSeq를 알아오기
 		String memberSeq = dao.getMemberSeqById(dto.getId());
 
+		// 태그 처리
+		dto.setTitle(dto.getTitle().replace("&", "&amp;")
+		        .replace("<", "&lt;")
+		        .replace(">", "&gt;")
+		        .replace("\"", "&quot;"));
+		
+		
+		dto.setContent(dto.getContent().replace("&", "&amp;")
+		        .replace("<", "&lt;")
+		        .replace(">", "&gt;")
+		        .replace("\"", "&quot;"));
+		
 		dto.setMemberSeq(memberSeq);
 
 		int result = dao.add(dto);
@@ -163,6 +175,18 @@ public class BoardService {
 		BoardDao dao = new BoardDao();
 
 		int result = dao.edit(dto);
+		
+		// 태그 처리
+		dto.setTitle(dto.getTitle().replace("&", "&amp;")
+		        .replace("<", "&lt;")
+		        .replace(">", "&gt;")
+		        .replace("\"", "&quot;"));
+		
+		
+		dto.setContent(dto.getContent().replace("&", "&amp;")
+		        .replace("<", "&lt;")
+		        .replace(">", "&gt;")
+		        .replace("\"", "&quot;"));
 
 		return result;
 
