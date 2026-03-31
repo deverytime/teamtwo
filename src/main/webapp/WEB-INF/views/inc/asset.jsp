@@ -47,7 +47,7 @@
         .pagination-wrap span,
         .pagination-wrap .active {
             @apply bg-brand-600 text-white;
-            /* !important가 필요하다면 @apply 밖에서 표준 CSS로 작성해야 합니다 */
+            /* !important가 필요하다면 @apply 밖에서 표준 CSS로 작성해야 함 */
             background-color: #2563eb !important;
             color: white !important;
         }
@@ -55,3 +55,4 @@
 </style>
 
 <link rel="stylesheet" type="text/tailwindcss" href="/teamtwo/asset/css/main.css" />
+<link rel="icon" type="image/png" href="/teamtwo/asset/pic/favilogo.png">
