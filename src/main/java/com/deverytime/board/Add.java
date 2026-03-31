@@ -87,6 +87,11 @@ public class Add extends HttpServlet {
 		String category = mr.getParameter("subject");
 		String title = mr.getParameter("title");
 		String content = mr.getParameter("content");
+		// 태그 처리 
+		content = content.replace("&", "&amp;")
+	        .replace("<", "&lt;")
+	        .replace(">", "&gt;")
+	        .replace("\"", "&quot;"); 
 		String searchType = mr.getParameter("searchType");
 		String keyword = mr.getParameter("keyword");
 		String paramCategory = mr.getParameter("category");
