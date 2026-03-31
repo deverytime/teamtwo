@@ -20,7 +20,7 @@ public class Add extends HttpServlet {
 
 		// Add.java
 		// 1.정보 받아오기
-		
+		req.setCharacterEncoding("UTF-8");
 
 		String seq = req.getParameter("seq");
 		String board = req.getParameter("board");
@@ -37,7 +37,6 @@ public class Add extends HttpServlet {
 		String redirectUrl = "/teamtwo/board/view.do?seq=" + seq + "&board=" + board + "&category=" + category
 				+ "&searchType=" + searchType + "&keyword=" + keywordEnc + "&page=" + page;
 		
-		req.setCharacterEncoding("UTF-8");
 		// 1.로그인 했나 안했나
 		HttpSession session = req.getSession();
 		if (session.getAttribute("auth") == null) {
@@ -61,7 +60,7 @@ public class Add extends HttpServlet {
 		String postSeq = seq; // 댓글 처리를 위한 글번호
 		String id = (String) session.getAttribute("auth");
 		String content = req.getParameter("content");
-
+		
 		cDto.setPostSeq(postSeq);
 		cDto.setContent(content);
 		cDto.setId(id);
