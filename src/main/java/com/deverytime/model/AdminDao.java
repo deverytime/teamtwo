@@ -758,7 +758,7 @@ public class AdminDao extends BasicDao {
 		try {
 			String sql = ""
 					+ "insert into request_comments (seq, content, requestBoardSeq) "
-					+ "values (request_comments_seq.nextval, ?, ?)";
+					+ "values (requestCommentsSeq.nextval, ?, ?)";
 
 			pstat = conn.prepareStatement(sql);
 			pstat.setString(1, content);
