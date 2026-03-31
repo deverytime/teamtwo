@@ -46,14 +46,19 @@
 							<c:when test="${empty list}"><tr><td colspan="6" class="py-10 text-slate-400">게시글이 없습니다.</td></tr></c:when>
 							<c:otherwise>
 								<c:forEach items="${list}" var="dto">
-									<tr class="hover:bg-slate-50 transition-colors">
-										<td>${dto.seq}</td>
+									<tr class="transition-colors ${dto.report >= 5 ? 'bg-red-50 hover:bg-red-100' : 'hover:bg-slate-50'}">
+										<td class="${dto.report >= 5 ? 'text-red-500 font-bold' : ''}">${dto.seq}</td>
 										<td><span class="badge badge-ghost badge-sm">자유</span></td>
-										<td class="text-left font-semibold truncate max-w-[200px]">${dto.title}</td>
-										<td>${dto.nickname}</td>
-										<td class="text-sm text-slate-500">${dto.regDate.substring(0,10)}</td>
+										<td class="text-left font-semibold truncate max-w-[200px] ${dto.report >= 5 ? 'text-red-700' : ''}">
+											${dto.title}
+											<c:if test="${dto.report >= 5}">
+												<span class="badge badge-error badge-sm text-white ml-2">🚨 신고 ${dto.report}회</span>
+											</c:if>
+										</td>
+										<td class="${dto.report >= 5 ? 'text-red-600 font-medium' : ''}">${dto.nickname}</td>
+										<td class="text-sm ${dto.report >= 5 ? 'text-red-400' : 'text-slate-500'}">${dto.regDate.substring(0,10)}</td>
 										<td>
-										<button type="button" class="btn btn-error btn-xs btn-outline" onclick="deleteBoard(${dto.seq})">삭제</button>
+										    <button type="button" class="btn btn-error btn-xs btn-outline ${dto.report >= 5 ? 'bg-white' : ''}" onclick="deleteBoard(${dto.seq})">삭제</button>
 										</td>
 									</tr>
 								</c:forEach>
