@@ -26,7 +26,10 @@
 	<div class="navbar max-w-6xl w-full mx-auto px-4 py-0 h-full min-h-0">
 
 		<div class="flex-1 items-center h-full flex">
-			<a href="/teamtwo/index.do" class="text-2xl font-bold text-brand-600">deverytime</a>
+			<a href="/teamtwo/index.do" class="text-2xl font-bold text-brand flex items-center gap-2">
+    <img src="/teamtwo/asset/pic/logo.png" alt="deverytime 로고" class="w-8 h-8 object-contain">
+    deverytime
+</a>
 			<c:if test="${not empty auth}">
 				<span
 					class="ml-3 chip ${authDto.type == 1 ? 'chip-amber' : 'chip-blue'}">
