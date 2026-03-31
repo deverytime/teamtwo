@@ -26,6 +26,9 @@ public class Edit extends HttpServlet {
 
 		// 1.로그인 했나 안했나
 		HttpSession session = req.getSession();
+		if(session.getAttribute("auth") == null) {
+			return;
+		}
 
 		// 2. 어느 게시판에서 온건지 저장
 		String board = req.getParameter("board");
@@ -48,6 +51,10 @@ public class Edit extends HttpServlet {
 	protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
 
 		// 1. 보낸 정보 받기
+		HttpSession session = req.getSession();
+		if(session.getAttribute("auth") == null) {
+			return;
+		}
 		
 		String uploadPath = getServletContext().getRealPath("/uploads");
 		// System.out.println("업로드 경로: " + uploadPath);
@@ -61,7 +68,6 @@ public class Edit extends HttpServlet {
 		MultipartRequest mr = new MultipartRequest(req, uploadPath, 10 * 1024 * 1024, // 10MB
 				"UTF-8", new DefaultFileRenamePolicy());
 
-		HttpSession session = req.getSession();
 
 		String id = (String) session.getAttribute("auth");
 		String board = mr.getParameter("board");
