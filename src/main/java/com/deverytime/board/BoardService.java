@@ -73,6 +73,7 @@ public class BoardService {
 				dto.setRegDate(regDate.substring(0, 10));
 
 			}
+			
 
 		}
 

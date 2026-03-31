@@ -100,7 +100,7 @@
 									<td>${dto.seq}</td>
 									<td>${dto.category}</td>
 									<td class="cursor-pointer hover:underline"
-										onclick="location.href='view.do?seq=${dto.seq}&board=${board}&category=${param.category}&searchType=${param.searchType}&keyword=${param.keyword}&page=${param.page }'">${dto.title}</td>
+										onclick="location.href='view.do?seq=${dto.seq}&board=${board}&category=${param.category}&searchType=${param.searchType}&keyword=${param.keyword}&page=${param.page }'">${dto.title} <small>(${dto.commentCount})</small></td>
 									<td>${dto.nickname}</td>
 									<td>${dto.regDate}</td>
 									<td>${dto.readCount}</td>
