@@ -42,8 +42,26 @@
                     placeholder="학습할 내용, 목표, 진행 방법 등을 자유롭게 작성하세요&#13;&#10;(예: 자바 기본 문법 복습 및 프로젝트 적용 연습)"
                     required maxlength="1000"></textarea>
               </div>
+              <div>
+                  <!-- 라벨 + 버튼 한 줄 -->
+                  <div class="flex justify-start gap-3 items-center">
+                      <label class="form-label">세부 목표 (선택)</label>
               
-            </div>
+                      <button type="button" class="btn btn-outline btn-secondary btn-sm"
+                              onclick="addGoal()">+ 목표 추가</button>
+                  </div>
+              
+                  <!-- 목표 리스트 -->
+                  <div id="goal-container" class="space-y-2 mt-2">
+                      <div class="flex gap-2 goal-item">
+                          <input type="text" name="goalNames"
+                                 class="input input-bordered w-full"
+                                 placeholder="목표를 입력하세요 (예: 자바 문법 1회독)">
+                          <button type="button" class="btn btn-error btn-sm"
+                                  onclick="removeGoal(this)">✕</button>
+                      </div>
+                  </div>
+              </div>
             <input type="hidden" id="memberSeq" name="memberSeq" value="${memberSeq}">
 
             <div class="flex justify-end gap-4 pt-2">
@@ -54,5 +72,37 @@
         </form>
       </main> 
   </div>
+  
+<script>
+function addGoal() {
+    const container = document.getElementById("goal-container");
+
+    const div = document.createElement("div");
+    div.className = "flex gap-2 goal-item";
+
+    div.innerHTML = `
+        <input type="text" name="goalNames"
+               class="input input-bordered w-full"
+               placeholder="목표를 입력하세요">
+        <button type="button" class="btn btn-error btn-sm"
+                onclick="removeGoal(this)">✕</button>
+    `;
+
+    container.appendChild(div);
+}
+
+function removeGoal(button) {
+    const container = document.getElementById("goal-container");
+    const items = container.getElementsByClassName("goal-item");
+
+    // 최소 1개는 남기기
+    if (items.length <= 1) {
+        button.previousElementSibling.value = "";
+        return;
+    }
+
+    button.parentElement.remove();
+}
+</script>
 </body>
 </html>

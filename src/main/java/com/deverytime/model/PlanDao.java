@@ -160,29 +160,44 @@ public class PlanDao extends BasicDao {
 		}
 	
 
-	public int addCompletion(PlanDto dto) {
-		
-		try {
-			String sql = "INSERT INTO plan (seq, title, subject, description, type, regdate, updatedate, progressStatus, memberSeq) "
-			           + "VALUES (planSeq.nextval, ?, ?, ?, ?, sysdate, sysdate, DEFAULT, ?)";
-			
-			pstat = conn.prepareStatement(sql);
 
-			pstat.setString(1, dto.getTitle());
-			pstat.setString(2, dto.getSubject());
-			pstat.setString(3, dto.getDescription());
-			pstat.setString(4, dto.getType());
-			pstat.setString(5, dto.getMemberSeq());
-			
-			return pstat.executeUpdate();
-			
-		} catch (Exception e) {
-			e.printStackTrace();
-		} finally {
-	        closeAll();
-		}
-		
-		return 0;
+	public int addCompletion(PlanDto dto) {
+
+	    try {
+	        // 1. seq 먼저 구하기
+	        String seqSql = "select planSeq.nextval as seq from dual";
+	        stat = conn.createStatement();
+	        rs = stat.executeQuery(seqSql);
+
+	        int planSeq = 0;
+	        if (rs.next()) {
+	            planSeq = rs.getInt("seq");
+	        }
+
+	        // 2. plan insert (중요: ?로 seq 넣는다)
+	        String sql = "insert into plan (seq, title, subject, description, type, regdate, updatedate, progressStatus, memberSeq) "
+	                   + "values (?, ?, ?, ?, ?, sysdate, sysdate, default, ?)";
+
+	        pstat = conn.prepareStatement(sql);
+
+	        pstat.setInt(1, planSeq);
+	        pstat.setString(2, dto.getTitle());
+	        pstat.setString(3, dto.getSubject());
+	        pstat.setString(4, dto.getDescription());
+	        pstat.setString(5, dto.getType());
+	        pstat.setString(6, dto.getMemberSeq());
+
+	        int result = pstat.executeUpdate();
+
+	        if (result == 1) {
+	            return planSeq;
+	        }
+
+	    } catch (Exception e) {
+	        e.printStackTrace();
+	    }
+
+	    return 0;
 	}
 
 	public PlanDto get(String seq, String memberSeq) {
@@ -292,6 +307,26 @@ public class PlanDao extends BasicDao {
 		}
 		
 		return -1;
+	}
+
+	public int addGoal(GoalDto dto) {
+
+		try {
+			String sql = "insert into goal (seq, name, isDone, doneDate, planSeq) "
+					   + "values (goalSeq.nextVal, ?, 0, null, ?)";
+
+			pstat = conn.prepareStatement(sql);
+
+			pstat.setString(1, dto.getName());
+			pstat.setString(2, dto.getPlanSeq());
+
+			return pstat.executeUpdate();
+
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+
+		return 0;
 	}
 }
 

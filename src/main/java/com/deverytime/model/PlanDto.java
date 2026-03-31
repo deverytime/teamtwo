@@ -27,6 +27,8 @@ public class PlanDto {
 	private Date updateDate;
 	private String progressStatus;
 	private String memberSeq;
+	@Builder.Default
+	private List<GoalDto> goals = new ArrayList<>(); // 완료기반 학습 계획용
 	
 	// 학습계획 상세정보 용 변수
 	private long daysFromStart;

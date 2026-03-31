@@ -6,6 +6,7 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 
+import com.deverytime.model.GoalDto;
 import com.deverytime.model.PlanDao;
 import com.deverytime.model.PlanDto;
 import com.deverytime.model.RecordDao;
@@ -26,7 +27,26 @@ public class PlanService {
 		if (dto.getType().equals("기간기반")) {
 			return dao.addPeriod(dto);
 		} else if (dto.getType().equals("완료기반")) {
-			return dao.addCompletion(dto);
+			
+			 // 1. plan 먼저 저장
+	        int planSeq = dao.addCompletion(dto);
+
+	        if (planSeq <= 0) {
+	            return -1;
+	        }
+
+	        // 2. dto에도 seq 세팅
+	        dto.setSeq(String.valueOf(planSeq));
+
+	        // 3. goals 저장
+	        List<GoalDto> goals = dto.getGoals();
+	        if (!goals.isEmpty()) {
+	            for (GoalDto goal : goals) {
+	                goal.setPlanSeq(String.valueOf(planSeq));
+	                dao.addGoal(goal);
+	            }
+	        }
+	        return 1;
 		} 
 		
 		return -1;
