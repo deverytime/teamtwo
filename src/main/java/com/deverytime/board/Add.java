@@ -32,8 +32,16 @@ public class Add extends HttpServlet {
 		// session.setAttribute("auth", "um1234"); // 로그인 기능 연결전 임시 세션 만들기 끝나면 삭제
 
 		if (session.getAttribute("auth") == null) {
-			resp.sendRedirect("/teamtwo/user/login.do");
-			return;
+		    resp.setContentType("text/html; charset=UTF-8");
+		    resp.setCharacterEncoding("UTF-8");
+		    
+		    PrintWriter out = resp.getWriter();
+		    out.print("<script>");
+		    out.print("alert('로그인 후 글을 작성해주세요');");
+		    out.print("location.href='/teamtwo/user/login.do';");
+		    out.print("</script>");
+		    out.close();
+		    return;
 		}
 
 		// 2. 어느 게시판에서 온건지 저장
