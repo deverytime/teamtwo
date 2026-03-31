@@ -206,7 +206,6 @@ public class BoardDao extends BasicDao {
 				}
 			}
 
-
 			if (dto.getBoardType() == null || dto.getBoardType().equals("")) {
 				sql = sql + " where " + seq;
 			} else {
@@ -607,35 +606,90 @@ public class BoardDao extends BasicDao {
 	public BoardDto get(String seq) {
 
 		try {
-			
+
 			String sql = "select * from vwPost a where seq = ?";
-			
+
 			pstat = conn.prepareStatement(sql);
 			pstat.setString(1, seq);
-			
+
 			rs = pstat.executeQuery();
-			
-			if(rs.next()) {
+
+			if (rs.next()) {
 				BoardDto dto = new BoardDto();
-				
+
 				dto.setSeq(rs.getString("seq"));
 				dto.setCategory(rs.getString("category"));
 				dto.setContent(rs.getString("content"));
 				dto.setId(rs.getString("id"));
 				dto.setRegDate(rs.getString("regDate"));
 				dto.setReadCount(rs.getString("readcount"));
-				
-				
+
 				return dto;
 			}
-			
+
 		} catch (Exception e) {
 			e.printStackTrace();
 		} finally {
 			closeAll();
 		}
-		
+
 		return null;
+	}
+
+	// ==========================================
+	// [메인 화면용] 인기글 최신순으로 가져오기
+	// ==========================================
+	public ArrayList<BoardDto> getTrendingList(int limit) {
+		ArrayList<BoardDto> list = new ArrayList<>();
+		try {
+			String sql = "SELECT * FROM (SELECT * FROM vwTrending ORDER BY recommend DESC, readCount DESC) WHERE ROWNUM <= ?";
+			pstat = conn.prepareStatement(sql);
+			pstat.setInt(1, limit);
+			rs = pstat.executeQuery();
+
+			while (rs.next()) {
+				BoardDto dto = new BoardDto();
+				dto.setSeq(rs.getString("seq"));
+				dto.setTitle(rs.getString("title"));
+				dto.setRecommend(rs.getString("recommend"));
+				dto.setBoardType(rs.getString("boardType")); // ★ 이거 추가!
+				list.add(dto);
+			}
+		} catch (Exception e) {
+			e.printStackTrace();
+		} finally {
+			closeAll();
+		}
+		return list;
+	}
+
+	// ==========================================
+	// [메인 화면용] 자유게시판 최신글 가져오기
+	// ==========================================
+	public ArrayList<BoardDto> getLatestFreeboardList(int limit) {
+		ArrayList<BoardDto> list = new ArrayList<>();
+		try {
+			// ★ '1' 대신 숫자 1로 안전하게 매칭!
+			String sql = "SELECT * FROM (SELECT * FROM vwPost WHERE boardType = 1 ORDER BY seq DESC) WHERE ROWNUM <= ?";
+			pstat = conn.prepareStatement(sql);
+			pstat.setInt(1, limit);
+			rs = pstat.executeQuery();
+
+			while (rs.next()) {
+				BoardDto dto = new BoardDto();
+				dto.setSeq(rs.getString("seq"));
+				dto.setTitle(rs.getString("title"));
+				String fullDate = rs.getString("regDate");
+				dto.setRegDate(fullDate != null && fullDate.length() >= 10 ? fullDate.substring(0, 10) : fullDate);
+				dto.setBoardType(rs.getString("boardType")); // ★ 이거 추가!
+				list.add(dto);
+			}
+		} catch (Exception e) {
+			e.printStackTrace();
+		} finally {
+			closeAll();
+		}
+		return list;
 	}
 
 }
