@@ -219,12 +219,17 @@ public class PlanService {
 
 	public int edit(PlanDto dto) {
 		PlanDao dao = new PlanDao();
+		int result = 0;
 		
 		if (dto.getType().equals("기간기반")) {
 			return dao.editPeriod(dto);
 		} else if (dto.getType().equals("완료기반")) {
-			return dao.editCompletion(dto);
-		} 
+			result = dao.editCompletion(dto);
+			if (result == 1 && "완료기반".equals(dto.getType())) {
+				dao.syncGoals(dto);
+	        }
+			return result;
+		}
 		
 		return -1;
 	}
@@ -233,6 +238,12 @@ public class PlanService {
 		PlanDao dao = new PlanDao();
 		
 		return dao.del(dto);
+	}
+
+	public List<GoalDto> getGoals(String planSeq) {
+		PlanDao dao = new PlanDao();
+		
+		return dao.getGoals(planSeq);
 	}
 
 }

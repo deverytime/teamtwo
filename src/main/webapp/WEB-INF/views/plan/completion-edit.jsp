@@ -55,6 +55,43 @@
               class="textarea textarea-bordered w-full h-64"
               id="description" name="description" required maxlength="1000">${dto.description}</textarea>
           </div>
+          
+          <div>
+            <!-- 라벨 + 버튼 -->
+            <div class="flex justify-start gap-3 items-center">
+                <label class="form-label">세부 목표 (선택)</label>
+        
+                <button type="button" class="btn btn-outline btn-secondary btn-sm"
+                        onclick="addGoal()">+ 목표 추가</button>
+            </div>
+        
+            <!-- 목표 리스트 -->
+            <div id="goal-container" class="space-y-2 mt-2">
+                <!-- goals 있으면 출력 -->
+                <c:if test="${not empty dto.goals}">
+                    <c:forEach var="goal" items="${dto.goals}">
+                        <div class="flex gap-2 goal-item">
+                            <input type="hidden" name="goalSeqs" value="${goal.seq}">
+                            <input type="text" name="goalNames"
+                                   class="input input-bordered w-full"
+                                   value="${goal.name}">
+                            <button type="button" class="btn btn-error btn-sm"
+                                    onclick="removeGoal(this)">✕</button>
+                        </div>
+                    </c:forEach>
+                </c:if>
+                <!-- goals 없으면 기본 1개 -->
+                <c:if test="${empty dto.goals}">
+                    <div class="flex gap-2 goal-item">
+                        <input type="hidden" name="goalSeqs" value="">
+                        <input type="text" name="goalNames"
+                               class="input input-bordered w-full"
+                               placeholder="목표를 입력하세요 (예: 자바 문법 1회독)">
+                        <button type="button" class="btn btn-error btn-sm"
+                                onclick="removeGoal(this)">✕</button>
+                    </div>
+                </c:if>        
+            </div>
         </div>
 
         <div class="flex justify-end gap-4 pt-2">
@@ -62,6 +99,40 @@
           <button type="submit" class="btn btn-accent">수정하기</button>
         </div>
       </form>
+      
+<script>
+    function removeGoal(button) {
+        const container = document.getElementById("goal-container");
+        const items = container.getElementsByClassName("goal-item");
+    
+        // 최소 1개는 남기기
+        if (items.length <= 1) {
+            button.previousElementSibling.value = "";
+            return;
+        }
+    
+        button.parentElement.remove();
+    }
+
+    function addGoal() {
+        const container = document.getElementById("goal-container");
+    
+        const div = document.createElement("div");
+        div.className = "flex gap-2 goal-item";
+    
+        div.innerHTML = `
+            <input type="hidden" name="goalSeqs" value="">
+            <input type="text" name="goalNames"
+                   class="input input-bordered w-full"
+                   placeholder="목표를 입력하세요 (예: 자바 문법 1회독)">
+            <button type="button" class="btn btn-error btn-sm"
+                    onclick="removeGoal(this)">✕</button>
+        `;
+    
+        container.appendChild(div);
+    }
+</script>
+      
     </main>
   </div>
 </body>
