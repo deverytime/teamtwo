@@ -34,10 +34,10 @@
     <!-- 바디 -->
     <div class="card-pad px-6 py-5">
   
-      <!-- 상단 (날짜 + 상태) -->
+      <!-- 상단 (날짜 및 학습시간 + 상태) -->
       <div class="flex items-center justify-between mb-5">
         <div class="text-lg font-semibold">
-          <fmt:formatDate value="${dto.studyDate}" pattern="M월 d일"/>
+          <fmt:formatDate value="${dto.studyDate}" pattern="M월 d일"/> <span class="text-sm text-slate-500">${dto.time}시간</span>
         </div>
   
         <div>
@@ -54,17 +54,9 @@
           </c:choose>
         </div>
       </div>
-  
+      
       <!-- 내용 -->
-      <div class="mb-6">
-        <div class="form-label">학습 시간</div>
-        <div class="bg-slate-50 border border-slate-200 rounded-xl p-4 min-h-[120px]">
-          ${dto.time} 시간
-        </div>
-      </div>
-  
-      <!-- 내용 -->
-      <div class="mb-6">
+      <div class="mb-5">
         <div class="form-label">학습 내용</div>
         <div class="bg-slate-50 border border-slate-200 rounded-xl p-4 min-h-[120px]">
           ${dto.content}

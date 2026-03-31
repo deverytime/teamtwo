@@ -26,41 +26,79 @@
 
     <!-- 계획 카드 -->
     <div class="bg-white rounded-2xl shadow-sm border border-slate-200 p-6 mb-6">
-
-      <!-- 상단 2열 -->
-      <div class="flex items-center gap-10 w-fit">
-      
-        <!-- 좌측 -->
-        <div>
-          <p class="text-sm text-slate-400 mb-1">계획명</p>
-          <h3 class="text-2xl font-bold text-slate-800">${dto.title}</h3>
-      
-          <span class="inline-flex mt-3 rounded-full px-3 py-1 text-sm font-medium
-            ${dto.progressStatus == '진행중' ? 'bg-blue-100 text-blue-700' : ''}
-            ${dto.progressStatus == '완료' ? 'bg-emerald-100 text-emerald-700' : ''}
-            ${dto.progressStatus == '미완료' ? 'bg-red-100 text-red-700' : ''}
-          ">
-            ${dto.progressStatus}
-          </span>
-        </div>
-      
-        <!-- 우측 (진행률) -->
+    
+    <!-- 상단 영역 -->
+    <div class="flex items-center gap-10">
+      <!-- 1열 -->
+      <div class="w-fit max-w-[500px] break-words">
+        <p class="text-sm text-slate-400 mb-1">계획명</p>
+        <h3 class="text-2xl font-bold text-slate-800">${dto.title}</h3>
+        <span class="inline-flex mt-3 rounded-full px-3 py-1 text-sm font-medium
+          ${dto.progressStatus == '진행중' ? 'bg-blue-100 text-blue-700' : ''}
+          ${dto.progressStatus == '완료' ? 'bg-emerald-100 text-emerald-700' : ''}
+          ${dto.progressStatus == '미완료' ? 'bg-red-100 text-red-700' : ''}
+        ">
+          ${dto.progressStatus}
+        </span>
+      </div>
+    
+      <!-- 2열 -->
+      <div class="flex flex-col items-center pt-[2px]">
+        <p class="text-sm text-slate-400 mb-3">현재 진행률</p>
         <div
-          class="radial-progress text-indigo-500 font-bold text-lg"
-          style="--value:${empty dto.records ? 0 : dto.records[0].progress}; --size:96px; --thickness:10px;">
+          class="radial-progress text-indigo-500 font-bold text-xl bg-indigo-50"
+          style="--value:${empty dto.records ? 0 : dto.records[0].progress}; --size:120px; --thickness:12px;">
           ${empty dto.records ? 0 : dto.records[0].progress}%
         </div>
-        
-<!--         <div class="shrink-0"> -->
-<!--           <div -->
-<!--             class="radial-progress text-emerald-500 font-bold text-xl" -->
-<!--             style="--value:35; --size:96px; --thickness:10px;" -->
-<!--           > -->
-<!--             35% -->
-<!--           </div> -->
-<!--         </div> -->
-      
       </div>
+    
+      <div class="flex flex-col items-center pt-[2px]">
+
+      <!-- 3열 -->
+      <c:choose>
+        <%-- 기간기반 --%>
+        <c:when test="${dto.type == '기간기반'}">
+          <p class="text-sm text-slate-400 mb-3">권장 진행률</p>
+    
+          <div
+            class="radial-progress text-emerald-500 font-bold text-xl bg-emerald-50"
+            style="--value:${empty dto.recommendProgress ? 0 : dto.recommendProgress}; --size:120px; --thickness:12px;">
+            ${empty dto.recommendProgress ? 0 : dto.recommendProgress}%
+          </div>
+        </c:when>
+        <%-- 완료기반 --%>
+        <c:when test="${dto.type == '완료기반'}">
+          <p class="text-sm text-slate-400 mb-3">완료한 목표</p>
+          <div class="flex flex-col items-center justify-center w-[120px] h-[120px] rounded-3xl bg-emerald-50 border border-emerald-100">    
+            <div class="relative w-[60px] h-[40px]">    
+              <!-- 완료 수 (왼쪽 위 → 더 위로) -->
+              <span class="absolute left-0 top-0 -translate-x-1 -translate-y-2 text-3xl font-bold text-emerald-600 z-10">
+                ${dto.completedGoals}
+
+              </span>
+            
+              <!-- 전체 수 (오른쪽 아래 → 더 아래로) -->
+              <span class="absolute right-0 bottom-0 translate-x-1 translate-y-2 text-3xl font-semibold text-slate-400 z-10">
+                ${dto.totalGoals}
+              </span>
+              <!-- 대각선 라인 -->
+              <div class="absolute top-[55%] left-[5%] w-[90%] h-[1px] bg-slate-300 rotate-[-45deg]"></div>
+            </div>
+          </div>
+        </c:when>
+      </c:choose>
+    </div>
+    
+      <!-- 4열 -->
+      <div class="flex flex-col items-center pt-[2px]">
+        <p class="text-sm text-slate-400 mb-3">최대 공부시간</p>
+      
+        <div class="flex items-center justify-center w-[120px] h-[120px] 
+                    rounded-full bg-violet-50 text-violet-600 font-bold text-xl">
+          ${dto.maxTime}시간
+        </div>
+      </div>
+    </div>
 
       <!-- 설명 -->
       <div class="mt-6 border-t border-slate-100 pt-5">
@@ -83,6 +121,100 @@
 
       
     </div>
+    
+  <c:if test="${'완료기반' eq dto.type}">
+    <div class="collapse collapse-arrow bg-white border border-slate-200 rounded-2xl shadow-sm my-6">
+
+        <input type="checkbox" checked/>
+
+        <!-- 아코디언 헤더 -->
+        <div class="collapse-title px-5 py-4 bg-indigo-100">
+            <div class="flex items-center justify-between pr-6">
+                <div>
+                    <h3 class="text-lg font-bold text-slate-800">세부 목표</h3>
+                    <p class="text-sm text-slate-400 mt-1">
+                        완료한 목표 ${dto.completedGoals}개 / 전체 ${dto.totalGoals}개
+                    </p>
+                </div>
+            </div>
+        </div>
+
+        <!-- 아코디언 내용 -->
+        <div class="collapse-content px-5 pb-5 pt-4">
+            <div class="space-y-4">
+
+                <c:forEach var="goal" items="${dto.goals}" varStatus="status">
+
+                    <c:set var="canCheck" value="false" />
+
+                    <!-- 첫 번째 목표면 미완료일 때 체크 가능 -->
+                    <c:if test="${status.first and goal.isDone == 0}">
+                        <c:set var="canCheck" value="true" />
+                    </c:if>
+
+                    <!-- 첫 번째가 아니면, 바로 이전 목표가 완료된 경우만 체크 가능 -->
+                    <c:if test="${not status.first and goal.isDone == 0 and dto.goals[status.index - 1].isDone == 1}">
+                        <c:set var="canCheck" value="true" />
+                    </c:if>
+
+                    <!-- 이미 완료된 목표 -->
+                    <c:if test="${goal.isDone == 1}">
+                        <div class="flex items-center gap-3 rounded-xl border border-emerald-200 bg-emerald-50 px-4 py-4">
+                            <input type="checkbox" checked disabled
+                                   class="checkbox checkbox-success pointer-events-none shrink-0" />
+
+                            <div class="flex-1 min-w-0">
+                                <p class="font-medium text-slate-800 break-words">${goal.name}</p>
+                                <p class="text-xs text-slate-400 mt-1">
+                                    완료됨
+                                    <c:if test="${goal.doneDate != null}">
+                                        · <fmt:formatDate value="${goal.doneDate}" pattern="yyyy-MM-dd"/>
+                                    </c:if>
+                                </p>
+                            </div>
+                        </div>
+                    </c:if>
+
+                    <!-- 체크 가능한 다음 목표 -->
+                    <c:if test="${goal.isDone == 0 and canCheck}">
+                        <form method="post" action="/teamtwo/plan/goal-check.do" class="mb-4">
+                            <input type="hidden" name="goalSeq" value="${goal.seq}">
+                            <input type="hidden" name="planSeq" value="${dto.seq}">
+
+                            <label class="flex items-center gap-3 rounded-xl border border-slate-200 bg-white px-4 py-4 cursor-pointer hover:border-primary hover:bg-slate-50 transition">
+                                <input type="checkbox"
+                                       class="checkbox checkbox-primary shrink-0"
+                                       onchange="this.form.submit()">
+
+                                <div class="flex-1 min-w-0">
+                                    <p class="font-medium text-slate-800 break-words">${goal.name}</p>
+                                    <p class="text-xs text-slate-400 mt-2">다음으로 완료할 수 있는 목표</p>
+                                </div>
+                            </label>
+                        </form>
+                    </c:if>
+
+                    <!-- 아직 순서가 안 된 목표 -->
+                    <c:if test="${goal.isDone == 0 and not canCheck}">
+                        <div class="flex items-center gap-3 rounded-xl border border-slate-200 bg-slate-50 px-4 py-4 opacity-70">
+                            <input type="checkbox" disabled
+                                   class="checkbox checkbox-disabled pointer-events-none shrink-0" />
+
+                            <div class="flex-1 min-w-0">
+                                <p class="font-medium text-slate-500 break-words">${goal.name}</p>
+                                <p class="text-xs text-slate-400 mt-2">이전 목표를 완료해야 체크할 수 있습니다</p>
+                            </div>
+
+                            <span class="text-xs text-slate-400 whitespace-nowrap ml-2">잠김</span>
+                        </div>
+                    </c:if>
+
+                </c:forEach>
+
+            </div>
+        </div>
+    </div>
+</c:if> 
     <!-- 기본 정보 + 통계 -->
 <div class="grid grid-cols-1 lg:grid-cols-3 gap-6">
 
@@ -118,12 +250,6 @@
         </div>
       </c:if>
 
-      <div class="rounded-xl bg-slate-50 p-4">
-        <p class="text-sm text-slate-400 mb-1">최근 수정일</p>
-        <p class="text-base font-medium text-slate-800">
-          <fmt:formatDate value="${dto.updateDate}" pattern="M월 d일" />
-        </p>
-      </div>
 
     </div>
   </div>

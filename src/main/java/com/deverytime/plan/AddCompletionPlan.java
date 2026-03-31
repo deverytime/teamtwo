@@ -1,7 +1,7 @@
 package com.deverytime.plan;
 
 import java.io.IOException;
-import java.sql.Date;
+import java.util.ArrayList;
 
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
@@ -10,6 +10,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
+import com.deverytime.model.GoalDto;
 import com.deverytime.model.MemberDto;
 import com.deverytime.model.PlanDto;
 
@@ -50,6 +51,19 @@ public class AddCompletionPlan extends HttpServlet {
 	    	    .description(req.getParameter("description"))
 	    	    .memberSeq(req.getParameter("memberSeq"))
 	    	    .build();
+	    
+	    // goal 세팅
+	    String[] goalNames = req.getParameterValues("goalNames");
+
+	    if (goalNames != null) {
+	    	for (String goalName : goalNames) {
+	    		if (goalName != null && !goalName.trim().equals("")) {
+	    			dto.getGoals().add(GoalDto.builder()
+	    					.name(goalName.trim())
+	    					.build());
+	    		}
+	    	}
+	    }
 
 	    int result = service.add(dto);
 	    

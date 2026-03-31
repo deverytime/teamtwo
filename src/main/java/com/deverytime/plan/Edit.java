@@ -10,6 +10,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
+import com.deverytime.model.GoalDto;
 import com.deverytime.model.MemberDto;
 import com.deverytime.model.PlanDto;
 
@@ -46,6 +47,11 @@ public class Edit extends HttpServlet {
 		if (dto == null) {
 			resp.getWriter().print("<script>alert('권한이 없습니다.');history.back();</script>");
 			return;
+		}
+		
+		// 완료기반이면 goal 목록도 조회해서 dto에 세팅
+		if ("완료기반".equals(dto.getType())) {
+			dto.setGoals(service.getGoals(seq));
 		}
 		
 		// planDto jsp 에 담기
@@ -90,6 +96,30 @@ public class Edit extends HttpServlet {
 			.updateDate(new Date(System.currentTimeMillis()))
 			.memberSeq(req.getParameter("memberSeq"))
 			.build();
+		
+		// 완료기반 goals 업데이트
+		if ("완료기반".equals(dto.getType())) {
+		    String[] goalSeqs = req.getParameterValues("goalSeqs");
+		    String[] goalNames = req.getParameterValues("goalNames");
+		    if (goalNames != null) {
+		        for (int i = 0; i < goalNames.length; i++) {
+		            String goalSeq = "";
+		            if (goalSeqs != null && goalSeqs.length > i && goalSeqs[i] != null) {
+		                goalSeq = goalSeqs[i];
+		            }
+		            String goalName = goalNames[i];
+		            if (goalName != null && !goalName.trim().equals("")) {
+		                dto.getGoals().add(
+		                    GoalDto.builder()
+		                        .seq(goalSeq)
+		                        .name(goalName.trim())
+		                        .planSeq(dto.getSeq())
+		                        .build()
+		                );
+		            }
+		        }
+		    }
+		}
 		
 		int result = service.edit(dto);
 		

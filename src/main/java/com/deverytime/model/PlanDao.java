@@ -2,6 +2,7 @@ package com.deverytime.model;
 
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 
 import com.deverytime.library.BasicDao;
 
@@ -160,29 +161,44 @@ public class PlanDao extends BasicDao {
 		}
 	
 
-	public int addCompletion(PlanDto dto) {
-		
-		try {
-			String sql = "INSERT INTO plan (seq, title, subject, description, type, regdate, updatedate, progressStatus, memberSeq) "
-			           + "VALUES (planSeq.nextval, ?, ?, ?, ?, sysdate, sysdate, DEFAULT, ?)";
-			
-			pstat = conn.prepareStatement(sql);
 
-			pstat.setString(1, dto.getTitle());
-			pstat.setString(2, dto.getSubject());
-			pstat.setString(3, dto.getDescription());
-			pstat.setString(4, dto.getType());
-			pstat.setString(5, dto.getMemberSeq());
-			
-			return pstat.executeUpdate();
-			
-		} catch (Exception e) {
-			e.printStackTrace();
-		} finally {
-	        closeAll();
-		}
-		
-		return 0;
+	public int addCompletion(PlanDto dto) {
+
+	    try {
+	        // 1. seq 먼저 구하기
+	        String seqSql = "select planSeq.nextval as seq from dual";
+	        stat = conn.createStatement();
+	        rs = stat.executeQuery(seqSql);
+
+	        int planSeq = 0;
+	        if (rs.next()) {
+	            planSeq = rs.getInt("seq");
+	        }
+
+	        // 2. plan insert (중요: ?로 seq 넣는다)
+	        String sql = "insert into plan (seq, title, subject, description, type, regdate, updatedate, progressStatus, memberSeq) "
+	                   + "values (?, ?, ?, ?, ?, sysdate, sysdate, default, ?)";
+
+	        pstat = conn.prepareStatement(sql);
+
+	        pstat.setInt(1, planSeq);
+	        pstat.setString(2, dto.getTitle());
+	        pstat.setString(3, dto.getSubject());
+	        pstat.setString(4, dto.getDescription());
+	        pstat.setString(5, dto.getType());
+	        pstat.setString(6, dto.getMemberSeq());
+
+	        int result = pstat.executeUpdate();
+
+	        if (result == 1) {
+	            return planSeq;
+	        }
+
+	    } catch (Exception e) {
+	        e.printStackTrace();
+	    }
+
+	    return 0;
 	}
 
 	public PlanDto get(String seq, String memberSeq) {
@@ -216,9 +232,7 @@ public class PlanDao extends BasicDao {
 
 		} catch (Exception e) {
 			e.printStackTrace();
-		} finally {
-			closeAll();
-		}
+		} 
 		
 		return null;
 	}
@@ -242,8 +256,6 @@ public class PlanDao extends BasicDao {
 
 		} catch (Exception e) {
 			e.printStackTrace();
-		} finally {
-			closeAll();
 		}
 		
 		return -1;
@@ -267,8 +279,6 @@ public class PlanDao extends BasicDao {
 
 		} catch (Exception e) {
 			e.printStackTrace();
-		} finally {
-			closeAll();
 		}
 		
 		return -1;
@@ -292,6 +302,153 @@ public class PlanDao extends BasicDao {
 		}
 		
 		return -1;
+	}
+	
+	public List<GoalDto> getGoals(String planSeq) {
+
+	    List<GoalDto> list = new ArrayList<>();
+
+	    try {
+	        String sql = ""
+	                + "select seq, name, isDone, doneDate, planSeq "
+	                + "from goal "
+	                + "where planSeq = ? "
+	                + "order by seq asc";
+
+	        pstat = conn.prepareStatement(sql);
+	        pstat.setString(1, planSeq);
+
+	        rs = pstat.executeQuery();
+
+	        while (rs.next()) {
+	            GoalDto dto = GoalDto.builder()
+	                    .seq(rs.getString("seq"))
+	                    .name(rs.getString("name"))
+	                    .isDone(rs.getInt("isDone"))
+	                    .doneDate(rs.getDate("doneDate"))
+	                    .planSeq(rs.getString("planSeq"))
+	                    .build();
+
+	            list.add(dto);
+	        } 
+	        return list;
+	    } catch (Exception e) {
+	    	e.printStackTrace();
+		}
+	    
+	    return null;
+	}
+
+	public void syncGoals(PlanDto dto) {
+
+	    try {
+
+	        // 1. DB 기존 goals
+	        List<GoalDto> dbGoals = getGoals(dto.getSeq());
+
+	        // 2. 화면에서 넘어온 seq 목록 저장
+	        List<String> submittedSeqs = new ArrayList<>();
+
+	        if (dto.getGoals() != null) {
+	            for (GoalDto goal : dto.getGoals()) {
+
+	                if (goal.getSeq() != null && !goal.getSeq().trim().equals("")) {
+	                    // 기존 → 수정
+	                    updateGoal(goal);
+	                    submittedSeqs.add(goal.getSeq());
+
+	                } else {
+	                    // 신규 → 추가
+	                    addGoal(goal);
+	                }
+	            }
+	        }
+
+	        // 3. 삭제 처리 (DB에는 있는데 제출 안 된 것)
+	        for (GoalDto dbGoal : dbGoals) {
+	            if (!submittedSeqs.contains(dbGoal.getSeq())) {
+	                deleteGoal(dbGoal.getSeq());
+	            }
+	        }
+
+	    } catch (Exception e) {
+	        e.printStackTrace();
+	    }
+	}
+	
+	public int addGoal(GoalDto dto) {
+
+		try {
+			String sql = "insert into goal (seq, name, isDone, doneDate, planSeq) "
+					   + "values (goalSeq.nextVal, ?, 0, null, ?)";
+
+			pstat = conn.prepareStatement(sql);
+
+			pstat.setString(1, dto.getName());
+			pstat.setString(2, dto.getPlanSeq());
+
+			return pstat.executeUpdate();
+
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+
+		return 0;
+	}
+	
+	public int deleteGoal(String seq) {
+
+	    try {
+	        String sql = "delete from goal where seq = ?";
+
+	        pstat = conn.prepareStatement(sql);
+	        pstat.setString(1, seq);
+
+	        return pstat.executeUpdate();
+
+	    } catch (Exception e) {
+	        e.printStackTrace();
+	    }
+
+	    return 0;
+	}
+	
+	
+	
+	public int updateGoal(GoalDto dto) {
+
+	    try {
+	        String sql = "update goal set name = ? where seq = ? and planSeq = ?";
+
+	        pstat = conn.prepareStatement(sql);
+	        pstat.setString(1, dto.getName());
+	        pstat.setString(2, dto.getSeq());
+	        pstat.setString(3, dto.getPlanSeq());
+
+	        return pstat.executeUpdate();
+
+	    } catch (Exception e) {
+	        e.printStackTrace();
+	    }
+
+	    return 0;
+	}
+	
+	public int checkGoal(String goalSeq) {
+
+	    try {
+	        String sql = "update goal set isDone = 1, doneDate = sysdate where seq = ?";
+
+	        pstat = conn.prepareStatement(sql);
+	        pstat.setString(1, goalSeq);
+
+	        return pstat.executeUpdate();
+
+	    } catch (Exception e) {
+	        e.printStackTrace();
+	    }
+
+	    return 0;
 	}
 }
 
