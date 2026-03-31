@@ -29,10 +29,13 @@ public class PlanDto {
 	private String memberSeq;
 	@Builder.Default
 	private List<GoalDto> goals = new ArrayList<>(); // 완료기반 학습 계획용
+	private int completedGoals;
+	private int totalGoals;
 	
 	// 학습계획 상세정보 용 변수
 	private long daysFromStart;
 	private long daysToEnd;
+	private int recommendProgress; // 권장 진도율 (0~100), 기간기반 학습 계획용
 	// lombok 이 초기화 무시 안하게 어노테이션 추가
 	@Builder.Default
 	private List<RecordDto> records = new ArrayList<>();

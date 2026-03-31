@@ -25,6 +25,8 @@ public class PlanService {
 		PlanDao dao = new PlanDao();
 		
 		if (dto.getType().equals("기간기반")) {
+			System.out.println("rlrl");
+			System.out.println("dto" + dto);
 			return dao.addPeriod(dto);
 		} else if (dto.getType().equals("완료기반")) {
 			
@@ -200,6 +202,47 @@ public class PlanService {
 		List<RecordDto> records = recordDao.getRecordsByPlan(seq, cnt);
 		planDto.setRecords(records);
 		
+		// 기간기반 =========================
+	    if ("기간기반".equals(planDto.getType())
+	            && startDate != null
+	            && planDto.getEndDate() != null) {
+
+	        LocalDate endDate = planDto.getEndDate().toLocalDate();
+
+	        long totalDays = ChronoUnit.DAYS.between(startDate, endDate);
+	        long passedDays = ChronoUnit.DAYS.between(startDate, today);
+
+	        int recommendProgress = 0;
+
+	        if (totalDays > 0) {
+	            recommendProgress = (int) ((passedDays * 100.0) / totalDays);
+	        }
+
+	        // 범위 보정 (0~100)
+	        if (recommendProgress < 0) recommendProgress = 0;
+	        if (recommendProgress > 100) recommendProgress = 100;
+
+	        planDto.setRecommendProgress(recommendProgress);
+	    }
+	    
+	    // 완료기반 =========================
+	    if ("완료기반".equals(planDto.getType())) {
+
+	        List<GoalDto> goals = dao.getGoals(seq); // DAO에 추가 필요
+	        planDto.setGoals(goals);
+	        
+	        // 목표관련 통계정보 가져오기
+	        int totalGoals = goals.size();
+	        int completedGoals = 0;
+	        for (GoalDto goal : goals) {
+	            if (goal.getIsDone() == 1) {
+	                completedGoals++;
+	            }
+	        }
+	        planDto.setTotalGoals(totalGoals);
+	        planDto.setCompletedGoals(completedGoals);
+	    }
+		
 		RecordDao recordDao2 = new RecordDao();
 		// 학습기록 총 개수 가져오기
 		int recordCount = recordDao2.getRecordCountByPlan(seq);
@@ -244,6 +287,52 @@ public class PlanService {
 		PlanDao dao = new PlanDao();
 		
 		return dao.getGoals(planSeq);
+	}
+
+	public int checkGoal(String goalSeq, String planSeq, String memberSeq) {
+		
+		PlanDao dao = new PlanDao();
+		
+		PlanDto planDto = dao.get(planSeq, memberSeq);
+        if (planDto == null) {
+        	return -1;
+        }
+
+        List<GoalDto> goals = dao.getGoals(planSeq);
+
+        GoalDto targetGoal = null;
+        int targetIndex = -1;
+
+        for (int i = 0; i < goals.size(); i++) {
+            if (goals.get(i).getSeq().equals(goalSeq)) {
+                targetGoal = goals.get(i);
+                targetIndex = i;
+                break;
+            }
+        }
+
+        if (targetGoal == null) {
+            return -1;
+        }
+
+        // 이미 완료된 목표면 막기
+        if (targetGoal.getIsDone() == 1) {
+            return 0;
+        }
+
+        // 첫 번째 목표가 아니면, 바로 이전 목표가 완료되어 있어야 함
+        if (targetIndex > 0) {
+            GoalDto prevGoal = goals.get(targetIndex - 1);
+            if (prevGoal.getIsDone() != 1) {
+                return 0;
+            }
+        }
+
+        int result = dao.checkGoal(goalSeq);
+
+		
+		
+		return result;
 	}
 
 }

@@ -433,5 +433,22 @@ public class PlanDao extends BasicDao {
 
 	    return 0;
 	}
+	
+	public int checkGoal(String goalSeq) {
+
+	    try {
+	        String sql = "update goal set isDone = 1, doneDate = sysdate where seq = ?";
+
+	        pstat = conn.prepareStatement(sql);
+	        pstat.setString(1, goalSeq);
+
+	        return pstat.executeUpdate();
+
+	    } catch (Exception e) {
+	        e.printStackTrace();
+	    }
+
+	    return 0;
+	}
 }
 
