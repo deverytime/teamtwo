@@ -72,29 +72,30 @@ public class RecordDao extends BasicDao {
 	}
 
 	public int add(RecordDto dto) {
-		
-		try {
-			String sql = "INSERT INTO record (seq, studyDate, content, progress, memo, regdate, updateDate, recordStatus, planSeq) "
-			           + "VALUES (recordSeq.nextval, ?, ?, ?, ?, sysdate, sysdate, ?, ?)";
 
-			pstat = conn.prepareStatement(sql);
+	    try {
+	        String sql = "INSERT INTO record (seq, studyDate, time, content, progress, memo, regDate, updateDate, recordStatus, planSeq) "
+	                   + "VALUES (recordSeq.nextval, ?, ?, ?, ?, ?, sysdate, sysdate, ?, ?)";
 
-			pstat.setDate(1, dto.getStudyDate());
-			pstat.setString(2, dto.getContent());
-			pstat.setInt(3, dto.getProgress());
-			pstat.setString(4, dto.getMemo());
-			pstat.setString(5, dto.getRecordStatus());
-			pstat.setString(6, dto.getPlanSeq());
+	        pstat = conn.prepareStatement(sql);
 
-			return pstat.executeUpdate();
+	        pstat.setDate(1, dto.getStudyDate());      // studyDate
+	        pstat.setInt(2, dto.getTime());            // time
+	        pstat.setString(3, dto.getContent());      // content
+	        pstat.setInt(4, dto.getProgress());        // progress
+	        pstat.setString(5, dto.getMemo());         // memo
+	        pstat.setString(6, dto.getRecordStatus()); // recordStatus
+	        pstat.setString(7, dto.getPlanSeq());      // planSeq
 
-		} catch (Exception e) {
-			e.printStackTrace();
-		} finally {
-			closeAll();
-		}
-		
-		return -1;
+	        return pstat.executeUpdate();
+
+	    } catch (Exception e) {
+	        e.printStackTrace();
+	    } finally {
+	    	closeAll();
+	    }
+
+	    return -1;
 	}
 	
 	public RecordDto get(String seq, String memberSeq) {
@@ -115,6 +116,7 @@ public class RecordDao extends BasicDao {
 	            return RecordDto.builder()
 	                    .seq(rs.getString("seq"))
 	                    .studyDate(rs.getDate("studyDate"))
+	                    .time(rs.getInt("time"))
 	                    .content(rs.getString("content"))
 	                    .progress(rs.getInt("progress"))
 	                    .memo(rs.getString("memo"))
@@ -150,6 +152,7 @@ public class RecordDao extends BasicDao {
 	            return RecordDto.builder()
 	                    .seq(rs.getString("seq"))
 	                    .studyDate(rs.getDate("studyDate"))
+	                    .time(rs.getInt("time"))
 	                    .content(rs.getString("content"))
 	                    .progress(rs.getInt("progress"))
 	                    .memo(rs.getString("memo"))
@@ -175,19 +178,21 @@ public class RecordDao extends BasicDao {
 	        String sql = "update record set "
 	                   + "studyDate = ?, "
 	                   + "content = ?, "
+	                   + "time = ?, " 
 	                   + "progress = ?, "
 	                   + "memo = ?, "
-	                   + "updateDate = ?, "
+	                   + "updateDate = sysdate, "
 	                   + "recordStatus = ? "
 	                   + "where seq = ? "
 	                   + "and planSeq in (select seq from plan where memberSeq = ?)";
-
+	        
 	        pstat = conn.prepareStatement(sql);
+
 	        pstat.setDate(1, dto.getStudyDate());
-	        pstat.setString(2, dto.getContent());
-	        pstat.setInt(3, dto.getProgress());
-	        pstat.setString(4, dto.getMemo());
-	        pstat.setDate(5, dto.getUpdateDate());
+	        pstat.setInt(2, dto.getTime());
+	        pstat.setString(3, dto.getContent());
+	        pstat.setInt(4, dto.getProgress());
+	        pstat.setString(5, dto.getMemo());
 	        pstat.setString(6, dto.getRecordStatus());
 	        pstat.setString(7, dto.getSeq());
 	        pstat.setString(8, dto.getMemberSeq());

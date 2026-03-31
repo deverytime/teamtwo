@@ -57,6 +57,14 @@
   
       <!-- 내용 -->
       <div class="mb-6">
+        <div class="form-label">학습 시간</div>
+        <div class="bg-slate-50 border border-slate-200 rounded-xl p-4 min-h-[120px]">
+          ${dto.time} 시간
+        </div>
+      </div>
+  
+      <!-- 내용 -->
+      <div class="mb-6">
         <div class="form-label">학습 내용</div>
         <div class="bg-slate-50 border border-slate-200 rounded-xl p-4 min-h-[120px]">
           ${dto.content}

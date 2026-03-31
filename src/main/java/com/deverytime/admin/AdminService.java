@@ -77,7 +77,7 @@ public class AdminService {
 		PagingService pagingService = new PagingService();
 
 		if (type == null || type.trim().equals("")) {
-			type = "all";
+			type = "";
 		}
 
 		if (word == null) {

@@ -78,6 +78,7 @@ public class Edit extends HttpServlet {
         RecordDto dto = RecordDto.builder()
                 .seq(req.getParameter("seq"))
                 .studyDate(Date.valueOf(req.getParameter("studyDate")))
+                .time(Integer.parseInt(req.getParameter("time")))
                 .progress(Integer.parseInt(req.getParameter("progress")))
                 .recordStatus(req.getParameter("recordStatus"))
                 .content(req.getParameter("content"))

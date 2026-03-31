@@ -242,8 +242,14 @@
 			<c:if test="${empty dto.prevSeq }">
 				<button class="btn">이전글이 없습니다</button>
 			</c:if>
+			<c:if test="${not empty param.board}">
 			<button class="btn btn-soft-brand"
-				onclick="location.href='list.do?board=${dto.boardType}&category=${param.category}&searchType=${param.searchType}&keyword=${param.keyword}&page=${param.page }'">돌아가기</button>
+				onclick="location.href='list.do?board=${dto.boardType}&category=${param.category}&searchType=${param.searchType}&keyword=${param.keyword}&page=${param.page }'">돌아가기 ${board}</button>
+			</c:if>
+			<c:if test="${empty param.board}">
+			<button class="btn btn-soft-brand"
+				onclick="location.href='/teamtwo/board/trendingboard/list.do'">돌아가기</button>
+			</c:if>
 			<c:if test="${not empty dto.nextSeq}">
 				<button class="btn btn-soft-brand"
 					onclick="location.href='view.do?seq=${dto.nextSeq}&board=${dto.boardType}&category=${param.category}&searchType=${param.searchType}&keyword=${param.keyword}&page=${param.page }'">다음

@@ -189,23 +189,29 @@ public class BoardDao extends BasicDao {
 
 		try {
 
-			String sql = "select * from vwPost ";
+			String sql = "select * from vwPost";
 			String board = "";
 			String seq = String.format("seq = %s", dto.getSeq());
 
 			// 보드타입으로 어떤 게시판인지 판별
-			if (dto.getBoardType().equals("1")) {
-				board = "where boardType=1 and ";
-			} else if (dto.getBoardType().equals("2")) {
-				board = "where boardType=2 and ";
-			} else if (dto.getBoardType().equals("3")) {
-				board = "where boardType=3 and ";
-			} else if (dto.getBoardType().equals("4")) {
-				board = "where boardType=4 and ";
+			if (dto.getBoardType() != null) {
+				if (dto.getBoardType().equals("1")) {
+					board = " where boardType=1 and ";
+				} else if (dto.getBoardType().equals("2")) {
+					board = " where boardType=2 and ";
+				} else if (dto.getBoardType().equals("3")) {
+					board = " where boardType=3 and ";
+				} else if (dto.getBoardType().equals("4")) {
+					board = " where boardType=4 and ";
+				}
 			}
-			
 
-			sql = sql + board + seq;
+
+			if (dto.getBoardType() == null || dto.getBoardType().equals("")) {
+				sql = sql + " where " + seq;
+			} else {
+				sql = sql + board + seq;
+			}
 
 			rs = stat.executeQuery(sql);
 
@@ -532,23 +538,95 @@ public class BoardDao extends BasicDao {
 	public FileDto getFile(String fileSeq) {
 
 		try {
-			
+
 			String sql = "select * from upload_file where seq = ?";
-			
+
 			pstat = conn.prepareStatement(sql);
 			pstat.setString(1, fileSeq);
+
+			rs = pstat.executeQuery();
+
+			if (rs.next()) {
+				FileDto dto = new FileDto();
+				dto.setSeq(rs.getString("seq"));
+				dto.setName(rs.getString("name")); // 저장명
+				dto.setOriginName(rs.getString("originName")); // 원본명
+				dto.setFileSize(rs.getLong("fileSize"));
+				dto.setPostSeq(rs.getString("postSeq"));
+
+				return dto;
+			}
+
+		} catch (Exception e) {
+			e.printStackTrace();
+		} finally {
+			closeAll();
+		}
+
+		return null;
+	}
+
+	public ArrayList<BoardDto> trendingList() {
+
+		try {
+
+			String sql = "select * from vwTrending";
+
+			stat = conn.createStatement();
+			rs = stat.executeQuery(sql);
+
+			ArrayList<BoardDto> list = new ArrayList<>();
+
+			while (rs.next()) {
+				BoardDto dto = new BoardDto();
+				dto.setSeq(rs.getString("seq"));
+				dto.setTitle(rs.getString("title"));
+				dto.setContent(rs.getString("content"));
+				dto.setReadCount(rs.getString("readCount"));
+				dto.setRegDate(rs.getString("regDate"));
+				dto.setRecommend(rs.getString("recommend"));
+				dto.setReport(rs.getString("report"));
+				dto.setCategory(rs.getString("category"));
+				dto.setNickname(rs.getString("nickname"));
+				dto.setBoardType(rs.getString("boardType"));
+
+				list.add(dto);
+			}
+
+			return list;
+
+		} catch (Exception e) {
+			e.printStackTrace();
+		} finally {
+			closeAll();
+		}
+
+		return new ArrayList<>();
+	}
+
+	public BoardDto get(String seq) {
+
+		try {
+			
+			String sql = "select * from vwPost a where seq = ?";
+			
+			pstat = conn.prepareStatement(sql);
+			pstat.setString(1, seq);
 			
 			rs = pstat.executeQuery();
 			
 			if(rs.next()) {
-				FileDto dto = new FileDto();
+				BoardDto dto = new BoardDto();
+				
 				dto.setSeq(rs.getString("seq"));
-				dto.setName(rs.getString("name"));  // 저장명
-	            dto.setOriginName(rs.getString("originName"));  // 원본명
-	            dto.setFileSize(rs.getLong("fileSize"));
-	            dto.setPostSeq(rs.getString("postSeq"));
-	            
-	            return dto;
+				dto.setCategory(rs.getString("category"));
+				dto.setContent(rs.getString("content"));
+				dto.setId(rs.getString("id"));
+				dto.setRegDate(rs.getString("regDate"));
+				dto.setReadCount(rs.getString("readcount"));
+				
+				
+				return dto;
 			}
 			
 		} catch (Exception e) {

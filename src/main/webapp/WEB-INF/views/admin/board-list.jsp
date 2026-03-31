@@ -24,9 +24,11 @@
 			<div class="bg-white p-4 rounded-xl shadow-sm border border-slate-100 mb-6 flex justify-between items-center">
 				<form action="/teamtwo/admin/board-list.do" method="GET" class="flex gap-2 w-full max-w-lg">
 					<select name="type" class="select select-bordered focus:select-primary">
-						<option value="all" ${type == 'all' ? 'selected' : ''}>전체 게시판</option>
-						<option value="free" ${type == 'free' ? 'selected' : ''}>자유</option>
-						<option value="qna" ${type == 'qna' ? 'selected' : ''}>질문</option>
+						<option value="" ${type == '' ? 'selected' : ''}>전체</option>
+						<option value="1" ${type == '1' ? 'selected' : ''}>자유</option>
+						<option value="2" ${type == '2' ? 'selected' : ''}>질문</option>
+						<option value="3" ${type == '3' ? 'selected' : ''}>자료 공유</option>
+						<option value="4" ${type == '3' ? 'selected' : ''}>학습 공유</option>
 					</select>
 					<input type="text" name="word" value="${word}" placeholder="제목 검색" class="input input-bordered flex-1 focus:input-primary" />
 					<button type="submit" class="btn btn-primary">검색</button>
