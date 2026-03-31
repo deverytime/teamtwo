@@ -72,7 +72,7 @@
 							<button class="btn btn-soft-brand btn-sm"
 								onclick="location.href='edit.do?seq=${dto.seq}&board=${dto.boardType}&category=${param.category}&searchType=${param.searchType}&keyword=${param.keyword}&page=${param.page}'">수정</button>
 							<button class="btn btn-error btn-sm"
-								onclick="location.href='del.do?seq=${dto.seq}&board=${dto.boardType}&category=${param.category}&searchType=${param.searchType}&keyword=${param.keyword}&page=${param.page}'">삭제</button>
+								onclick="deleteBoard(${dto.seq},${dto.boardType},'${param.category}', '${param.searchType}', '${param.keyword}', '${param.page}')">삭제</button>
 						</div>
 					</c:if>
 				</div>
@@ -261,6 +261,17 @@
 		</div>
 	</main>
 	<script>
+	function deleteBoard(postSeq, boardType, category, searchType, keyword, page) {
+	    if(confirm('글을 삭제하시겠습니까?')) {
+	        location.href = `/teamtwo/board/del.do?seq=` + postSeq + 
+	                       `&board=` + boardType + 
+	                       `&category=` + category + 
+	                       `&searchType=` + searchType + 
+	                       `&keyword=` + keyword + 
+	                       `&page=` + page;
+	    }
+	}
+	
 	function deleteComment(seq, postSeq, boardType, category, searchType, keyword, page) {
 	    if(confirm('댓글을 삭제하시겠습니까?')) {
 	        location.href = `/teamtwo/comment/del.do?seq=` + seq + 
