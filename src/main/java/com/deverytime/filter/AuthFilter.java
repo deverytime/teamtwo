@@ -32,7 +32,7 @@ public class AuthFilter implements Filter {
 			if (req.getRequestURI().endsWith("add.do") || req.getRequestURI().endsWith("edit.do")
 					|| req.getRequestURI().endsWith("del.do")) {
 				response.setContentType("text/html; charset=UTF-8");
-				response.getWriter().print("<script>alert('정상경로로 들어와 로그인 해주세요.');history.back();</script>");
+				response.getWriter().print("<script>alert('정상경로로 들어와 로그인 해주세요.'); location.href='/teamtwo/index.do';</script>");
 				return; // 필터 종료
 			}
 		} else {
@@ -50,7 +50,7 @@ public class AuthFilter implements Filter {
 					if (dto != null) {
 						if (!auth.equals(dto.getId())) {
 							response.setContentType("text/html; charset=UTF-8");
-							response.getWriter().print("<script>alert('정상경로로 들어온 사용자만 글을 수정하거나 삭제할 수 있습니다.');history.back();</script>");
+							response.getWriter().print("<script>alert('정상경로로 들어온 사용자만 글을 수정하거나 삭제할 수 있습니다.'); location.href='/teamtwo/index.do';</script>");
 							return; // 필터 종료
 						}
 					}
