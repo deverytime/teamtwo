@@ -36,6 +36,7 @@ public class Goal extends HttpServlet {
         if (result == 1) {
             resp.sendRedirect("/teamtwo/plan/view.do?seq=" + planSeq);
         } else {
+        	resp.setCharacterEncoding("UTF-8");
             resp.setContentType("text/html; charset=UTF-8");
             resp.getWriter().print("<script>alert('체크할 수 없는 목표입니다.'); location.href='/teamtwo/plan/view.do?seq=" + planSeq + "';</script>");
             resp.getWriter().close();

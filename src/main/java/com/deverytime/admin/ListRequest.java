@@ -9,12 +9,14 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+import com.deverytime.model.MemberDto;
+
 @WebServlet("/board/request/list.do")
 public class ListRequest extends HttpServlet {
 
 	@Override
 	protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
-
+		
 		AdminService service = new AdminService();
 
 		String page = req.getParameter("page");

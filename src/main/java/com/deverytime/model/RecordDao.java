@@ -271,4 +271,46 @@ public class RecordDao extends BasicDao {
 		return 0;
 	}
 	
+	public int getLatestProgress(String planSeq, String seq) {
+
+	    try {
+	        StringBuilder sql = new StringBuilder();
+
+	        sql.append("select progress ");
+	        sql.append("from ( ");
+	        sql.append("    select progress ");
+	        sql.append("    from record ");
+	        sql.append("    where planSeq = ? ");
+
+	        // edit일 때만 자기 자신 제외
+	        if (seq != null && !seq.trim().equals("")) {
+	            sql.append("and seq != ? ");
+	        }
+
+	        sql.append("    order by studyDate desc, seq desc ");
+	        sql.append(") ");
+	        sql.append("where rownum = 1");
+
+	        pstat = conn.prepareStatement(sql.toString());
+
+	        int index = 1;
+	        pstat.setString(index++, planSeq);
+
+	        if (seq != null && !seq.trim().equals("")) {
+	            pstat.setString(index++, seq);
+	        }
+
+	        rs = pstat.executeQuery();
+
+	        if (rs.next()) {
+	            return rs.getInt("progress");
+	        }
+
+	    } catch (Exception e) {
+	        e.printStackTrace();
+	    }
+
+	    return 0;
+	}
+	
 }

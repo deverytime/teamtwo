@@ -32,7 +32,8 @@ public class View extends HttpServlet {
         String memberSeq = auth.getSeq();
 
         RecordDto dto = service.getDetailInfo(seq, memberSeq);
-
+        resp.setCharacterEncoding("UTF-8");
+		resp.setContentType("text/html; charset=UTF-8");
         if (dto == null) {
             resp.getWriter().print("<script>alert('권한이 없습니다.');history.back();</script>");
             resp.getWriter().close();

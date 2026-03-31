@@ -44,7 +44,7 @@ public class View extends HttpServlet {
 		}
 		
 		PlanDto dto = service.getDetailInfo(seq, memberSeq, cnt);
-		
+		resp.setCharacterEncoding("UTF-8");
 		// 내 학습계획이 아니면 뒤로가기
 		resp.setContentType("text/html; charset=UTF-8");
 		if (dto == null) {

@@ -59,7 +59,7 @@
                 <input type="range"
                        id="progress"
                        name="progress"
-                       min="0" max="100" step="5"
+                       min="${dto.minProgress}" max="100" step="5"
                        value="${dto.progress}"
                        class="range range-primary flex-1"
                        required />
