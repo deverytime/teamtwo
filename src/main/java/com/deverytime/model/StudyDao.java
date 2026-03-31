@@ -6,181 +6,181 @@ import java.util.HashMap;
 
 import com.deverytime.library.BasicDao;
 
-public class StudyDao extends BasicDao{
+public class StudyDao extends BasicDao {
 
 	public ArrayList<StudyDto> list(HashMap<String, String> map, MemberDto mdto) {
-	    
-	    ArrayList<StudyDto> list = new ArrayList<StudyDto>();
-	    String where = "";
-	    
-	    // 1. 조건절 구성
-	    if("y".equals(map.get("search"))) {
-	        String status = map.get("status");
-	        String word = map.get("word");
-	        
-	        // 1. 상태값만 있는 경우
-	        if (status != null && !status.equals("") && (word == null || word.equals(""))) {
-	            where = String.format("where status = '%s'", status);
-	        } 
-	        // 2. 검색어만 있는 경우
-	        else if ((status == null || status.equals("")) && word != null && !word.equals("")) {
-	            where = String.format("where (name like '%%%s%%' or description like '%%%s%%')", word, word);
-	        } 
-	        // 3. 둘 다 있는 경우
-	        else if (status != null && !status.equals("") && word != null && !word.equals("")) {
-	            where = String.format("where status = '%s' and (name like '%%%s%%' or description like '%%%s%%')", status, word, word);
-	        }
-	    }
-	    
-	    // 2. 페이징 쿼리
-	    // FROM study 대신 FROM vwStudy를 사용합니다.
-	    String sql = "select * from (select s.*, (select count(*) from study_member where studySeq = s.seq and memberSeq = ?) as isMember, "
-	            + "rownum as rnum from (select * from vwStudy " + where + " order by seq desc) s) where rnum between ? and ?";
-	    
 
-	    try {
-	        // PreparedStatement 사용
-	        pstat = conn.prepareStatement(sql);
-	        pstat.setString(1, mdto != null ? mdto.getSeq() : "0");
-	        pstat.setString(2, map.get("begin"));
-	        pstat.setString(3, map.get("end"));
-	        
-	        rs = pstat.executeQuery();
-	        
-	        while(rs.next()) {
-	            StudyDto dto = new StudyDto();
-	            dto.setSeq(rs.getString("seq"));
-	            dto.setName(rs.getString("name"));
-	            dto.setDescription(rs.getString("description"));
-	            dto.setCapacity(rs.getString("capacity"));
-	            dto.setStatus(rs.getString("status"));
-	            dto.setCreateDate(rs.getString("createDate"));
-	            dto.setScheduleCount(rs.getString("scheduleCount"));
-	            dto.setHeadCount(rs.getString("headCount"));
-	            dto.setIsMember(rs.getInt("isMember") > 0 ? "y" : "n");
-	            
-	            list.add(dto);
-	        }
-	        return list;
-	        
-	    } catch (Exception e) {
-	        e.printStackTrace();
-	    } finally {
-	        closeAll();    
-	    }
-	    return null;
-	}
+		ArrayList<StudyDto> list = new ArrayList<StudyDto>();
+		String where = "";
 
-	public int getTotalCountSM(HashMap<String, String> map, MemberDto mdto) {
-		
-		try {
-			
-			String where = "";
-			
-			if(map.get("search").equals("y")) {
-				where = String.format("where name like '%%%s%%'", map.get("word"));
+		// 1. 조건절 구성
+		if ("y".equals(map.get("search"))) {
+			String status = map.get("status");
+			String word = map.get("word");
+
+			// 1. 상태값만 있는 경우
+			if (status != null && !status.equals("") && (word == null || word.equals(""))) {
+				where = String.format("where status = '%s'", status);
 			}
-			
-			String sql = "select count(*) as cnt from study_member where memberSeq = ?";
-			
+			// 2. 검색어만 있는 경우
+			else if ((status == null || status.equals("")) && word != null && !word.equals("")) {
+				where = String.format("where (name like '%%%s%%' or description like '%%%s%%')", word, word);
+			}
+			// 3. 둘 다 있는 경우
+			else if (status != null && !status.equals("") && word != null && !word.equals("")) {
+				where = String.format("where status = '%s' and (name like '%%%s%%' or description like '%%%s%%')",
+						status, word, word);
+			}
+		}
+
+		// 2. 페이징 쿼리
+		// FROM study 대신 FROM vwStudy를 사용합니다.
+		String sql = "select * from (select s.*, (select count(*) from study_member where studySeq = s.seq and memberSeq = ?) as isMember, "
+				+ "rownum as rnum from (select * from vwStudy " + where
+				+ " order by seq desc) s) where rnum between ? and ?";
+
+		try {
+			// PreparedStatement 사용
 			pstat = conn.prepareStatement(sql);
-			pstat.setString(1, mdto.getSeq());
+			pstat.setString(1, mdto != null ? mdto.getSeq() : "0");
+			pstat.setString(2, map.get("begin"));
+			pstat.setString(3, map.get("end"));
+
 			rs = pstat.executeQuery();
-			
-			if(rs.next()) {
-				
-				return rs.getInt("cnt"); 
-			}
-			
-		} catch (Exception e) {
-			e.printStackTrace();
-		} finally {
-			closeAll();
-		}
-		
-		return 0;
-		
-	}
-	
-	public int getTotalCount(HashMap<String, String> map) {
-		
-		try {
-			
-			String where = "";
-			
-			if(map.get("search").equals("y")) {
-				where = String.format("where name like '%%%s%%'", map.get("word"));
-			}
-			
-			String sql = "select count(*) as cnt from study" + where;
-			
-			rs = stat.executeQuery(sql);
-			
-			if(rs.next()) {
-				return rs.getInt("cnt");
-			}
-			
-		} catch (Exception e) {
-			e.printStackTrace();
-		} finally {
-			closeAll();
-		}
-		
-		return 0;
-		
-	}
 
-	public StudyDto get(String seq) {
-		
-		try {
-			
-			String sql = "select * from vwStudy where seq = ?";
-			
-			pstat = conn.prepareStatement(sql);
-			
-			pstat.setString(1, seq);
-			
-			rs = pstat.executeQuery();	
-			
-			if(rs.next()) {
+			while (rs.next()) {
 				StudyDto dto = new StudyDto();
-				
 				dto.setSeq(rs.getString("seq"));
 				dto.setName(rs.getString("name"));
 				dto.setDescription(rs.getString("description"));
 				dto.setCapacity(rs.getString("capacity"));
 				dto.setStatus(rs.getString("status"));
 				dto.setCreateDate(rs.getString("createDate"));
-				
 				dto.setScheduleCount(rs.getString("scheduleCount"));
 				dto.setHeadCount(rs.getString("headCount"));
-				
-				return dto;
+				dto.setIsMember(rs.getInt("isMember") > 0 ? "y" : "n");
+
+				list.add(dto);
 			}
-			
+			return list;
+
 		} catch (Exception e) {
 			e.printStackTrace();
 		} finally {
 			closeAll();
 		}
-		
 		return null;
-		
+	}
+
+	public int getTotalCountSM(HashMap<String, String> map, MemberDto mdto) {
+
+		try {
+
+			String where = "";
+
+			if (map.get("search").equals("y")) {
+				where = String.format("where name like '%%%s%%'", map.get("word"));
+			}
+
+			String sql = "select count(*) as cnt from study_member where memberSeq = ?";
+
+			pstat = conn.prepareStatement(sql);
+			pstat.setString(1, mdto.getSeq());
+			rs = pstat.executeQuery();
+
+			if (rs.next()) {
+
+				return rs.getInt("cnt");
+			}
+
+		} catch (Exception e) {
+			e.printStackTrace();
+		} finally {
+			closeAll();
+		}
+
+		return 0;
+
+	}
+
+	public int getTotalCount(HashMap<String, String> map) {
+
+		try {
+
+			String where = "";
+
+			if (map.get("search").equals("y")) {
+				where = String.format("where name like '%%%s%%'", map.get("word"));
+			}
+
+			String sql = "select count(*) as cnt from study" + where;
+
+			rs = stat.executeQuery(sql);
+
+			if (rs.next()) {
+				return rs.getInt("cnt");
+			}
+
+		} catch (Exception e) {
+			e.printStackTrace();
+		} finally {
+			closeAll();
+		}
+
+		return 0;
+
+	}
+
+	public StudyDto get(String seq) {
+
+		try {
+
+			String sql = "select * from vwStudy where seq = ?";
+
+			pstat = conn.prepareStatement(sql);
+
+			pstat.setString(1, seq);
+
+			rs = pstat.executeQuery();
+
+			if (rs.next()) {
+				StudyDto dto = new StudyDto();
+
+				dto.setSeq(rs.getString("seq"));
+				dto.setName(rs.getString("name"));
+				dto.setDescription(rs.getString("description"));
+				dto.setCapacity(rs.getString("capacity"));
+				dto.setStatus(rs.getString("status"));
+				dto.setCreateDate(rs.getString("createDate"));
+
+				dto.setScheduleCount(rs.getString("scheduleCount"));
+				dto.setHeadCount(rs.getString("headCount"));
+
+				return dto;
+			}
+
+		} catch (Exception e) {
+			e.printStackTrace();
+		} finally {
+			closeAll();
+		}
+
+		return null;
+
 	}
 
 	public ArrayList<MemberDto> memberlist(String seq, HashMap<String, String> map) {
-		
-		//에러시 list가 없는 것을 방지하기 위해 밖에서 선언
+
+		// 에러시 list가 없는 것을 방지하기 위해 밖에서 선언
 		ArrayList<MemberDto> list = new ArrayList<MemberDto>();
-		
+
 		try {
-			
+
 			String sort = "ORDER BY regdate DESC, seq DESC";
-			
-			String sql = String.format("select * from (select a.*, rownum as rnum from (select * from vwStudyMember where studySeq = ? %s) a) where rnum between %s and %s"
-									,sort
-									,map.get("begin")
-									,map.get("end"));
+
+			String sql = String.format(
+					"select * from (select a.*, rownum as rnum from (select * from vwStudyMember where studySeq = ? %s) a) where rnum between %s and %s",
+					sort, map.get("begin"), map.get("end"));
 
 			pstat = conn.prepareStatement(sql);
 
@@ -206,420 +206,439 @@ public class StudyDao extends BasicDao{
 
 			}
 
-
-		return list;
-
+			return list;
 
 		} catch (Exception e) {
 
-		e.printStackTrace();
+			e.printStackTrace();
 
 		} finally {
 
-		closeAll();
+			closeAll();
 
 		}
 
-
 		return null;
 
-
-		} 
+	}
 
 	public int getTotalCountM(String seq) {
-		
+
 		try {
-			
+
 			String sql = "select count(*) as cnt from vwStudyMember where studySeq = ?";
-			
+
 			pstat = conn.prepareStatement(sql);
 			pstat.setString(1, seq);
 			rs = pstat.executeQuery();
-			
-			if(rs.next()) {
+
+			if (rs.next()) {
 				return rs.getInt("cnt");
 			}
-			
+
 		} catch (Exception e) {
 			e.printStackTrace();
 		} finally {
 			closeAll();
 		}
-		
+
 		return 0;
 	}
 
 	public int add(StudyDto dto, MemberDto mdto) {
-		
+
 		int result = 0;
-		
+
 		try {
-			
+
 			conn.setAutoCommit(false);
-			
+
 			String sql = "insert into study (seq, name, description, capacity, status, createDate) values (studySeq.nextVal, ?, ?, ?, default, default)";
-			
+
 			pstat = conn.prepareStatement(sql);
 			pstat.setString(1, dto.getName());
 			pstat.setString(2, dto.getDescription());
 			pstat.setString(3, dto.getCapacity());
 			int result1 = pstat.executeUpdate();
-			
+
 			sql = "insert into study_member (seq, memberseq, studyseq, regdate, type) values (studymemberSeq.nextVal, ?, studySeq.currVal, default, 1)";
 			pstat = conn.prepareStatement(sql);
 			pstat.setString(1, mdto.getSeq());
 			int result2 = pstat.executeUpdate();
-			
+
 			if (result1 == 1 && result2 == 1) {
-	            conn.commit();
-	            result = 1;
-	        } else {
-	            conn.rollback();
-	            result = 0;
-	        }
-			
+				conn.commit();
+				result = 1;
+			} else {
+				conn.rollback();
+				result = 0;
+			}
+
 			return result;
-			
-			
+
 		} catch (Exception e) {
 			try {
-	            if (conn != null) conn.rollback();
-	        } catch (Exception ex) {
-	            ex.printStackTrace();
-	        }
-	        e.printStackTrace();
-	    } finally {
-	        try {
-	            conn.setAutoCommit(true);
-	        } catch (Exception e) {}
-	        closeAll();
-	    }
-		
+				if (conn != null)
+					conn.rollback();
+			} catch (Exception ex) {
+				ex.printStackTrace();
+			}
+			e.printStackTrace();
+		} finally {
+			try {
+				conn.setAutoCommit(true);
+			} catch (Exception e) {
+			}
+			closeAll();
+		}
+
 		return result;
 	}
 
 	public MemberDto getMember(String id) {
-		
+
 		try {
-	
+
 			String sql = "select * from Member where id = ?";
-			
+
 			pstat = conn.prepareStatement(sql);
 			pstat.setString(1, id);
 			rs = pstat.executeQuery();
-			
-			if(rs.next()) {
+
+			if (rs.next()) {
 				MemberDto dto = new MemberDto();
 				dto.setSeq(rs.getString("seq"));
-				
+
 				return dto;
 			}
-			
+
 		} catch (Exception e) {
 			e.printStackTrace();
 		} finally {
 			closeAll();
 		}
-		
+
 		return null;
-		
+
 	}
 
 	public ArrayList<StudyDto> mylist(HashMap<String, String> map, MemberDto mdto) {
-		
+
 		try {
-			
+
 			String where = "";
-			
-			if(map.get("search").equals("y")) {
-				where = String.format("where %s like '%%%s%%'"
-						, map.get("word"));
+
+			if (map.get("search").equals("y")) {
+				where = String.format("where %s like '%%%s%%'", map.get("word"));
 			}
-			
+
 			String sql = "";
-			
-			sql = String.format("select * from (select a.*, rownum as rnum from vwStudyByMseq a where memberSeq = ?) where rnum between %s and %s"
-							,map.get("begin")
-							,map.get("end"));
-			
+
+			sql = String.format(
+					"select * from (select a.*, rownum as rnum from vwStudyByMseq a where memberSeq = ?) where rnum between %s and %s",
+					map.get("begin"), map.get("end"));
+
 			pstat = conn.prepareStatement(sql);
 			pstat.setString(1, mdto.getSeq());
 			rs = pstat.executeQuery();
-			
+
 			ArrayList<StudyDto> list = new ArrayList<StudyDto>();
-			
-			while(rs.next()) {
+
+			while (rs.next()) {
 				StudyDto dto = new StudyDto();
-				
+
 				dto.setSeq(rs.getString("seq"));
 				dto.setName(rs.getString("name"));
 				dto.setDescription(rs.getString("description"));
 				dto.setCapacity(rs.getString("capacity"));
 				dto.setStatus(rs.getString("status"));
 				dto.setCreateDate(rs.getString("createDate"));
-				
+
 				dto.setScheduleCount(rs.getString("scheduleCount"));
 				dto.setHeadCount(rs.getString("headCount"));
-				
-				
+
 				list.add(dto);
 			}
-			
+
 			return list;
-			
+
 		} catch (Exception e) {
 			e.printStackTrace();
 		} finally {
-			closeAll();	
+			closeAll();
 		}
-		
+
 		return null;
-		
+
 	}
 
 	public int regStudy(StudyDto dto, MemberDto mdto) {
-		
+
 		try {
-			
+
 			String sql = "INSERT INTO study_member (seq, memberSeq, studySeq, regdate, type) "
 					+ "SELECT studymemberSeq.nextVal, ?, ?, sysdate, 0 FROM dual "
 					+ "WHERE NOT EXISTS (SELECT 1 FROM study_member WHERE memberSeq = ? AND studySeq = ?)";
-			
+
 			pstat = conn.prepareStatement(sql);
 			pstat.setString(1, mdto.getSeq());
 			pstat.setString(2, dto.getSeq());
 			pstat.setString(3, mdto.getSeq());
 			pstat.setString(4, dto.getSeq());
-			
+
 			return pstat.executeUpdate();
-			
+
 		} catch (Exception e) {
 			e.printStackTrace();
 		} finally {
 			closeAll();
 		}
-		
+
 		return 0;
-		
+
 	}
 
-
 	public int unregStudy(MemberDto dto, String seq) {
-		
+
 		try {
-			
+
 			String sql = "delete from study_member where memberseq = ? and studySeq = ? and type = 0";
-			
+
 			pstat = conn.prepareStatement(sql);
 			pstat.setString(1, dto.getSeq());
 			pstat.setString(2, seq);
-			
+
 			return pstat.executeUpdate();
-			
+
 		} catch (Exception e) {
 			e.printStackTrace();
 		} finally {
 			closeAll();
 		}
-		
+
 		return 0;
 	}
 
 	public int isManager(MemberDto mdto, StudyDto dto) {
-		
+
 		try {
-			
+
 			String sql = "select count(*) as cnt from study_member where memberSeq = ? and studySeq = ? and type = 1";
-			
+
 			pstat = conn.prepareStatement(sql);
 			pstat.setString(1, mdto.getSeq());
 			pstat.setString(2, dto.getSeq());
-			
+
 			rs = pstat.executeQuery();
-			
-			if(rs.next()) {
+
+			if (rs.next()) {
 				return rs.getInt("cnt");
 			}
-			
+
 		} catch (Exception e) {
 			e.printStackTrace();
 		} finally {
 			closeAll();
 		}
-		
+
 		return 0;
 	}
 
 	public int edit(StudyDto dto) {
-		
+
 		try {
-			
+
 			String sql = "update study set name = ?, description = ?, capacity = ?, status = ? where seq = ?";
-			
+
 			pstat = conn.prepareStatement(sql);
 			pstat.setString(1, dto.getName());
 			pstat.setString(2, dto.getDescription());
 			pstat.setString(3, dto.getCapacity());
 			pstat.setString(4, dto.getStatus());
 			pstat.setString(5, dto.getSeq());
-			
+
 			return pstat.executeUpdate();
-			
+
 		} catch (Exception e) {
 			e.printStackTrace();
 		} finally {
 			closeAll();
 		}
-		
+
 		return 0;
-		
+
 	}
 
 	public int del(String seq) {
-		
+
 		try {
-			
+
 			String sql = "delete from study where seq = ?";
-			
+
 			pstat = conn.prepareStatement(sql);
 			pstat.setString(1, seq);
-			
+
 			return pstat.executeUpdate();
-			
+
 		} catch (Exception e) {
 			e.printStackTrace();
 		} finally {
 			closeAll();
 		}
-		
+
 		return 0;
-		
+
 	}
 
 	public int isMember(MemberDto mdto, StudyDto dto) {
-		
+
 		try {
-			
+
 			String sql = "select count(*) as cnt from study_member where memberSeq = ? and studySeq = ?";
-			
+
 			pstat = conn.prepareStatement(sql);
 			pstat.setString(1, mdto.getSeq());
 			pstat.setString(2, dto.getSeq());
-			
+
 			rs = pstat.executeQuery();
-			
-			if(rs.next()) {
+
+			if (rs.next()) {
 				return rs.getInt("cnt");
 			}
-			
+
 		} catch (Exception e) {
 			e.printStackTrace();
 		} finally {
 			closeAll();
 		}
-		
+
 		return 0;
-		
+
 	}
 
 	public int deport(String mseq, String seq) {
-		
+
 		try {
-			
+
 			String sql = "delete from study_member where studySeq = ? and memberSeq = ? and type = 0";
-			
+
 			pstat = conn.prepareStatement(sql);
 			pstat.setString(1, seq);
 			pstat.setString(2, mseq);
-			
+
 			return pstat.executeUpdate();
-			
+
 		} catch (Exception e) {
 			e.printStackTrace();
 		} finally {
 			closeAll();
 		}
-		
+
 		return 0;
-		
+
 	}
 
 	public String getManagerSeq(String seq) {
-		
+
 		try {
-			
+
 			String sql = "select * from study_member where studySeq = ? and type = 1";
-			
+
 			pstat = conn.prepareStatement(sql);
 			pstat.setString(1, seq);
-			
+
 			rs = pstat.executeQuery();
-			
-			if(rs.next()) {
+
+			if (rs.next()) {
 				return rs.getString("memberSeq");
 			}
-			
+
 		} catch (Exception e) {
 			e.printStackTrace();
 		} finally {
 			closeAll();
 		}
-		
+
 		return null;
-		
+
 	}
 
 	public int delegateManager(String seq, String mseq, String managerSeq) {
-		
+
 		int result = 0;
-		
+
 		try {
-			
+
 			conn.setAutoCommit(false);
-			
+
 			String sql = "update study_member set type = 1 where studySeq = ? and memberSeq = ?";
-			
+
 			pstat = conn.prepareStatement(sql);
 			pstat.setString(1, seq);
 			pstat.setString(2, mseq);
 			int result1 = pstat.executeUpdate();
-			
+
 			sql = "update study_member set type = 0 where studySeq = ? and memberSeq = ?";
 			pstat = conn.prepareStatement(sql);
 			pstat.setString(1, seq);
 			pstat.setString(2, managerSeq);
 			int result2 = pstat.executeUpdate();
-			
+
 			if (result1 == 1 && result2 == 1) {
-	            conn.commit();
-	            result = 1;
-	        } else {
-	            conn.rollback();
-	            result = 0;
-	        }
-			
+				conn.commit();
+				result = 1;
+			} else {
+				conn.rollback();
+				result = 0;
+			}
+
 			return result;
-			
-			
+
 		} catch (Exception e) {
 			try {
-	            if (conn != null) conn.rollback();
-	        } catch (Exception ex) {
-	            ex.printStackTrace();
-	        }
-	        e.printStackTrace();
-	    } finally {
-	        try {
-	            conn.setAutoCommit(true);
-	        } catch (Exception e) {}
-	        closeAll();
-	    }
-		
+				if (conn != null)
+					conn.rollback();
+			} catch (Exception ex) {
+				ex.printStackTrace();
+			}
+			e.printStackTrace();
+		} finally {
+			try {
+				conn.setAutoCommit(true);
+			} catch (Exception e) {
+			}
+			closeAll();
+		}
+
 		return result;
-		
-		
+
 	}
 
-	
-	
+	// ==========================================
+	// [메인 화면용] 신규 모집 중인 스터디 최신 N개
+	// ==========================================
+	public ArrayList<StudyDto> getLatestStudies(int limit) {
+		ArrayList<StudyDto> list = new ArrayList<>();
+		try {
+			String sql = "SELECT * FROM (SELECT * FROM study WHERE status = 0 ORDER BY seq DESC) WHERE ROWNUM <= ?";
+			pstat = conn.prepareStatement(sql);
+			pstat.setInt(1, limit);
+			rs = pstat.executeQuery();
+
+			while (rs.next()) {
+				StudyDto dto = new StudyDto();
+				dto.setSeq(rs.getString("seq"));
+				dto.setName(rs.getString("name"));
+				dto.setDescription(rs.getString("description"));
+				dto.setCapacity(rs.getString("capacity"));
+				list.add(dto);
+			}
+		} catch (Exception e) {
+			e.printStackTrace();
+		} finally {
+			closeAll();
+		}
+		return list;
+	}
+
 }
