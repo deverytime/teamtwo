@@ -27,6 +27,7 @@ public class AuthFilter implements Filter {
 		HttpSession session = req.getSession();
 
 		if (session.getAttribute("auth") == null) {
+			
 			// System.out.println("익명사용자");
 			if (req.getRequestURI().endsWith("add.do") || req.getRequestURI().endsWith("edit.do")
 					|| req.getRequestURI().endsWith("del.do")) {

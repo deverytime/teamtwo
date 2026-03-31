@@ -60,8 +60,8 @@
 										${param.searchType == 'title_content' ? 'selected' : ''}>제목+내용</option>
 								</select> <input type="text" name="keyword" value="${param.keyword}"
 									placeholder="검색어 입력" class="input input-bordered bg-white" />
-									<input type="hidden" name="board" value="${board}">
-									<input type="hidden" name="category" value="${param.category}">
+								<input type="hidden" name="board" value="${board}"> <input
+									type="hidden" name="category" value="${param.category}">
 								<button type="submit" class="btn btn-brand">검색</button>
 							</div>
 						</form>
@@ -100,7 +100,9 @@
 									<td>${dto.seq}</td>
 									<td>${dto.category}</td>
 									<td class="cursor-pointer hover:underline"
-										onclick="location.href='view.do?seq=${dto.seq}&board=${board}&category=${param.category}&searchType=${param.searchType}&keyword=${param.keyword}&page=${param.page }'">${dto.title} <small>(${dto.commentCount})</small></td>
+										onclick="location.href='view.do?seq=${dto.seq}&board=${board}&category=${param.category}&searchType=${param.searchType}&keyword=${param.keyword}&page=${param.page }'">${dto.title}
+										<small>(${dto.commentCount})</small>
+									</td>
 									<td>${dto.nickname}</td>
 									<td>${dto.regDate}</td>
 									<td>${dto.readCount}</td>
@@ -121,8 +123,7 @@
 
 					<!-- 오른쪽 글쓰기 버튼 -->
 					<div class="w-24 flex justify-end">
-						<button class="btn btn-brand"
-							onclick="location.href='add.do?board=${board}&category=${param.category}&searchType=${param.searchType}&keyword=${param.keyword}'">글쓰기</button>
+						<button class="btn btn-brand" onclick="checkLogin()">글쓰기</button>
 					</div>
 				</div>
 		</div>
@@ -133,6 +134,19 @@
 
 	<script>
 		// 현재 페이지 전용 JavaScript가 필요하면 여기에 작성
+		function checkLogin() {
+	    // 세션에 auth 정보가 있는지 확인 (JSTL 사용)
+	    const isLogined = ${not empty auth}; 
+	    
+	    if (isLogined) {
+	        // 로그인 상태면 원래 가려던 경로로 이동
+	        location.href = 'add.do?board=${board}&category=${param.category}&searchType=${param.searchType}&keyword=${param.keyword}';
+	    } else {
+	        // 로그인 상태가 아니면 메시지 출력 후 로그인 페이지로 이동
+	        alert('로그인 후 글을 작성해주세요');
+	        location.href = '/teamtwo/user/login.do';
+	    }
+}
 	</script>
 </body>
 </html>
