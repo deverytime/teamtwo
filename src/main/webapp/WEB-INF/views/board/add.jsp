@@ -114,7 +114,7 @@
 		  const div = document.createElement('div');
 		  div.className = 'flex gap-2 items-center';
 		  div.innerHTML = `
-		    <input type="file" name="file${fileIndex}" class="file-input file-input-bordered w-full bg-white">
+		    <input type="file" name="file\${fileIndex}" class="file-input file-input-bordered w-full bg-white">
 		    <button type="button" class="btn btn-error btn-sm" onclick="removeFile(this)">✕</button>
 		  `;
 		
@@ -134,7 +134,7 @@
 			  
 			  btn.parentElement.remove();
 			  document.querySelector('[onclick="addFile()"]').style.display = '';
-			}
+		}
 	</script>
 </body>
 </html>
