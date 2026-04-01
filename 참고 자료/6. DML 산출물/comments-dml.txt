@@ -1,0 +1,21 @@
+REM INSERTING into EXPORT_TABLE
+SET DEFINE OFF;
+Insert into EXPORT_TABLE (SEQ,REGDATE,CONTENT,POSTSEQ,MEMBERSEQ) values (1,to_date('26/03/23','RR/MM/DD'),'내 친구 진석이 안녕',1,2);
+Insert into EXPORT_TABLE (SEQ,REGDATE,CONTENT,POSTSEQ,MEMBERSEQ) values (25,to_date('26/03/30','RR/MM/DD'),'asdf',21,3);
+Insert into EXPORT_TABLE (SEQ,REGDATE,CONTENT,POSTSEQ,MEMBERSEQ) values (46,to_date('26/03/30','RR/MM/DD'),'ㅁㄴㅇㅁㄴㅇㅁ',52,41);
+Insert into EXPORT_TABLE (SEQ,REGDATE,CONTENT,POSTSEQ,MEMBERSEQ) values (77,to_date('26/03/31','RR/MM/DD'),'asdfasdf',194,3);
+Insert into EXPORT_TABLE (SEQ,REGDATE,CONTENT,POSTSEQ,MEMBERSEQ) values (78,to_date('26/03/31','RR/MM/DD'),'ㅁㄴㅇㅎㅁㄹㅇ',194,3);
+Insert into EXPORT_TABLE (SEQ,REGDATE,CONTENT,POSTSEQ,MEMBERSEQ) values (26,to_date('26/03/30','RR/MM/DD'),'asdf',61,3);
+Insert into EXPORT_TABLE (SEQ,REGDATE,CONTENT,POSTSEQ,MEMBERSEQ) values (30,to_date('26/03/30','RR/MM/DD'),'엄',168,3);
+Insert into EXPORT_TABLE (SEQ,REGDATE,CONTENT,POSTSEQ,MEMBERSEQ) values (79,to_date('26/03/31','RR/MM/DD'),'ㅁ낭허ㅗㅌ오패모냉',199,3);
+Insert into EXPORT_TABLE (SEQ,REGDATE,CONTENT,POSTSEQ,MEMBERSEQ) values (74,to_date('26/03/31','RR/MM/DD'),'ìëã
+',194,3);
+Insert into EXPORT_TABLE (SEQ,REGDATE,CONTENT,POSTSEQ,MEMBERSEQ) values (24,to_date('26/03/30','RR/MM/DD'),'안녕',107,3);
+Insert into EXPORT_TABLE (SEQ,REGDATE,CONTENT,POSTSEQ,MEMBERSEQ) values (27,to_date('26/03/30','RR/MM/DD'),'안녕',104,3);
+Insert into EXPORT_TABLE (SEQ,REGDATE,CONTENT,POSTSEQ,MEMBERSEQ) values (31,to_date('26/03/30','RR/MM/DD'),'asdf',167,3);
+Insert into EXPORT_TABLE (SEQ,REGDATE,CONTENT,POSTSEQ,MEMBERSEQ) values (32,to_date('26/03/30','RR/MM/DD'),'asdf',167,3);
+Insert into EXPORT_TABLE (SEQ,REGDATE,CONTENT,POSTSEQ,MEMBERSEQ) values (72,to_date('26/03/31','RR/MM/DD'),'ããããããí³ãã',194,3);
+Insert into EXPORT_TABLE (SEQ,REGDATE,CONTENT,POSTSEQ,MEMBERSEQ) values (73,to_date('26/03/31','RR/MM/DD'),'ã¹ããã´ã¹ãã´ãã¹',194,3);
+Insert into EXPORT_TABLE (SEQ,REGDATE,CONTENT,POSTSEQ,MEMBERSEQ) values (34,to_date('26/03/30','RR/MM/DD'),'asdf',119,3);
+Insert into EXPORT_TABLE (SEQ,REGDATE,CONTENT,POSTSEQ,MEMBERSEQ) values (76,to_date('26/03/31','RR/MM/DD'),'ãã´ããã´ãã¹ã',194,3);
+Insert into EXPORT_TABLE (SEQ,REGDATE,CONTENT,POSTSEQ,MEMBERSEQ) values (75,to_date('26/03/31','RR/MM/DD'),'ìë',194,3);

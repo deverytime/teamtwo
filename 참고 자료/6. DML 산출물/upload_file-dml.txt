@@ -1,0 +1,13 @@
+REM INSERTING into EXPORT_TABLE
+SET DEFINE OFF;
+Insert into EXPORT_TABLE (SEQ,ORIGINNAME,NAME,PATH,FILESIZE,POSTSEQ) values (23,'프로젝트 오류.png','프로젝트 오류.png','/uploads',42375,194);
+Insert into EXPORT_TABLE (SEQ,ORIGINNAME,NAME,PATH,FILESIZE,POSTSEQ) values (41,'요구분석서.pdf','요구분석서.pdf','/uploads',1045913,207);
+Insert into EXPORT_TABLE (SEQ,ORIGINNAME,NAME,PATH,FILESIZE,POSTSEQ) values (21,'2팀 스토리보드.pdf','2팀 스토리보드.pdf','/uploads',859282,193);
+Insert into EXPORT_TABLE (SEQ,ORIGINNAME,NAME,PATH,FILESIZE,POSTSEQ) values (22,'스크린샷 2026-02-10 113142.png','스크린샷 2026-02-10 1131421.png','/uploads',230996,194);
+Insert into EXPORT_TABLE (SEQ,ORIGINNAME,NAME,PATH,FILESIZE,POSTSEQ) values (42,'2팀 스토리보드.pdf','2팀 스토리보드.pdf','/uploads',859282,207);
+Insert into EXPORT_TABLE (SEQ,ORIGINNAME,NAME,PATH,FILESIZE,POSTSEQ) values (45,'images.jpg','images2.jpg','/uploads',6202,209);
+Insert into EXPORT_TABLE (SEQ,ORIGINNAME,NAME,PATH,FILESIZE,POSTSEQ) values (46,'5575243_1.jpg','5575243_12.jpg','/uploads',120074,209);
+Insert into EXPORT_TABLE (SEQ,ORIGINNAME,NAME,PATH,FILESIZE,POSTSEQ) values (47,'favilogo.png','favilogo1.png','/uploads',25308,209);
+Insert into EXPORT_TABLE (SEQ,ORIGINNAME,NAME,PATH,FILESIZE,POSTSEQ) values (43,'images.jpg','images1.jpg','/uploads',6202,208);
+Insert into EXPORT_TABLE (SEQ,ORIGINNAME,NAME,PATH,FILESIZE,POSTSEQ) values (44,'favilogo.png','favilogo.png','/uploads',25308,208);
+Insert into EXPORT_TABLE (SEQ,ORIGINNAME,NAME,PATH,FILESIZE,POSTSEQ) values (4,'2팀 스토리보드.pdf','2팀 스토리보드8.pdf','/uploads',859282,169);

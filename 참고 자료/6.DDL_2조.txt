@@ -1,0 +1,213 @@
+-- 시퀀스 생성
+create sequence memberSeq;
+create sequence boardSeq;
+create sequence postCategorySeq;
+create sequence postSeq;
+create sequence uploadFileSeq;
+create sequence commentsSeq;
+create sequence requestBoardSeq;
+create sequence request_comments_seq;
+create sequence planSeq;
+create sequence recordSeq;
+create sequence studySeq;
+create sequence studyScheduleSeq;
+create sequence todoSeq;
+create sequence studyMemberSeq;
+
+-- 시퀀스 삭제
+drop sequence memberSeq;
+drop sequence boardSeq;
+drop sequence postCategorySeq;
+drop sequence postSeq;
+drop sequence uploadFileSeq;
+drop sequence commentsSeq;
+drop sequence requestBoardSeq;
+drop sequence request_comments_seq;
+drop sequence planSeq;
+drop sequence recordSeq;
+drop sequence studySeq;
+drop sequence studyScheduleSeq;
+drop sequence todoSeq;
+drop sequence studyMemberSeq;
+
+
+CREATE TABLE member (
+	seq	number		NOT NULL,
+	name	varchar2(50)		NOT NULL,
+	id	varchar2(30)		NOT NULL,
+	pw	varchar2(100)		NOT NULL,
+	pic	varchar2(255)	DEFAULT 'pic.png'	NULL,
+	nickname	varchar2(50)		NOT NULL,
+	email	varchar2(100)		NOT NULL,
+	status	number(1)		NOT NULL,
+	twoFactor	number(1)		NOT NULL,
+	type	number(1)		NOT NULL,
+	CONSTRAINT PK_MEMBER PRIMARY KEY (seq)
+);
+
+-- COMMENT ON COLUMN member.pw IS '영문, 숫자, 특수문자 포함 8자리 이상';
+-- COMMENT ON COLUMN member.status IS '정상(0)/5회이상틀려서잠김(1)/탈퇴(2)';
+-- COMMENT ON COLUMN member.twoFactor IS '2차인증비활성화(0)/2차인증비활성화(1)';
+-- COMMENT ON COLUMN member.type IS '회원(0)/관리자(1)';
+
+CREATE TABLE board (
+	seq	number		NOT NULL,
+	type	number		NOT NULL,
+	CONSTRAINT PK_BOARD PRIMARY KEY (seq)
+);
+
+-- COMMENT ON COLUMN board.type IS '자유/질문/자료공유/학습경험';
+
+CREATE TABLE post_category (
+	seq	number		NOT NULL,
+	type	number		NOT NULL,
+	CONSTRAINT PK_POST_CATEGORY PRIMARY KEY (seq)
+);
+
+-- COMMENT ON COLUMN post_category.type IS '잡담/개발/에러/인사/유머/자랑/정보/나눔/토론';
+
+CREATE TABLE post (
+	seq	number		NOT NULL,
+	title	varchar2(100)		NOT NULL,
+	content	varchar2(4000)		NOT NULL,
+	readCount	number	DEFAULT 0	NOT NULL,
+	regDate	date	DEFAULT sysdate	NOT NULL,
+	recommend	number	DEFAULT 0	NOT NULL,
+	report	number	DEFAULT 0	NOT NULL,
+	memberSeq	number		NOT NULL,
+	boardSeq	number		NOT NULL,
+	postCategorySeq	number	DEFAULT 1	NOT NULL,
+	CONSTRAINT PK_POST PRIMARY KEY (seq),
+	CONSTRAINT FK_member_TO_post_1 FOREIGN KEY (memberSeq) REFERENCES member (seq),
+	CONSTRAINT FK_board_TO_post_1 FOREIGN KEY (boardSeq) REFERENCES board (seq),
+	CONSTRAINT FK_post_category_TO_post_1 FOREIGN KEY (postCategorySeq) REFERENCES post_category (seq)
+);
+
+CREATE TABLE upload_file (
+	seq	number		NOT NULL,
+	originName	varchar2(100)		NOT NULL,
+	name	varchar2(100)		NOT NULL,
+	path	varchar2(255)		NOT NULL,
+	fileSize	number		NOT NULL,
+	postSeq	number		NOT NULL,
+	CONSTRAINT PK_UPLOAD_FILE PRIMARY KEY (seq),
+	CONSTRAINT FK_post_TO_upload_file_1 FOREIGN KEY (postSeq) REFERENCES post (seq)
+);
+
+CREATE TABLE comments (
+	seq	number		NOT NULL,
+	regDate	date	DEFAULT sysdate	NOT NULL,
+	content	varchar2(4000)		NOT NULL,
+	postSeq	number		NOT NULL,
+	memberSeq	number		NOT NULL,
+	CONSTRAINT PK_COMMENTS PRIMARY KEY (seq),
+	CONSTRAINT FK_post_TO_comments_1 FOREIGN KEY (postSeq) REFERENCES post (seq),
+	CONSTRAINT FK_member_TO_comments_1 FOREIGN KEY (memberSeq) REFERENCES member (seq)
+);
+
+CREATE TABLE request_board (
+	seq	number		NOT NULL,
+	title	varchar2(100)		NOT NULL,
+	subject	number(1)	DEFAULT 0	NOT NULL,
+	content	varchar2(2000)		NOT NULL,
+	readCount	number	DEFAULT 0	NOT NULL,
+	regDate	date	DEFAULT sysdate	NOT NULL,
+	status		number(1)	DEFAULT 0	NOT NULL,
+	memberSeq	number		NOT NULL,
+	CONSTRAINT PK_REQUEST_BOARD PRIMARY KEY (seq),
+	CONSTRAINT FK_member_TO_request_board_1 FOREIGN KEY (memberSeq) REFERENCES member (seq) ON DELETE CASCADE
+);
+
+-- COMMENT ON COLUMN request_board.subject IS '문의(0)/요청(1)';
+
+CREATE TABLE request_comments (
+	seq	number		NOT NULL,
+	content	varchar2(4000)		NOT NULL,
+	requestSeq	number		NOT NULL,
+	CONSTRAINT PK_REQUEST_COMMENTS PRIMARY KEY (seq),
+	CONSTRAINT FK_request_TO_request_comments_1 FOREIGN KEY (requestSeq) REFERENCES request (seq) ON DELETE CASCADE
+);
+
+CREATE TABLE plan (
+	seq	number		NOT NULL,
+	title	varchar2(500)		NOT NULL,
+	subject	varchar2(500)		NOT NULL,
+	description	varchar2(4000)		NOT NULL,
+	type	varchar2(10 CHAR)	DEFAULT '기간기반'	NOT NULL,
+	startDate	date	DEFAULT sysdate	NULL,
+	endDate	date		NULL,
+	regDate	date	DEFAULT sysdate	NOT NULL,
+	updateDate	date		NULL,
+	progressStatus	varchar2(10 CHAR)	DEFAULT '미완료'	NULL,
+	memberSeq	number		NOT NULL,
+	CONSTRAINT PK_PLAN PRIMARY KEY (seq),
+	CONSTRAINT FK_member_TO_plan_1 FOREIGN KEY (memberSeq) REFERENCES member (seq) ON DELETE CASCADE
+);
+
+-- COMMENT ON COLUMN plan.type IS '기간기반/완료기반';
+-- COMMENT ON COLUMN plan.startDate IS '기간기반 계획 용';
+-- COMMENT ON COLUMN plan.endDate IS '기간기반 계획 용';
+-- COMMENT ON COLUMN plan.progressStatus IS '완료기반 계획 용, 완료/미완료';
+
+CREATE TABLE record (
+	seq	number		NOT NULL,
+	studyDate	date	DEFAULT sysdate	NOT NULL,
+	content	varchar2(2000)		NOT NULL,
+	progress	number CHECK (progress between 0 and 100)		NOT NULL,
+	memo	varchar2(1000)		NULL,
+	regDate	date	DEFAULT sysdate	NOT NULL,
+	updateDate	date	DEFAULT sysdate	NOT NULL,
+	recordStatus	varchar2(10 CHAR)	DEFAULT '완료'	NOT NULL,
+	planSeq	number		NOT NULL,
+	CONSTRAINT PK_RECORD PRIMARY KEY (seq),
+	CONSTRAINT FK_plan_TO_record_1 FOREIGN KEY (planSeq) REFERENCES plan (seq) ON DELETE CASCADE
+);
+
+-- COMMENT ON COLUMN record.progress IS '최소0, 최대100, 단위10';
+-- COMMENT ON COLUMN record.memo IS '선택';
+
+CREATE TABLE study (
+	seq	number		NOT NULL,
+	name	varchar2(50)		NOT NULL,
+	description	varchar2(2000)		NOT NULL,
+	capacity	number		NOT NULL,
+	status	number(1)	DEFAULT 0	NOT NULL,
+	createDate	date	DEFAULT sysdate	NOT NULL,
+	CONSTRAINT PK_STUDY PRIMARY KEY (seq)
+);
+
+-- COMMENT ON COLUMN study.status IS '모집중(0)/모집완료(1)';
+
+CREATE TABLE study_schedule (
+	seq	number		NOT NULL,
+	title	varchar2(50)		NOT NULL,
+	content	varchar2(4000)		NOT NULL,
+	startDate	date		NOT NULL,
+	endDate	date		NOT NULL,
+	studySeq	number		NOT NULL,
+	CONSTRAINT PK_STUDY_SCHEDULE PRIMARY KEY (seq),
+	CONSTRAINT FK_study_TO_study_schedule_1 FOREIGN KEY (studySeq) REFERENCES study (seq)
+);
+
+-- COMMENT ON COLUMN study_schedule.startdate IS '스터디일정 진행상태는 db에는 없음';
+
+CREATE TABLE todo (
+	seq	number		NOT NULL,
+	title	varchar2(50)		NOT NULL,
+	content	varchar2(2000)		NOT NULL,
+	status	number(1)	DEFAULT 0	NOT NULL,
+	studyScheduleSeq	number		NOT NULL,
+	CONSTRAINT PK_TODO PRIMARY KEY (seq),
+	CONSTRAINT FK_study_schedule_TO_todo_1 FOREIGN KEY (studyScheduleSeq) REFERENCES study_schedule (seq)
+);
+
+-- COMMENT ON COLUMN todo.status IS '미완료(0)/완료(1)';
+
+CREATE TABLE study_member (
+	seq	number		NOT NULL,
+	memberSeq	number		NOT NULL,
+	studySeq	number		NOT NULL,
+	CONSTRAINT PK_STUDY_MEMBER PRIMARY KEY (seq),
+	CONSTRAINT FK_member_TO_study_member_1 FOREIGN KEY (memberSeq) REFERENCES member (seq),
+	CONSTRAINT FK_study_TO_study_member_1 FOREIGN KEY (studySeq) REFERENCES study (seq)
+);

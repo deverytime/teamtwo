@@ -1,0 +1,7 @@
+REM INSERTING into EXPORT_TABLE
+SET DEFINE OFF;
+Insert into EXPORT_TABLE (SEQ,REASON) values (1,'스팸/광고');
+Insert into EXPORT_TABLE (SEQ,REASON) values (2,'욕설/혐오');
+Insert into EXPORT_TABLE (SEQ,REASON) values (3,'음란물');
+Insert into EXPORT_TABLE (SEQ,REASON) values (4,'개인정보 노출');
+Insert into EXPORT_TABLE (SEQ,REASON) values (5,'기타');

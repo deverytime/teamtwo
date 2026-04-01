@@ -1,0 +1,6 @@
+REM INSERTING into EXPORT_TABLE
+SET DEFINE OFF;
+Insert into EXPORT_TABLE (SEQ,TYPE) values (1,1);
+Insert into EXPORT_TABLE (SEQ,TYPE) values (2,2);
+Insert into EXPORT_TABLE (SEQ,TYPE) values (3,3);
+Insert into EXPORT_TABLE (SEQ,TYPE) values (4,4);
