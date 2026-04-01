@@ -3,6 +3,7 @@
 <link href="https://cdn.jsdelivr.net/npm/daisyui@5" rel="stylesheet" type="text/css" />
 <script src="https://cdn.jsdelivr.net/npm/@tailwindcss/browser@4"></script>
 <script src="https://code.jquery.com/jquery-4.0.0.js"></script>
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard/dist/web/static/pretendard.css">
 
 <style type="text/tailwindcss">
     @theme {
@@ -51,6 +52,11 @@
             background-color: #2563eb !important;
             color: white !important;
         }
+    }
+</style>
+<style>
+    body {
+      font-family: "Pretendard", sans-serif;
     }
 </style>
 
