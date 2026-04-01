@@ -25,7 +25,7 @@ public class DeportStudy extends HttpServlet {
 		
 		HttpSession session = req.getSession();
 		
-		Object auth = session.getAttribute("auth");
+		Object auth = session.getAttribute("authDto");
 		
 		//로그인 체크 로직
 		if(auth == null) {
